@@ -5,4 +5,9 @@ window["chrome"] = {
             version: "X.Y.Z",
         }),
     },
+    storage: {
+        session: {},
+        local: {},
+        sync: {},
+    },
 };
