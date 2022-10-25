@@ -9,55 +9,55 @@ const loadSendoff = (() => {
             sections: [
                 {
                     title: {
-                        text: "How To Use",
+                        text: "Farewell",
                     },
                     interactions: [
                         {
                             className: "action",
                             label: {
-                                text: "1. Search for anything on your preferred search engine.",
-                            },
-                            note: {
-                                text: "Try \"mark my search\" on DuckDuckGo or Google to find our pages!",
+                                text: "Uninstallation successful",
                             },
                         },
-                    ],
-                },
-                {
-                    title: {
-                        text: "Operation",
-                    },
-                    interactions: [
                         {
                             className: "action",
                             label: {
-                                text: "Highlighting - activate or deactivate",
+                                text: "We're sorry to see you go. Please consider filling out this form so we can improve for the future!",
                             },
                             note: {
-                                text: "Alt+Shift+M",
+                                text: `If you do not wish to submit feedback, simply close this tab and carry on.
+However, Mark My Search will only improve if we know what needs fixing.`,
                             },
                         },
-                    ],
-                },
-                {
-                    title: {
-                        text: "Contributing",
-                    },
-                    interactions: [
                         {
                             className: "action",
                             label: {
-                                text: "Report a problem",
+                                text: "All data is sent stripped of any personal information, and will be viewed only by the developer of Mark My Search.",
                             },
                             submitters: [{
-                                    text: "Submit anonymously",
+                                    text: "Submit",
                                     onClick: (messageText, onSuccess, onError) => {
                                         sendProblemReport(messageText)
                                             .then(onSuccess)
                                             .catch(onError);
                                     },
+                                    formFields: [
+                                        {
+                                            className: "TODOreplace",
+                                            label: {
+                                                text: "it's just bad",
+                                            },
+                                            checkbox: {},
+                                        },
+                                        {
+                                            className: "TODOreplace",
+                                            label: {
+                                                text: "do not like",
+                                            },
+                                            checkbox: {},
+                                        },
+                                    ],
                                     message: {
-                                        rows: 3,
+                                        rows: 6,
                                         placeholder: "Optional message",
                                     },
                                     alerts: {
@@ -68,13 +68,10 @@ const loadSendoff = (() => {
                                             text: "Status {status}: {text}",
                                         },
                                         [PageAlertType.PENDING]: {
-                                            text: "Pending, do not close popup",
+                                            text: "Pending, do not close tab",
                                         },
                                     },
                                 }],
-                            note: {
-                                text: "Submits: version, url, keywords, message",
-                            },
                         },
                         {
                             className: "link",
