@@ -23,15 +23,15 @@ const sendEmail = window["libSendEmail"];
     */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const sendProblemReport = async (userMessage = "") => {
-    const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-    const session = await getStorageSession([StorageSession.RESEARCH_INSTANCES]);
-    const phrases = session.researchInstances[tab.id]
-        ? session.researchInstances[tab.id].terms.map((term) => term.phrase).join(" ∣ ")
-        : "";
+    //const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    //const session = await getStorageSession([StorageSession.RESEARCH_INSTANCES]);
+    //const phrases = session.researchInstances[tab.id]
+    //    ? session.researchInstances[tab.id].terms.map((term) => term.phrase).join(" ∣ ")
+    //    : "";
     return sendEmail("service_mms_report", "template_mms_report", {
         mmsVersion: chrome.runtime.getManifest().version,
-        url: tab.url,
-        phrases,
+        url: window.location.href,
+        phrases: "",
         userMessage,
     }, "NNElRuGiCXYr1E43j");
 };
@@ -684,13 +684,13 @@ textarea
             tabContainer.appendChild(tab);
         });
         handleTabs(shiftModifierIsRequired);
-        chrome.storage.onChanged.addListener(() => reload(panelsInfo));
-        chrome.tabs.onActivated.addListener(() => reload(panelsInfo));
+        //chrome.storage.onChanged.addListener(() => reload(panelsInfo));
+        //chrome.tabs.onActivated.addListener(() => reload(panelsInfo));
     };
     return (panelsInfo, additionalStyleText = "", shiftModifierIsRequired = true) => {
-        chrome.tabs.query = useChromeAPI()
-            ? chrome.tabs.query
-            : browser.tabs.query;
+        //chrome.tabs.query = useChromeAPI()
+        //    ? chrome.tabs.query
+        //    : browser.tabs.query;
         fillAndInsertStylesheet(additionalStyleText);
         insertAndManageContent(panelsInfo, shiftModifierIsRequired);
         pageFocusScrollContainer();
