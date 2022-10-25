@@ -35,30 +35,92 @@ However, Mark My Search will only improve if we know what needs fixing.`,
                             },
                             submitters: [{
                                     text: "Submit",
-                                    onClick: (messageText, onSuccess, onError) => {
-                                        sendProblemReport(messageText)
+                                    onClick: (messageText, formFields, onSuccess, onError) => {
+                                        sendProblemReport(messageText, formFields)
                                             .then(onSuccess)
                                             .catch(onError);
                                     },
                                     formFields: [
                                         {
-                                            className: "TODOreplace",
+                                            className: "option",
                                             label: {
-                                                text: "it's just bad",
+                                                text: "Not what I was looking for",
                                             },
                                             checkbox: {},
                                         },
                                         {
-                                            className: "TODOreplace",
+                                            className: "option",
                                             label: {
-                                                text: "do not like",
+                                                text: "Doesn't show up",
+                                            },
+                                            checkbox: {},
+                                        },
+                                        {
+                                            className: "option",
+                                            label: {
+                                                text: "Slows down my browser",
+                                            },
+                                            checkbox: {},
+                                        },
+                                        {
+                                            className: "option",
+                                            label: {
+                                                text: "Too confusing",
+                                            },
+                                            checkbox: {},
+                                        },
+                                        {
+                                            className: "option",
+                                            label: {
+                                                text: "Toolbar gets in the way",
+                                            },
+                                            checkbox: {},
+                                        },
+                                        {
+                                            className: "option",
+                                            label: {
+                                                text: "Highlighting is sometimes incomplete",
+                                            },
+                                            checkbox: {},
+                                        },
+                                        {
+                                            className: "option",
+                                            label: {
+                                                text: "Highlighting messes up pages",
+                                            },
+                                            checkbox: {},
+                                        },
+                                        {
+                                            className: "option",
+                                            label: {
+                                                text: "Highlighting is ugly or hard to read",
+                                            },
+                                            checkbox: {},
+                                        },
+                                        {
+                                            className: "option",
+                                            label: {
+                                                text: "I don't want all my searches highlighted",
+                                            },
+                                            note: {
+                                                text: "Turn off 'Highlight web searches' in the popup",
+                                            },
+                                            checkbox: {},
+                                        },
+                                        {
+                                            className: "option",
+                                            label: {
+                                                text: "Highlighting is overwhelming",
+                                            },
+                                            note: {
+                                                text: "Turn off 'Highlights begin visible' in the options",
                                             },
                                             checkbox: {},
                                         },
                                     ],
                                     message: {
                                         rows: 6,
-                                        placeholder: "Optional message",
+                                        placeholder: "Optional details or support to help us out",
                                     },
                                     alerts: {
                                         [PageAlertType.SUCCESS]: {
@@ -68,7 +130,7 @@ However, Mark My Search will only improve if we know what needs fixing.`,
                                             text: "Status {status}: {text}",
                                         },
                                         [PageAlertType.PENDING]: {
-                                            text: "Pending, do not close tab",
+                                            text: "Pending, do not exit page",
                                         },
                                     },
                                 }],
@@ -94,7 +156,7 @@ However, Mark My Search will only improve if we know what needs fixing.`,
     ];
     return () => {
         const title = document.createElement("title");
-        title.text = `${getName()} - Start`;
+        title.text = `${getName()} - Farewell`;
         document.head.appendChild(title);
         loadPage(panelsInfo, `
 body

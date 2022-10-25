@@ -22,18 +22,15 @@ const sendEmail = window["libSendEmail"];
  * @param userMessage An optional message string to send as a comment.
     */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const sendProblemReport = async (userMessage = "") => {
-    //const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-    //const session = await getStorageSession([StorageSession.RESEARCH_INSTANCES]);
-    //const phrases = session.researchInstances[tab.id]
-    //    ? session.researchInstances[tab.id].terms.map((term) => term.phrase).join(" ∣ ")
-    //    : "";
-    return sendEmail("service_mms_report", "template_mms_report", {
-        mmsVersion: chrome.runtime.getManifest().version,
-        url: window.location.href,
-        phrases: "",
-        userMessage,
-    }, "NNElRuGiCXYr1E43j");
+const sendProblemReport = async (userMessage = "", formFields) => {
+    const message = {
+        user_message: userMessage,
+    };
+    (formFields !== null && formFields !== void 0 ? formFields : []).forEach((formField, i) => {
+        message[`item_${i}_question`] = formField.question;
+        message[`item_${i}_response`] = formField.response;
+    });
+    return sendEmail("service_mms_ux", formFields ? "template_mms_ux_form" : "template_mms_ux_report", message, "NNElRuGiCXYr1E43j");
 };
 // TODO document functions
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -134,7 +131,7 @@ textarea
 .panel .list.row > *
 	{ flex: 1 1 auto; }
 .panel .interaction.option
-	{ flex-direction: row; padding-block: 0; }
+	{ flex-direction: row; padding-block: 0; user-select: none; }
 .panel .interaction > *, .panel .organizer > *
 	{ margin-block: 2px; border-radius: 2px; padding-block: 4px; }
 .panel .interaction input[type="text"],
@@ -513,6 +510,28 @@ textarea
             if (!submitterInfo) {
                 return;
             }
+            let getFormFields = () => [];
+            if (submitterInfo.formFields) {
+                const list = document.createElement("div");
+                list.classList.add("organizer");
+                list.classList.add("list");
+                list.classList.add("column");
+                submitterInfo.formFields.forEach(interactionInfo => {
+                    const interaction = createInteraction(interactionInfo, -1);
+                    list.appendChild(interaction);
+                });
+                container.appendChild(list);
+                getFormFields = () => Array.from(list.querySelectorAll("label")).map((label) => {
+                    var _a, _b;
+                    const input = list.querySelector(`input#${label.htmlFor}`);
+                    return {
+                        question: (_a = label.textContent) !== null && _a !== void 0 ? _a : "",
+                        response: input
+                            ? input.checked === undefined ? (_b = input.value) !== null && _b !== void 0 ? _b : "" : input.checked.toString()
+                            : "",
+                    };
+                });
+            }
             const button = document.createElement("button");
             button.type = "button";
             button.classList.add("submitter");
@@ -522,7 +541,7 @@ textarea
             button.onclick = () => {
                 button.disabled = true;
                 clearAlerts(container, [PageAlertType.PENDING, PageAlertType.FAILURE]);
-                submitterInfo.onClick(getMessageText(), () => {
+                submitterInfo.onClick(getMessageText(), getFormFields(), () => {
                     if (submitterInfo.alerts) {
                         clearAlerts(container, [PageAlertType.PENDING]);
                         insertAlert(PageAlertType.SUCCESS, //
@@ -602,9 +621,9 @@ textarea
             insertObjectList(interaction, interactionInfo.object, index);
             insertAnchor(interaction, interactionInfo.anchor);
             insertSubmitters(interaction, interactionInfo.submitters);
-            insertCheckbox(interaction, interactionInfo.checkbox, checkboxId, index, 0);
             insertTextbox(interaction, interactionInfo.textbox, index, 0);
             insertNote(interaction, interactionInfo.note);
+            insertCheckbox(interaction, interactionInfo.checkbox, checkboxId, index, 0);
             return interaction;
         };
         return (sectionInfo) => {
@@ -684,13 +703,8 @@ textarea
             tabContainer.appendChild(tab);
         });
         handleTabs(shiftModifierIsRequired);
-        //chrome.storage.onChanged.addListener(() => reload(panelsInfo));
-        //chrome.tabs.onActivated.addListener(() => reload(panelsInfo));
     };
     return (panelsInfo, additionalStyleText = "", shiftModifierIsRequired = true) => {
-        //chrome.tabs.query = useChromeAPI()
-        //    ? chrome.tabs.query
-        //    : browser.tabs.query;
         fillAndInsertStylesheet(additionalStyleText);
         insertAndManageContent(panelsInfo, shiftModifierIsRequired);
         pageFocusScrollContainer();
