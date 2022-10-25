@@ -15,12 +15,6 @@ const loadSendoff = (() => {
                         {
                             className: "action",
                             label: {
-                                text: "Uninstallation successful",
-                            },
-                        },
-                        {
-                            className: "action",
-                            label: {
                                 text: "We're sorry to see you go. Please consider filling out this form so we can improve for the future!",
                             },
                             note: {
@@ -31,7 +25,7 @@ However, Mark My Search will only improve if we know what needs fixing.`,
                         {
                             className: "action",
                             label: {
-                                text: "All data is sent stripped of any personal information, and will be viewed only by the developer of Mark My Search.",
+                                text: "Information is sent privately with no personal details, and will be viewed only by the developer of Mark My Search.",
                             },
                             submitters: [{
                                     text: "Submit",
@@ -156,7 +150,7 @@ However, Mark My Search will only improve if we know what needs fixing.`,
     ];
     return () => {
         const title = document.createElement("title");
-        title.text = `${getName()} - Farewell`;
+        title.text = `${getName()} - Uninstalled`;
         document.head.appendChild(title);
         loadPage(panelsInfo, `
 body
