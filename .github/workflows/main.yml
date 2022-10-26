@@ -1,7 +1,7 @@
 name: Compile Source
 run-name: ${{ github.actor }} is compiling source files
 
-on: [repository_dispatch]
+on: [push]
 
 jobs:
   update_dist:
