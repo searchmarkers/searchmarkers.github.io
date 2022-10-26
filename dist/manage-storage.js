@@ -11,7 +11,7 @@ window["chrome"] = {
             set: async () => undefined,
             get: async () => {
                 const store = {};
-                Object.keys(StorageSession).forEach(key => store[key] = {});
+                Object.values(StorageSession).forEach(key => store[key] = {});
                 return store;
             },
         },
@@ -19,7 +19,7 @@ window["chrome"] = {
             set: async () => undefined,
             get: async () => {
                 const store = {};
-                Object.keys(StorageLocal).forEach(key => store[key] = {});
+                Object.values(StorageLocal).forEach(key => store[key] = {});
                 return store;
             },
         },
