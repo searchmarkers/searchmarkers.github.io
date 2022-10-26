@@ -31,23 +31,24 @@ jobs:
           git clone https://user:$GITHUB_TOKEN@github.com/searchmarkers/searchmarkers.github.io
           cp -r releases/mark_my_search-firefox/dist/ searchmarkers.github.io/
           FILES="releases/mark_my_search-firefox/pages/*"
-          ls releases/mark_my_search-firefox/pages
           mkdir --parents searchmarkers.github.io/pages
           for file_path in $FILES
           do
             file_fullname="${file_path##*/}"
             file_name="${file_fullname%.*}"
-            echo $file_path
-            echo $file_fullname
-            echo $file_name
             mv $file_path searchmarkers.github.io/pages/$file_name/index.html
           done
           cd searchmarkers.github.io
           git config user.name "searchmarkers"
           git config user.email "dev@example.com"
-          git add .
-          git commit -m "Update dist"
-          git push
+          if [ -z $( git status --short) ]
+          then
+            git add .
+            git commit -m "Update dist"
+            git push
+          else
+            echo "nothing to commit"
+          fi
       - name: Artifact archive pages
         uses: actions/upload-artifact@v3
         with:
