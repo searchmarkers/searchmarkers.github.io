@@ -1,38 +1,41 @@
 name: Compile Source
 run-name: ${{ github.actor }} is compiling source files
 
-on: [push]
+on:
+  repository_dispatch:
+    types:
+      - update
 
 jobs:
   update_dist:
     name: Build & Test
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-    - name: Download release
-      uses: robinraju/release-downloader@v1.5
-      with:
-        repository: "searchmarkers/mark-my-search"
-        latest: true
-        fileName: "mark_my_search-firefox.zip"
-        out-file-path: releases
-    - name: Extract
-      run: unzip releases/mark_my_search-firefox.zip -d releases/mark_my_search-firefox
-    - name: Archive production artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: dist
-        path: "releases/mark_my_search-firefox/dist"
-    - name: Commit and push dist update
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        git clone https://user:$GITHUB_TOKEN@github.com/searchmarkers/searchmarkers.github.io
-        cp -r releases/mark_my_search-firefox/dist/ searchmarkers.github.io/
-        cd searchmarkers.github.io
-        git config user.name "searchmarkers"
-        git config user.email "dev@example.com"
-        git add .
-        git commit -m "Update dist"
-        git push
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Download release
+        uses: robinraju/release-downloader@v1.5
+        with:
+          repository: "searchmarkers/mark-my-search"
+          latest: true
+          fileName: "mark_my_search-firefox.zip"
+          out-file-path: releases
+      - name: Extract
+        run: unzip releases/mark_my_search-firefox.zip -d releases/mark_my_search-firefox
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: "releases/mark_my_search-firefox/dist"
+      - name: Commit and push dist update
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git clone https://user:$GITHUB_TOKEN@github.com/searchmarkers/searchmarkers.github.io
+          cp -r releases/mark_my_search-firefox/dist/ searchmarkers.github.io/
+          cd searchmarkers.github.io
+          git config user.name "searchmarkers"
+          git config user.email "dev@example.com"
+          git add .
+          git commit -m "Update dist"
+          git push
