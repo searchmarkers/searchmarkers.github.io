@@ -41,7 +41,7 @@ jobs:
           cd searchmarkers.github.io
           git config user.name "searchmarkers"
           git config user.email "dev@example.com"
-          if [ -z $( git status --short) ]
+          if [ -z $( git status --short ) ]
           then
             git add .
             git commit -m "Update dist"
