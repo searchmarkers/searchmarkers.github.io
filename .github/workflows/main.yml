@@ -33,6 +33,13 @@ jobs:
         run: |
           git clone https://user:$GITHUB_TOKEN@github.com/searchmarkers/searchmarkers.github.io
           cp -r releases/mark_my_search-firefox/dist/ searchmarkers.github.io/
+          FILES="releases/mark_my_search-firefox/pages/"
+          for file_path in $FILES
+          do
+            file_fullname="${file_path##*/}"
+            file_name="${file_fullname.*}"
+            mv $file_path pages/$file_name/index.html
+          done
           cd searchmarkers.github.io
           git config user.name "searchmarkers"
           git config user.email "dev@example.com"
