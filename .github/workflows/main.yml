@@ -2,6 +2,7 @@ name: pages-update
 run-name: pages update from main repo
 
 on:
+  push:
   repository_dispatch:
     types: [update]
 
