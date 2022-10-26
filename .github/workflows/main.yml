@@ -1,14 +1,11 @@
 name: pages-update
 run-name: pages update from main repo
 
-on:
-  repository_dispatch:
-    types:
-      - update
+on: [push]
 
 jobs:
   update_dist:
-    name: Build & Test
+    name: update-push
     runs-on: ubuntu-latest
     steps:
       - name: Repository checkout
@@ -22,11 +19,16 @@ jobs:
           out-file-path: releases
       - name: Release extract
         run: unzip releases/mark_my_search-firefox.zip -d releases/mark_my_search-firefox
-      - name: Archive production artifacts
+      - name: Artifact archive dist
         uses: actions/upload-artifact@v3
         with:
           name: dist
           path: "releases/mark_my_search-firefox/dist"
+      - name: Artifact archive pages
+        uses: actions/upload-artifact@v3
+        with:
+          name: pages
+          path: "releases/mark_my_search-firefox/pages"
       - name: Update commit and push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
