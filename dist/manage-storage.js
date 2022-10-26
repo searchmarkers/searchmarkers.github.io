@@ -1,4 +1,4 @@
-
+"use strict"
 window["chrome"] = {
     runtime: {
         getManifest: () => ({
