@@ -561,14 +561,14 @@ textarea
                 }, error => {
                     if (submitterInfo.alerts) {
                         clearAlerts(container, [PageAlertType.PENDING]);
-                        const errorText = error.text || "(no error message)";
+                        const errorText = (error ? error.text : "") || "(no error message)";
                         insertAlert(PageAlertType.FAILURE, //
                         submitterInfo.alerts, //
                         button, //
                         -1, //
                         errorText, //
                         //
-                        text => text.replace("{status}", error.status.toString()).replace("{text}", errorText));
+                        text => text.replace("{status}", error ? error.status.toString() : "-1").replace("{text}", errorText));
                     }
                     button.disabled = false;
                 });
