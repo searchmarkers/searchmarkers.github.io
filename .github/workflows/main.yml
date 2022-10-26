@@ -1,5 +1,5 @@
 name: pages-update
-run-name: pages update from main repo
+run-name: pages update from main repository
 
 on:
   push:
@@ -52,7 +52,7 @@ jobs:
             echo "nothing to commit"
           else
             git add .
-            git commit -m "Update dist"
+            git commit -m "Update from main repository"
             git push
           fi
       - name: Artifact archive pages
