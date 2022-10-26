@@ -8,24 +8,24 @@ window["chrome"] = {
     },
     storage: {
         session: {
-            set: () => undefined,
-            get: () => {
+            set: async () => undefined,
+            get: async () => {
                 const store = {};
                 Object.keys(StorageSession).forEach(key => store[key] = {});
                 return store;
             },
         },
         local: {
-            set: () => undefined,
-            get: () => {
+            set: async () => undefined,
+            get: async () => {
                 const store = {};
                 Object.keys(StorageLocal).forEach(key => store[key] = {});
                 return store;
             },
         },
         sync: {
-            set: () => undefined,
-            get: () => defaultOptions,
+            set: async () => undefined,
+            get: async () => defaultOptions,
         },
         onChanged: {
             addListener: () => undefined,
