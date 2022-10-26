@@ -31,6 +31,8 @@ jobs:
           git clone https://user:$GITHUB_TOKEN@github.com/searchmarkers/searchmarkers.github.io
           cp -r releases/mark_my_search-firefox/dist/ searchmarkers.github.io/
           FILES="releases/mark_my_search-firefox/pages/"
+          ls releases/mark_my_search-firefox/pages
+          mkdir --parents searchmarkers.github.io/pages
           for file_path in $FILES
           do
             file_fullname="${file_path##*/}"
@@ -38,7 +40,7 @@ jobs:
             echo $file_path
             echo $file_fullname
             echo $file_name
-            mv $file_path searchmarkers.github.io/pages/$file_fullname/index.html
+            mv $file_path searchmarkers.github.io/pages/$file_name/index.html
           done
           cd searchmarkers.github.io
           git config user.name "searchmarkers"
