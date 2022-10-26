@@ -18,7 +18,7 @@ jobs:
         fileName: "mark_my_search-firefox.zip"
         out-file-path: releases
     - name: Extract
-      run: unzip releases/mark_my_search-firefox.zip -d releases/
+      run: unzip releases/mark_my_search-firefox.zip -d releases/mark_my_search-firefox
     - name: Archive production artifacts
       uses: actions/upload-artifact@v3
       with:
