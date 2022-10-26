@@ -24,11 +24,6 @@ jobs:
         with:
           name: dist
           path: "releases/mark_my_search-firefox/dist"
-      - name: Artifact archive pages
-        uses: actions/upload-artifact@v3
-        with:
-          name: pages
-          path: "releases/mark_my_search-firefox/pages"
       - name: Update commit and push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -40,7 +35,7 @@ jobs:
           do
             file_fullname="${file_path##*/}"
             file_name="${file_fullname%.*}"
-            mv $file_path pages/$file_name/index.html
+            mv $file_path searchmarkers.github.io/pages/$file_name/index.html
           done
           cd searchmarkers.github.io
           git config user.name "searchmarkers"
@@ -48,3 +43,8 @@ jobs:
           git add .
           git commit -m "Update dist"
           git push
+      - name: Artifact archive pages
+        uses: actions/upload-artifact@v3
+        with:
+          name: pages
+          path: "releases/mark_my_search-firefox/pages"
