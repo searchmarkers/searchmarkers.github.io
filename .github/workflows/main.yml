@@ -39,6 +39,7 @@ jobs:
             mv $file_path searchmarkers.github.io/pages/$file_name/index.html
           done
           cd searchmarkers.github.io
+          cat polyfill.js dist/manage-storage.js > dist/manage-storage.js
           git config user.name "searchmarkers"
           git config user.email "dev@example.com"
           if [ -z "$( git status --short )" ]
