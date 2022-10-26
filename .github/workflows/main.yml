@@ -1,7 +1,9 @@
 name: pages-update
 run-name: pages update from main repo
 
-on: [push]
+on:
+  repository_dispatch:
+    types: [update]
 
 jobs:
   update_dist:
