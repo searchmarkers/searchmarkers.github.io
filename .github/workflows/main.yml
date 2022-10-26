@@ -1,5 +1,5 @@
-name: Compile Source
-run-name: ${{ github.actor }} is compiling source files
+name: pages-update
+run-name: pages update from main repo
 
 on:
   repository_dispatch:
@@ -11,23 +11,23 @@ jobs:
     name: Build & Test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Repository checkout
         uses: actions/checkout@v3
-      - name: Download release
+      - name: Release download
         uses: robinraju/release-downloader@v1.5
         with:
           repository: "searchmarkers/mark-my-search"
           latest: true
           fileName: "mark_my_search-firefox.zip"
           out-file-path: releases
-      - name: Extract
+      - name: Release extract
         run: unzip releases/mark_my_search-firefox.zip -d releases/mark_my_search-firefox
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3
         with:
           name: dist
           path: "releases/mark_my_search-firefox/dist"
-      - name: Commit and push dist update
+      - name: Update commit and push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -37,7 +37,7 @@ jobs:
           for file_path in $FILES
           do
             file_fullname="${file_path##*/}"
-            file_name="${file_fullname.*}"
+            file_name="${file_fullname%.*}"
             mv $file_path pages/$file_name/index.html
           done
           cd searchmarkers.github.io
