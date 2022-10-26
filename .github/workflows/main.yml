@@ -35,7 +35,10 @@ jobs:
           do
             file_fullname="${file_path##*/}"
             file_name="${file_fullname%.*}"
-            mv $file_path searchmarkers.github.io/pages/$file_name/index.html
+            echo file_path
+            echo file_fullname
+            echo file_name
+            mv $file_path searchmarkers.github.io/pages/$file_fullname/index.html
           done
           cd searchmarkers.github.io
           git config user.name "searchmarkers"
