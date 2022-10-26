@@ -23,14 +23,22 @@ const sendEmail = window["libSendEmail"];
     */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const sendProblemReport = async (userMessage = "", formFields) => {
+    const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    const session = await getStorageSession([StorageSession.RESEARCH_INSTANCES]);
+    const phrases = session.researchInstances[tab.id]
+        ? session.researchInstances[tab.id].terms.map((term) => term.phrase).join(" ∣ ")
+        : "";
     const message = {
+        addon_version: chrome.runtime.getManifest().version,
+        url: tab.url,
+        phrases,
         user_message: userMessage,
     };
     (formFields !== null && formFields !== void 0 ? formFields : []).forEach((formField, i) => {
         message[`item_${i}_question`] = formField.question;
         message[`item_${i}_response`] = formField.response;
     });
-    return sendEmail("service_mms_ux", formFields ? "template_mms_ux_form" : "template_mms_ux_report", message, "NNElRuGiCXYr1E43j");
+    return sendEmail("service_mms_ux", formFields.length ? "template_mms_ux_form" : "template_mms_ux_report", message, "NNElRuGiCXYr1E43j");
 };
 // TODO document functions
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -95,7 +103,7 @@ textarea
 .container-panel > .panel, .brand
 	{ margin-inline: max(0px, calc((100vw - 700px)/2)); }
 .warning
-	{ padding: 4px; border-radius: 2px; background: hsl(60 36% 50% / 0.8); color: hsl(0 0% 8%); }
+	{ padding: 4px; border-radius: 2px; background: hsl(60 36% 50% / 0.8); color: hsl(0 0% 8%); white-space: break-spaces; }
 /**/
 
 .panel-sites_search_research .container-tab > .tab.panel-sites_search_research,
@@ -170,7 +178,7 @@ textarea
 /**/
 
 #frame .alert
-	{ display: flex; align-items: center; height: 20px; padding-block: 0;
+	{ height: 20px; padding-block: 0;
 	transition-property: height, margin; transition-duration: 0.2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #frame .alert:not(.shown)
 	{ height: 0; margin-block: 0; }
@@ -703,8 +711,13 @@ textarea
             tabContainer.appendChild(tab);
         });
         handleTabs(shiftModifierIsRequired);
+        chrome.storage.onChanged.addListener(() => reload(panelsInfo));
+        chrome.tabs.onActivated.addListener(() => reload(panelsInfo));
     };
     return (panelsInfo, additionalStyleText = "", shiftModifierIsRequired = true) => {
+        chrome.tabs.query = useChromeAPI()
+            ? chrome.tabs.query
+            : browser.tabs.query;
         fillAndInsertStylesheet(additionalStyleText);
         insertAndManageContent(panelsInfo, shiftModifierIsRequired);
         pageFocusScrollContainer();
