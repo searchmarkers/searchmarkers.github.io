@@ -33,9 +33,6 @@ jobs:
         cd searchmarkers.github.io
         git config user.name "searchmarkers"
         git config user.email "dev@example.com"
-        git checkout -b dist_update-$COMMIT
         git add .
         git commit -m "Update dist"
-        git remote -v
-        git push --set-upstream origin dist_update-$COMMIT
-        git push --set-upstream https://user:$GITHUB_TOKEN@github.com/searchmarkers/searchmarkers.github.io dist_update-$COMMIT
+        git push
