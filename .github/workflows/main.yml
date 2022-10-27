@@ -6,6 +6,10 @@ on:
   repository_dispatch:
     types: [update]
 
+env:
+  OWNER_NAME: ${{ ${GITHUB_REPOSITORY%/*} }}
+  REPO_NAME: ${{ ${GITHUB_REPOSITORY#*/} }}
+
 jobs:
   update_dist:
     name: update-push
@@ -16,7 +20,7 @@ jobs:
       - name: Release download
         uses: robinraju/release-downloader@v1.5
         with:
-          repository: "searchmarkers/mark-my-search"
+          repository: "${{ env.OWNER_NAME }}/mark-my-search"
           latest: true
           fileName: "mark_my_search-firefox.zip"
           out-file-path: releases
@@ -31,17 +35,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git clone https://user:$GITHUB_TOKEN@github.com/searchmarkers/searchmarkers.github.io
-          cp -r releases/mark_my_search-firefox/dist/ searchmarkers.github.io/
+          git clone https://user:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY
+          cp -r releases/mark_my_search-firefox/dist/ ${{ env.REPO_NAME }}
           FILES="releases/mark_my_search-firefox/pages/*"
           for file_path in $FILES
           do
             file_fullname="${file_path##*/}"
             file_name="${file_fullname%.*}"
-            mkdir --parents searchmarkers.github.io/pages/$file_name/
-            mv $file_path searchmarkers.github.io/pages/$file_name/index.html
+            mkdir --parents ${{ env.REPO_NAME }}/pages/$file_name/
+            mv $file_path ${{ env.REPO_NAME }}/pages/$file_name/index.html
           done
-          cd searchmarkers.github.io
+          cd ${{ env.REPO_NAME }}
           cat polyfill.js dist/manage-storage.js > temp
           cat temp > dist/manage-storage.js
           rm temp
