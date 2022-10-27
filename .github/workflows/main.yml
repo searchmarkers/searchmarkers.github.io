@@ -7,20 +7,24 @@ on:
     types: [update]
 
 env:
-  OWNER_NAME: "${GITHUB_REPOSITORY%/*}"
-  REPO_NAME: "${GITHUB_REPOSITORY#*/}"
+  REPO_OWNER: ""
+  REPO_NAME: ""
 
 jobs:
   update_dist:
     name: update-push
     runs-on: ubuntu-latest
     steps:
+      - name: env setup
+        run: |
+          "REPO_OWNER=${GITHUB_REPOSITORY%/*}" >> $GITHUB_ENV
+          "REPO_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
       - name: Repository checkout
         uses: actions/checkout@v3
       - name: Release download
         uses: robinraju/release-downloader@v1.5
         with:
-          repository: "${{ env.OWNER_NAME }}/mark-my-search"
+          repository: "${{ env.REPO_OWNER }}/mark-my-search"
           latest: true
           fileName: "mark_my_search-firefox.zip"
           out-file-path: releases
@@ -31,7 +35,7 @@ jobs:
         with:
           name: dist
           path: "releases/mark_my_search-firefox/dist"
-      - name: Update commit and push
+      - name: Changes commit and push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
