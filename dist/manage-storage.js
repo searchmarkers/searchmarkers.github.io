@@ -6,6 +6,7 @@ window["chrome"] = {
             name: "Mark My Search",
             version: "X.Y.Z",
         }),
+        sendMessage: async () => undefined,
         openOptionsPage: () => undefined,
     },
     storage: {
