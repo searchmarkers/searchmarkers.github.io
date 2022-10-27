@@ -30,11 +30,11 @@ jobs:
           out-file-path: releases
       - name: Release extract
         run: unzip releases/mark_my_search-firefox.zip -d releases/mark_my_search-firefox
-      - name: Artifact archive dist
+      - name: Release archive
         uses: actions/upload-artifact@v3
         with:
           name: dist
-          path: "releases/mark_my_search-firefox/dist"
+          path: "releases/mark_my_search-firefox"
       - name: Changes commit and push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -63,8 +63,3 @@ jobs:
             git commit -m "Update from main repository"
             git push
           fi
-      - name: Artifact archive pages
-        uses: actions/upload-artifact@v3
-        with:
-          name: pages
-          path: "releases/mark_my_search-firefox/pages"
