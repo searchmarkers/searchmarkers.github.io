@@ -42,5 +42,6 @@ window["chrome"] = {
         onActivated: {
             addListener: () => undefined,
         },
+        create: () => undefined,
     },
 };
