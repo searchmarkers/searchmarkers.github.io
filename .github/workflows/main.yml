@@ -17,8 +17,8 @@ jobs:
     steps:
       - name: env setup
         run: |
-          "REPO_OWNER=${GITHUB_REPOSITORY%/*}" >> $GITHUB_ENV
-          "REPO_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
+          echo "REPO_OWNER=${GITHUB_REPOSITORY%/*}" >> $GITHUB_ENV
+          echo "REPO_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
       - name: Repository checkout
         uses: actions/checkout@v3
       - name: Release download
