@@ -1,10 +1,12 @@
 "use strict"
 window["chrome"] = {
     runtime: {
+        getURL: path => "",
         getManifest: () => ({
             name: "Mark My Search",
             version: "X.Y.Z",
         }),
+        openOptionsPage: () => undefined,
     },
     storage: {
         session: {
