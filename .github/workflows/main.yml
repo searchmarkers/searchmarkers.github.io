@@ -7,8 +7,8 @@ on:
     types: [update]
 
 env:
-  OWNER_NAME: ${{ ${GITHUB_REPOSITORY%/*} }}
-  REPO_NAME: ${{ ${GITHUB_REPOSITORY#*/} }}
+  OWNER_NAME: "${GITHUB_REPOSITORY%/*}"
+  REPO_NAME: "${GITHUB_REPOSITORY#*/}"
 
 jobs:
   update_dist:
