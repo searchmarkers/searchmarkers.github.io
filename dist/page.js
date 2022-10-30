@@ -305,10 +305,12 @@ textarea
             });
         });
     };
-    const insertAlert = (alertType, alertsInfo, previousSibling, timeout = -1, tooltip = "", formatText = (text) => text) => {
+    const insertAlert = (alertType, alertsInfo, previousSibling, timeoutDefault = -1, tooltip = "", formatText = (text) => text) => {
+        var _a;
         if (!alertsInfo) {
             return;
         }
+        const timeout = (_a = alertsInfo[alertType].timeout) !== null && _a !== void 0 ? _a : timeoutDefault;
         const alert = document.createElement("label");
         alert.classList.add("alert");
         alert.classList.add(alertType);
