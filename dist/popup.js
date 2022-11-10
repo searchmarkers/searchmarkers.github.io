@@ -103,9 +103,10 @@ const loadPopup = (() => {
                                 onToggle: checked => {
                                     if (checked) {
                                         getStorageSession([StorageSession.RESEARCH_INSTANCES]).then(async (session) => {
+                                            const local = await getStorageLocal([StorageLocal.PERSIST_RESEARCH_INSTANCES]);
                                             const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
                                             const researchInstance = session.researchInstances[tab.id];
-                                            if (researchInstance && researchInstance.persistent) {
+                                            if (researchInstance && local.persistResearchInstances) {
                                                 researchInstance.enabled = true;
                                             }
                                             chrome.runtime.sendMessage({
@@ -126,25 +127,33 @@ const loadPopup = (() => {
                         {
                             className: "option",
                             label: {
-                                text: "Restores keywords",
+                                text: "Keywords stored",
                             },
                             checkbox: {
                                 onLoad: async (setChecked) => {
                                     const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
                                     const session = await getStorageSession([StorageSession.RESEARCH_INSTANCES]);
-                                    const researchInstance = session.researchInstances[tab.id];
-                                    setChecked(researchInstance
-                                        ? researchInstance.persistent
-                                        : (await getStorageLocal([StorageLocal.PERSIST_RESEARCH_INSTANCES])).persistResearchInstances);
+                                    setChecked(!!session.researchInstances[tab.id]);
                                 },
                                 onToggle: checked => {
                                     getStorageSession([StorageSession.RESEARCH_INSTANCES]).then(async (session) => {
                                         const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-                                        const researchInstance = session.researchInstances[tab.id];
-                                        if (researchInstance) {
-                                            researchInstance.persistent = checked;
-                                            setStorageSession(session);
+                                        if (checked) {
+                                            session.researchInstances[tab.id] = {
+                                                enabled: false,
+                                                autoOverwritable: false,
+                                                highlightsShown: true,
+                                                phrases: [],
+                                                terms: [],
+                                            };
                                         }
+                                        else {
+                                            delete session.researchInstances[tab.id];
+                                            chrome.runtime.sendMessage({
+                                                disableTabResearch: true,
+                                            });
+                                        }
+                                        setStorageSession(session);
                                     });
                                 },
                             },
@@ -289,7 +298,7 @@ const loadPopup = (() => {
                             className: "TODOreplace",
                             list: {
                                 getLength: () => getStorageSync([StorageSync.TERM_LISTS]).then(sync => sync.termLists.length),
-                                pushEmpty: () => getStorageSync([StorageSync.URL_FILTERS]).then(sync => {
+                                pushEmpty: () => getStorageSync([StorageSync.TERM_LISTS]).then(sync => {
                                     sync.termLists.push({
                                         name: "",
                                         terms: [],
@@ -297,14 +306,14 @@ const loadPopup = (() => {
                                     });
                                     setStorageSync(sync);
                                 }),
-                                removeAt: index => getStorageSync([StorageSync.URL_FILTERS]).then(sync => {
-                                    delete sync.termLists[index];
+                                removeAt: index => getStorageSync([StorageSync.TERM_LISTS]).then(sync => {
+                                    sync.termLists.splice(index, 1);
                                     setStorageSync(sync);
                                 }),
                             },
                             label: {
                                 text: "",
-                                getText: index => getStorageSync([StorageSync.TERM_LISTS]).then(sync => sync.termLists[index].name),
+                                getText: index => getStorageSync([StorageSync.TERM_LISTS]).then(sync => sync.termLists[index] ? sync.termLists[index].name : ""),
                                 setText: (text, index) => getStorageSync([StorageSync.TERM_LISTS]).then(sync => {
                                     sync.termLists[index].name = text;
                                     setStorageSync(sync);
@@ -318,9 +327,12 @@ const loadPopup = (() => {
                                 list: {
                                     getArray: index => getStorageSync([StorageSync.TERM_LISTS]).then(sync => sync.termLists[index].terms),
                                     setArray: (array, index) => getStorageSync([StorageSync.TERM_LISTS]).then(sync => {
+                                        console.log(sync.termLists[index].terms);
                                         sync.termLists[index].terms = array;
+                                        console.log(array);
                                         setStorageSync(sync);
                                     }),
+                                    getNew: text => new MatchTerm(text),
                                 },
                                 name: {
                                     text: "",
@@ -341,7 +353,7 @@ const loadPopup = (() => {
                                                     spellcheck: false,
                                                     onLoad: async (setText, objectIndex, containerIndex) => {
                                                         const sync = await getStorageSync([StorageSync.TERM_LISTS]);
-                                                        setText(sync.termLists[containerIndex].terms[objectIndex].phrase);
+                                                        setText(sync.termLists[containerIndex].terms[objectIndex] ? sync.termLists[containerIndex].terms[objectIndex].phrase : "");
                                                     },
                                                     onChange: (text, objectIndex, containerIndex) => {
                                                         getStorageSync([StorageSync.TERM_LISTS]).then(sync => {
@@ -475,6 +487,27 @@ const loadPopup = (() => {
                                 placeholder: "example.com/optional-path",
                                 spellcheck: false,
                             },
+                            submitters: [
+                                {
+                                    text: "Highlight in current tab",
+                                    onClick: async (messageText, formFields, onSuccess, onError, index) => {
+                                        const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+                                        const sync = await getStorageSync([StorageSync.TERM_LISTS]);
+                                        const session = await getStorageSession([StorageSession.RESEARCH_INSTANCES]);
+                                        const researchInstance = session.researchInstances[tab.id];
+                                        if (researchInstance && !researchInstance.enabled) {
+                                            researchInstance.enabled = true;
+                                            await setStorageSession(session);
+                                        }
+                                        chrome.runtime.sendMessage({
+                                            terms: researchInstance ? researchInstance.terms.concat(sync.termLists[index].terms.filter(termFromList => !researchInstance.terms.find(term => term.phrase === termFromList.phrase))) : sync.termLists[index].terms,
+                                            makeUnique: true,
+                                            toggleHighlightsOn: true,
+                                        });
+                                        onSuccess();
+                                    },
+                                },
+                            ],
                         },
                     ],
                 },
@@ -482,13 +515,14 @@ const loadPopup = (() => {
         },
     ];
     return () => {
-        var _a, _b;
+        var _a, _b, _c;
         loadPage(panelsInfo, `
 body
 	{ width: 300px; height: 540px; user-select: none; }
 		`, false);
-        pageInsertWarning((_a = document.querySelector(".container-panel .panel-sites_search_research")) !== null && _a !== void 0 ? _a : document.body, "Experimental, please report any issues!");
-        pageInsertWarning((_b = document.querySelector(".container-panel .panel-term_lists")) !== null && _b !== void 0 ? _b : document.body, "This is a work in progress.");
+        pageInsertWarning((_a = document.querySelector(".container-panel .panel-sites_search_research")) !== null && _a !== void 0 ? _a : document.body, "Experimental, look out for bugs!");
+        pageInsertWarning((_b = document.querySelector(".container-panel .panel-sites_search_research")) !== null && _b !== void 0 ? _b : document.body, "List entries are saved as you type them. This will be more clear in future.");
+        pageInsertWarning((_c = document.querySelector(".container-panel .panel-term_lists")) !== null && _c !== void 0 ? _c : document.body, "Keyword lists are highly experimental. Please report any issues.");
     };
 })();
 (() => {
