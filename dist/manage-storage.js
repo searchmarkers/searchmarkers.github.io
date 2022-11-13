@@ -142,7 +142,7 @@ const getStorageSafely = (callGetStorage) => callGetStorage().catch(async () => 
  * @param items An object of items to create or update.
  */
 const setStorageSession = (items) => {
-    return chrome.storage.session.set(items);
+    return chrome.storage["session"].set(items);
 };
 /**
  * Retrieves items from browser session storage.
@@ -151,7 +151,7 @@ const setStorageSession = (items) => {
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getStorageSession = (keys) => getStorageSafely(async () => {
-    const session = await chrome.storage.session.get(keys);
+    const session = await chrome.storage["session"].get(keys);
     if (session.engines) {
         const engines = session.engines;
         Object.keys(engines).forEach(id => engines[id] = Object.assign(new Engine, engines[id]));
