@@ -164,7 +164,7 @@ const setStorageSession = (items) => {
         items[StorageSession._ID_R_INSTANCES] = idRInstances;
         items[StorageSession._TAB_R_INSTANCE_IDS] = tabRInstanceIds;
     }
-    return chrome.storage["session"].set(items);
+    return chrome.storage.session.set(items);
 };
 /**
  * Retrieves items from browser session storage.
@@ -182,7 +182,7 @@ const getStorageSession = (keysParam) => getStorageSafely(async () => {
         keys.push(StorageSession._ID_R_INSTANCES);
         keys.push(StorageSession._TAB_R_INSTANCE_IDS);
     }
-    const session = await chrome.storage["session"].get(keys);
+    const session = await chrome.storage.session.get(keys);
     if (gettingRInstances) {
         const idRInstances = session[StorageSession._ID_R_INSTANCES];
         const tabRInstanceIds = session[StorageSession._TAB_R_INSTANCE_IDS];
