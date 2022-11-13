@@ -15,6 +15,7 @@ var ElementClass;
     ElementClass["CONTROL_BUTTON"] = "control-button";
     ElementClass["CONTROL_REVEAL"] = "control-reveal";
     ElementClass["CONTROL_EDIT"] = "control-edit";
+    ElementClass["PIN"] = "pin";
     ElementClass["BAR_CONTROL"] = "bar-control";
     ElementClass["OPTION_LIST"] = "options";
     ElementClass["OPTION"] = "option";
@@ -180,7 +181,8 @@ input:not(:focus, .${getSel(ElementClass.OVERRIDE_VISIBILITY)})
 
 /* || Bar */
 #${getSel(ElementID.BAR)}
-	{ all: revert; position: fixed; z-index: ${zIndexMax}; color-scheme: light; font-size: 14.6px; line-height: initial; user-select: none; }
+	{ all: revert; position: fixed; top: 0; left: 0; z-index: ${zIndexMax};
+	color-scheme: light; font-size: 14.6px; line-height: initial; user-select: none; }
 #${getSel(ElementID.BAR)}.${getSel(ElementClass.BAR_HIDDEN)}
 	{ display: none; }
 #${getSel(ElementID.BAR)} *
@@ -535,6 +537,7 @@ const insertTermInput = (() => {
                 terms: terms.concat(termChanged),
                 termChanged,
                 termChangedIdx: TermChange.CREATE,
+                toggleAutoOverwritable: false,
             });
         }
     };
@@ -1042,7 +1045,6 @@ const insertControls = (() => {
          * @param hideWhenInactive Indicates whether to hide the control while not in interaction.
          */
         const insertControlWithInfo = (barControlName, info, hideWhenInactive) => {
-            var _a;
             const container = document.createElement("div");
             container.classList.add(getSel(ElementClass.BAR_CONTROL)); // TODO redundant? can use CSS to select partial class
             container.classList.add(getSel(ElementClass.BAR_CONTROL, barControlName));
@@ -1072,7 +1074,7 @@ const insertControls = (() => {
             if (hideWhenInactive) {
                 container.classList.add(getSel(ElementClass.DISABLED));
             }
-            button.onclick = (_a = info.onclick) !== null && _a !== void 0 ? _a : null;
+            button.onclick = () => { var _a; return ((_a = info.onclick) !== null && _a !== void 0 ? _a : (() => undefined))(container); };
             if (info.setUp) {
                 info.setUp(container);
             }
@@ -1116,6 +1118,17 @@ const insertControls = (() => {
                     });
                     pad.appendChild(controlReveal);
                     container.appendChild(optionList);
+                },
+            },
+            pinTerms: {
+                buttonClass: ElementClass.PIN,
+                path: "/icons/pin.svg",
+                containerId: ElementID.BAR_CONTROLS,
+                onclick: control => {
+                    control.remove();
+                    chrome.runtime.sendMessage({
+                        toggleAutoOverwritable: false,
+                    });
                 },
             },
         }[barControlName], hideWhenInactive);
@@ -1242,7 +1255,7 @@ const insertScrollMarkers = (() => {
             markersHtml += `<div class="${className}" top="${yRelative}" style="${markerCss}"></div>`;
         });
         gutter.replaceChildren(); // Removes children, since inner HTML replacement does not for some reason
-        gutter.insertAdjacentHTML("afterbegin", markersHtml);
+        gutter.innerHTML = markersHtml;
     };
 })();
 /**
@@ -1390,7 +1403,6 @@ const purgeClass = (className, root = document.body, selectorPrefix = "", predic
 const restoreNodes = (classNames = [], root = document.body) => {
     const highlights = root.querySelectorAll(classNames.length ? `mms-h.${classNames.join(", mms-h.")}` : "mms-h");
     for (const highlight of Array.from(highlights)) {
-        // Direct assignation to `outerHTML` prevents the mutation observer from triggering excess highlighting
         highlight.outerHTML = highlight.innerHTML;
     }
     if (root.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
@@ -1718,9 +1730,10 @@ const getTermsFromSelection = () => {
             highlightsShown: false,
             barControlsShown: {
                 disableTabResearch: true,
-                performSearch: true,
+                performSearch: false,
                 toggleHighlights: true,
                 appendTerm: true,
+                pinTerms: true,
             },
             barLook: {
                 showEditIcon: true,
@@ -1762,8 +1775,13 @@ const getTermsFromSelection = () => {
                 message.extensionCommands.forEach(command => commands.push(command));
             }
             Object.entries((_a = message.barControlsShown) !== null && _a !== void 0 ? _a : {}).forEach(([key, value]) => {
-                controlsInfo.barControlsShown[key] = value;
+                if (key !== "pinTerms") {
+                    controlsInfo.barControlsShown[key] = value;
+                }
             });
+            if (message.autoOverwritable !== undefined) {
+                controlsInfo.barControlsShown.pinTerms = message.autoOverwritable;
+            }
             Object.entries((_b = message.barLook) !== null && _b !== void 0 ? _b : {}).forEach(([key, value]) => {
                 controlsInfo.barLook[key] = value;
             });
@@ -1800,6 +1818,11 @@ const getTermsFromSelection = () => {
             const bar = document.getElementById(getSel(ElementID.BAR));
             if (bar) {
                 bar.classList[controlsInfo.highlightsShown ? "add" : "remove"](getSel(ElementClass.HIGHLIGHTS_SHOWN));
+            }
+            const pinSelector = `.${getSel(ElementClass.PIN)}`;
+            if (!controlsInfo.barControlsShown.pinTerms
+                && document.querySelector(pinSelector)) {
+                document.querySelector(pinSelector).remove();
             }
             sendResponse({}); // Mitigates manifest V3 bug which otherwise logs an error message.
         });

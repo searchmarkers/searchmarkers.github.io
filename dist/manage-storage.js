@@ -54,8 +54,6 @@ chrome.storage = useChromeAPI() ? chrome.storage : browser.storage;
 var StorageSession;
 (function (StorageSession) {
     StorageSession["RESEARCH_INSTANCES"] = "researchInstances";
-    StorageSession["_ID_R_INSTANCES"] = "idResearchInstances";
-    StorageSession["_TAB_R_INSTANCE_IDS"] = "tabResearchInstanceIds";
     StorageSession["ENGINES"] = "engines";
 })(StorageSession || (StorageSession = {}));
 var StorageLocal;
@@ -110,9 +108,10 @@ const defaultOptions = {
     },
     barControlsShown: {
         disableTabResearch: true,
-        performSearch: true,
+        performSearch: false,
         toggleHighlights: true,
         appendTerm: true,
+        pinTerms: true,
     },
     barLook: {
         showEditIcon: true,
@@ -143,57 +142,16 @@ const getStorageSafely = (callGetStorage) => callGetStorage().catch(async () => 
  * @param items An object of items to create or update.
  */
 const setStorageSession = (items) => {
-    items = { ...items };
-    if (StorageSession.RESEARCH_INSTANCES in items) {
-        // TODO disable object shallow copying when linking disabled in settings
-        const tabRInstances = items.researchInstances;
-        const tabs = Object.keys(tabRInstances);
-        const idRInstances = [];
-        const tabRInstanceIds = {};
-        items.researchInstances = {};
-        tabs.forEach(tab => {
-            const id = idRInstances.indexOf(tabRInstances[tab]);
-            if (id === -1) {
-                tabRInstanceIds[tab] = idRInstances.length;
-                idRInstances.push(tabRInstances[tab]);
-            }
-            else {
-                tabRInstanceIds[tab] = id;
-            }
-        });
-        items[StorageSession._ID_R_INSTANCES] = idRInstances;
-        items[StorageSession._TAB_R_INSTANCE_IDS] = tabRInstanceIds;
-    }
-    return chrome.storage["session"].set(items);
+    return chrome.storage.session.set(items);
 };
 /**
  * Retrieves items from browser session storage.
- * @param keysParam An array of storage keys for which to retrieve the items.
+ * @param keys An array of storage keys for which to retrieve the items.
  * @returns A promise that resolves with an object containing the requested items.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getStorageSession = (keysParam) => getStorageSafely(async () => {
-    const keys = keysParam === undefined
-        ? undefined
-        : typeof (keysParam) === "string" ? [keysParam] : Array.from(new Set(keysParam));
-    const gettingRInstances = keys && keys.includes(StorageSession.RESEARCH_INSTANCES);
-    if (gettingRInstances) {
-        keys.splice(keys.indexOf(StorageSession.RESEARCH_INSTANCES), 1);
-        keys.push(StorageSession._ID_R_INSTANCES);
-        keys.push(StorageSession._TAB_R_INSTANCE_IDS);
-    }
-    const session = await chrome.storage["session"].get(keys);
-    if (gettingRInstances) {
-        const idRInstances = session[StorageSession._ID_R_INSTANCES];
-        const tabRInstanceIds = session[StorageSession._TAB_R_INSTANCE_IDS];
-        delete session[StorageSession._ID_R_INSTANCES];
-        delete session[StorageSession._TAB_R_INSTANCE_IDS];
-        const tabRInstances = {};
-        Object.keys(tabRInstanceIds).forEach(tab => {
-            tabRInstances[tab] = idRInstances[tabRInstanceIds[tab]];
-        });
-        session.researchInstances = tabRInstances;
-    }
+const getStorageSession = (keys) => getStorageSafely(async () => {
+    const session = await chrome.storage.session.get(keys);
     if (session.engines) {
         const engines = session.engines;
         Object.keys(engines).forEach(id => engines[id] = Object.assign(new Engine, engines[id]));
@@ -209,11 +167,11 @@ const setStorageLocal = (items) => {
 };
 /**
  * Retrieves items from browser local storage.
- * @param keysParam An array of storage keys for which to retrieve the items.
+ * @param keys An array of storage keys for which to retrieve the items.
  * @returns A promise that resolves with an object containing the requested items.
  */
-const getStorageLocal = async (keysParam) => getStorageSafely(async () => {
-    return chrome.storage.local.get(keysParam);
+const getStorageLocal = async (keys) => getStorageSafely(async () => {
+    return chrome.storage.local.get(keys);
 });
 /**
  * Stores items to browser sync storage.
@@ -224,11 +182,11 @@ const setStorageSync = (items) => {
 };
 /**
  * Retrieves items from browser synced storage.
- * @param keysParam An array of storage keys for which to retrieve the items.
+ * @param keys An array of storage keys for which to retrieve the items.
  * @returns A promise that resolves with an object containing the requested items.
  */
-const getStorageSync = (keysParam) => getStorageSafely(async () => {
-    return chrome.storage.sync.get(keysParam);
+const getStorageSync = (keys) => getStorageSafely(async () => {
+    return chrome.storage.sync.get(keys);
 });
 /**
  * Sets internal storage to its default working values.

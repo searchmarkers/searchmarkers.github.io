@@ -143,7 +143,6 @@ const loadPopup = (() => {
                                                 enabled: false,
                                                 autoOverwritable: false,
                                                 highlightsShown: true,
-                                                phrases: [],
                                                 terms: [],
                                             };
                                         }
@@ -500,7 +499,9 @@ const loadPopup = (() => {
                                             await setStorageSession(session);
                                         }
                                         chrome.runtime.sendMessage({
-                                            terms: researchInstance ? researchInstance.terms.concat(sync.termLists[index].terms.filter(termFromList => !researchInstance.terms.find(term => term.phrase === termFromList.phrase))) : sync.termLists[index].terms,
+                                            terms: researchInstance
+                                                ? researchInstance.terms.concat(sync.termLists[index].terms.filter(termFromList => !researchInstance.terms.find(term => term.phrase === termFromList.phrase)))
+                                                : sync.termLists[index].terms,
                                             makeUnique: true,
                                             toggleHighlightsOn: true,
                                         });
@@ -515,14 +516,13 @@ const loadPopup = (() => {
         },
     ];
     return () => {
-        var _a, _b, _c;
+        var _a, _b;
         loadPage(panelsInfo, `
 body
 	{ width: 300px; height: 540px; user-select: none; }
 		`, false);
-        pageInsertWarning((_a = document.querySelector(".container-panel .panel-sites_search_research")) !== null && _a !== void 0 ? _a : document.body, "Experimental, look out for bugs!");
-        pageInsertWarning((_b = document.querySelector(".container-panel .panel-sites_search_research")) !== null && _b !== void 0 ? _b : document.body, "List entries are saved as you type them. This will be more clear in future.");
-        pageInsertWarning((_c = document.querySelector(".container-panel .panel-term_lists")) !== null && _c !== void 0 ? _c : document.body, "Keyword lists are highly experimental. Please report any issues.");
+        pageInsertWarning((_a = document.querySelector(".container-panel .panel-sites_search_research")) !== null && _a !== void 0 ? _a : document.body, "List entries are saved as you type them. This will be more clear in future.");
+        pageInsertWarning((_b = document.querySelector(".container-panel .panel-term_lists")) !== null && _b !== void 0 ? _b : document.body, "Keyword lists are highly experimental. Please report any issues.");
     };
 })();
 (() => {
