@@ -237,6 +237,7 @@ textarea
         const inputFirst = document.querySelector(`.panel.${className} input`);
         if (inputFirst) {
             if (inputFirst.type === "text") {
+                inputFirst.focus();
                 inputFirst.select();
             }
             else {
@@ -362,7 +363,6 @@ textarea
         : ".alert").forEach((alert) => clearAlert(alert));
     const createSection = (() => {
         const insertLabel = (container, labelInfo, containerIndex) => {
-            console.log(containerIndex);
             if (!labelInfo) {
                 return;
             }
@@ -390,7 +390,6 @@ textarea
             })();
             label.classList.add("label");
             const onChangeInternal = () => {
-                console.log(containerIndex);
                 labelInfo.setText ? labelInfo.setText(label.value, containerIndex) : undefined;
             };
             if (labelInfo.setText) {
@@ -463,6 +462,7 @@ textarea
                             onChangeInternal(true);
                             return;
                         }
+                        textboxes[textboxIndex].focus();
                         textboxes[textboxIndex].select();
                     }
                 });
@@ -728,9 +728,6 @@ textarea
                         });
                     }
                     else if (!labelTextbox.value && container.lastElementChild !== interaction && commitIfEmpty) {
-                        if (index + 1 < container.childElementCount) {
-                            container.children[index + 1].querySelector("input").select();
-                        }
                         interaction.remove();
                         listInfo.removeAt(index);
                     }
@@ -746,6 +743,7 @@ textarea
                             onChangeInternal(true);
                             return;
                         }
+                        textboxes[textboxIndex].focus();
                         textboxes[textboxIndex].select();
                     }
                 });

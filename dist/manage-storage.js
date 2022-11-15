@@ -127,22 +127,11 @@ const defaultOptions = {
     termLists: [],
 };
 /**
- * Calls a function which gets a particular area of storage, initializing storage and retrying **once** if an error is encountered.
- * @param callGetStorage Function to get any storage items from "session", "local", or "sync" storage.
- * @returns The storage returned by the storage getter.
- */
-const getStorageSafely = (callGetStorage) => callGetStorage().catch(async () => {
-    // TODO use custom logging function
-    console.warn("Reinitialized storage due to error when getting storage items. Retrying.");
-    await initializeStorage();
-    return callGetStorage();
-});
-/**
  * Stores items to browser session storage.
  * @param items An object of items to create or update.
  */
 const setStorageSession = (items) => {
-    return chrome.storage["session"].set(items);
+    return chrome.storage.session.set(items);
 };
 /**
  * Retrieves items from browser session storage.
@@ -150,14 +139,14 @@ const setStorageSession = (items) => {
  * @returns A promise that resolves with an object containing the requested items.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getStorageSession = (keys) => getStorageSafely(async () => {
-    const session = await chrome.storage["session"].get(keys);
+const getStorageSession = async (keys) => {
+    const session = await chrome.storage.session.get(keys);
     if (session.engines) {
         const engines = session.engines;
         Object.keys(engines).forEach(id => engines[id] = Object.assign(new Engine, engines[id]));
     }
     return session;
-});
+};
 /**
  * Stores items to browser local storage.
  * @param items An object of items to create or update.
@@ -170,9 +159,9 @@ const setStorageLocal = (items) => {
  * @param keys An array of storage keys for which to retrieve the items.
  * @returns A promise that resolves with an object containing the requested items.
  */
-const getStorageLocal = async (keys) => getStorageSafely(async () => {
+const getStorageLocal = async (keys) => {
     return chrome.storage.local.get(keys);
-});
+};
 /**
  * Stores items to browser sync storage.
  * @param items An object of items to create or update.
@@ -185,9 +174,9 @@ const setStorageSync = (items) => {
  * @param keys An array of storage keys for which to retrieve the items.
  * @returns A promise that resolves with an object containing the requested items.
  */
-const getStorageSync = (keys) => getStorageSafely(async () => {
+const getStorageSync = async (keys) => {
     return chrome.storage.sync.get(keys);
-});
+};
 /**
  * Sets internal storage to its default working values.
  */

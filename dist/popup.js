@@ -326,9 +326,7 @@ const loadPopup = (() => {
                                 list: {
                                     getArray: index => getStorageSync([StorageSync.TERM_LISTS]).then(sync => sync.termLists[index].terms),
                                     setArray: (array, index) => getStorageSync([StorageSync.TERM_LISTS]).then(sync => {
-                                        console.log(sync.termLists[index].terms);
                                         sync.termLists[index].terms = array;
-                                        console.log(array);
                                         setStorageSync(sync);
                                     }),
                                     getNew: text => new MatchTerm(text),
