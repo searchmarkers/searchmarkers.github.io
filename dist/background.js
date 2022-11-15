@@ -222,15 +222,9 @@ const updateActionIcon = (enabled) => enabled === undefined
      * Registers items to selectively appear in context menus, if not present, to serve as shortcuts for managing the extension.
      */
     const createContextMenuItems = () => {
-        if (chrome.contextMenus.onClicked.hasListeners()) {
+        if (useChromeAPI() && chrome.contextMenus.onClicked["hasListeners"]()) {
             return;
         }
-        chrome.contextMenus.removeAll();
-        chrome.contextMenus.create({
-            title: "&Highlight Selection",
-            id: "activate-research-tab",
-            contexts: ["selection", "page"],
-        });
         chrome.contextMenus.onClicked.addListener((info, tab) => {
             if (tab && tab.id !== undefined) {
                 log("research activation request", "context menu item activated", { tabId: tab.id });
@@ -239,6 +233,13 @@ const updateActionIcon = (enabled) => enabled === undefined
             else {
                 assert(false, "research activation [from context menu] no request", "", { tab });
             }
+        });
+        chrome.contextMenus.removeAll(() => {
+            chrome.contextMenus.create({
+                title: "&Highlight Selection",
+                id: "activate-research-tab",
+                contexts: ["selection", "page"],
+            });
         });
     };
     /**
