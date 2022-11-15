@@ -46,8 +46,8 @@ const loadStartpage = (() => {
                                                 toggleHighlightsOn: true,
                                                 makeUnique: true,
                                                 terms: messageText.split(" ").filter(phrase => phrase !== "").map(phrase => new MatchTerm(phrase)),
-                                            })
-                                                .then(() => onSuccess());
+                                            });
+                                            onSuccess();
                                         }
                                     },
                                     message: {
