@@ -17,7 +17,7 @@ if ( /*isBrowserChromium()*/!this.browser) {
     // Firefox accepts a list of event page scripts, whereas Chromium only accepts service workers.
     this["importScripts"](ScriptLib.STORAGE, ScriptLib.STEMMING, ScriptLib.DIACRITICS, ScriptLib.COMMON);
 }
-chrome.tabs.executeScript = useChromeAPI() ? chrome.tabs.executeScript : browser.tabs.executeScript;
+chrome.scripting = useChromeAPI() ? chrome.scripting : browser["scripting"];
 chrome.tabs.query = useChromeAPI() ? chrome.tabs.query : browser.tabs.query;
 chrome.tabs.sendMessage = useChromeAPI()
     ? chrome.tabs.sendMessage
@@ -213,15 +213,24 @@ const manageEnginesCacheOnBookmarkUpdate = (() => {
  */
 const updateActionIcon = (enabled) => enabled === undefined
     ? getStorageLocal([StorageLocal.ENABLED]).then(local => updateActionIcon(local.enabled))
-    : chrome.browserAction.setIcon({ path: useChromeAPI()
+    : chrome.action.setIcon({ path: useChromeAPI()
             ? enabled ? "/icons/mms-32.png" : "/icons/mms-off-32.png" // Chromium still has patchy SVG support
             : enabled ? "/icons/mms.svg" : "/icons/mms-off.svg"
     });
 (() => {
     /**
-     * Registers items to selectively appear in context menus. These items serve as shortcuts for managing the extension.
+     * Registers items to selectively appear in context menus, if not present, to serve as shortcuts for managing the extension.
      */
     const createContextMenuItems = () => {
+        if (chrome.contextMenus.onClicked.hasListeners()) {
+            return;
+        }
+        chrome.contextMenus.removeAll();
+        chrome.contextMenus.create({
+            title: "&Highlight Selection",
+            id: "activate-research-tab",
+            contexts: ["selection", "page"],
+        });
         chrome.contextMenus.onClicked.addListener((info, tab) => {
             if (tab && tab.id !== undefined) {
                 log("research activation request", "context menu item activated", { tabId: tab.id });
@@ -231,14 +240,6 @@ const updateActionIcon = (enabled) => enabled === undefined
                 assert(false, "research activation [from context menu] no request", "", { tab });
             }
         });
-        return (() => {
-            chrome.contextMenus.removeAll();
-            chrome.contextMenus.create({
-                title: "&Highlight Selection",
-                id: "activate-research-tab",
-                contexts: ["selection", "page"],
-            });
-        })();
     };
     /**
      * Prepares non-volatile extension components on install.
@@ -410,16 +411,24 @@ const updateActionIcon = (enabled) => enabled === undefined
  * This script will first be injected if not already present.
  */
 const activateHighlightingInTab = async (targetTabId, highlightMessageToReceive) => {
-    highlightMessageToReceive = Object.assign({ extensionCommands: await chrome.commands.getAll() }, highlightMessageToReceive);
     const logMetadata = { tabId: targetTabId };
-    log("script injection [highlighting activation] start", "", logMetadata);
-    await executeScriptsInTab(targetTabId).then(value => {
-        log("script injection [highlighting activation] finish", "", logMetadata);
-        chrome.tabs.sendMessage(targetTabId, highlightMessageToReceive);
+    log("pilot function injection start", "", logMetadata);
+    await chrome.scripting.executeScript({
+        func: (flag, tabId, highlightMessage) => {
+            chrome.runtime.sendMessage({
+                executeInTab: !window[flag],
+                tabId,
+                highlightMessage,
+            });
+            window[flag] = true;
+        },
+        args: [WindowFlag.EXECUTION_UNNECESSARY, targetTabId, Object.assign({ extensionCommands: await chrome.commands.getAll() }, highlightMessageToReceive)],
+        target: { tabId: targetTabId },
+    }).then(value => {
+        log("pilot function injection finish", "", logMetadata);
         return value;
     }).catch(() => {
-        log("script injection [highlighting activation] fail", "injection not permitted in this tab (perhaps scripts were already injected), sending message regardless", logMetadata);
-        chrome.tabs.sendMessage(targetTabId, highlightMessageToReceive);
+        log("pilot function injection fail", "injection not permitted in this tab", logMetadata);
     });
 };
 /**
@@ -453,13 +462,13 @@ const activateResearchInTab = async (tabId) => {
     const session = await getStorageSession([StorageSession.RESEARCH_INSTANCES]);
     const termsSelected = await getTermsSelectedInTab(tabId, 1);
     if (termsSelected === undefined) {
-        log("research activation fail", "terms were not received in response, perhaps there is no script injected");
+        log("research activation fail", "terms were not received in response, perhaps no script is injected");
         return;
     }
-    const researchInstance = session.researchInstances[tabId] && local.persistResearchInstances
+    const researchInstance = session.researchInstances[tabId] && local.persistResearchInstances && !termsSelected.length
         ? session.researchInstances[tabId]
         : await createResearchInstance({
-            terms: [],
+            terms: termsSelected,
             autoOverwritable: false,
         });
     researchInstance.enabled = true;
@@ -518,18 +527,25 @@ const toggleHighlightsInTab = async (tabId, toggleHighlightsOn) => {
 const executeScriptsInTab = async (tabId) => {
     const logMetadata = { tabId };
     log("script injection start", "", logMetadata);
-    await chrome.tabs.executeScript(tabId, { file: ScriptLib.STEMMING }).then(async () => {
-        await chrome.tabs.executeScript(tabId, { file: ScriptLib.DIACRITICS });
-        await chrome.tabs.executeScript(tabId, { file: ScriptLib.COMMON });
-        await chrome.tabs.executeScript(tabId, { file: Script.CONTENT_MARKER });
-        log("script injection finish", "", logMetadata);
+    return chrome.scripting.executeScript({
+        files: [
+            ScriptLib.STEMMING,
+            ScriptLib.DIACRITICS,
+            ScriptLib.COMMON,
+            Script.CONTENT_MARKER,
+        ],
+        target: { tabId },
+    }).then(value => {
+        log("script injection finish (silent failure possible)", "", logMetadata);
+        return value;
     }).catch(() => {
         log("script injection fail", "injection not permitted in this tab", logMetadata);
     });
 };
 chrome.commands.onCommand.addListener(async (commandString) => {
+    var _a;
     if (commandString === "open-popup") {
-        chrome.browserAction["openPopup"]();
+        ((_a = chrome.action["openPopup"]) !== null && _a !== void 0 ? _a : (() => undefined))();
     }
     const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
     const tabId = tab.id; // `tab.id` always defined for this case.
@@ -659,6 +675,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
     sendResponse(); // Mitigates manifest V3 bug which otherwise logs an error message.
 });
-chrome.browserAction.onClicked.addListener(() => chrome.permissions.request({ permissions: ["bookmarks"] }));
+chrome.action.onClicked.addListener(() => chrome.permissions.request({ permissions: ["bookmarks"] }));
 chrome.permissions.onAdded.addListener(permissions => permissions && permissions.permissions && permissions.permissions.includes("bookmarks")
     ? manageEnginesCacheOnBookmarkUpdate() : undefined);
