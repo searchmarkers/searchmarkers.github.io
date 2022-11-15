@@ -131,7 +131,7 @@ const defaultOptions = {
  * @param items An object of items to create or update.
  */
 const setStorageSession = (items) => {
-    return chrome.storage.session.set(items);
+    return chrome.storage["session"].set(items);
 };
 /**
  * Retrieves items from browser session storage.
