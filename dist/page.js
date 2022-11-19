@@ -719,7 +719,7 @@ textarea
                 const onChangeInternal = (commitIfEmpty = false) => {
                     index = Array.from(container.children).indexOf(interaction);
                     if (labelTextbox.value && container.lastElementChild.querySelector("input").value) {
-                        listInfo.pushEmpty().then(() => {
+                        listInfo.pushWithName(labelTextbox.value).then(() => {
                             insertBody();
                             insertInteraction(container, interactionInfo);
                         });
