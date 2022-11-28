@@ -222,7 +222,7 @@ const updateActionIcon = (enabled) => enabled === undefined
      * Registers items to selectively appear in context menus, if not present, to serve as shortcuts for managing the extension.
      */
     const createContextMenuItems = () => {
-        if (chrome.contextMenus.onClicked.hasListeners()) {
+        if (useChromeAPI() && chrome.contextMenus.onClicked["hasListeners"]()) {
             return;
         }
         chrome.contextMenus.removeAll();

@@ -105,7 +105,7 @@ const getSel = (identifier, argument) => argument === undefined ? `markmysearch-
  * @param terms Terms to account for and style.
  * @param hues Color hues for term styles to cycle through.
  */
-const fillStylesheetContent = (terms, hues) => {
+const fillStylesheetContent = (terms, hues, controlsInfo) => {
     const style = document.getElementById(getSel(ElementID.STYLE));
     const zIndexMax = 2 ** 31 - 1;
     const makeImportant = (styleText) => styleText.replace(/;/g, " !important;"); // Prevent websites from overriding rules with !important;
@@ -116,7 +116,7 @@ const fillStylesheetContent = (terms, hues) => {
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.CONTROL_PAD)} input,
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.BAR_CONTROL)} input
 	{ width: 5em; padding: 0 2px 0 2px; margin-left: 4px; border: none; outline: revert;
-	box-sizing: unset; font-family: revert; white-space: pre; color: #000; }
+	box-sizing: unset; font-family: revert; white-space: pre; color: hsl(0 0% 0%); }
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.CONTROL_PAD)} button:disabled,
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.CONTROL_PAD)} button:disabled *,
 #${getSel(ElementID.BAR)}:not(:hover) .${getSel(ElementClass.CONTROL_PAD)}
@@ -182,7 +182,7 @@ input:not(:focus, .${getSel(ElementClass.OVERRIDE_VISIBILITY)})
 /* || Bar */
 #${getSel(ElementID.BAR)}
 	{ all: revert; position: fixed; top: 0; left: 0; z-index: ${zIndexMax};
-	color-scheme: light; font-size: 14.6px; line-height: initial; user-select: none; }
+	color-scheme: light; font-size: ${controlsInfo.barLook.fontSize}; line-height: initial; user-select: none; }
 #${getSel(ElementID.BAR)}.${getSel(ElementClass.BAR_HIDDEN)}
 	{ display: none; }
 #${getSel(ElementID.BAR)} *
@@ -206,9 +206,10 @@ input:not(:focus, .${getSel(ElementClass.OVERRIDE_VISIBILITY)})
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.OPTION_LIST)}:focus .${getSel(ElementClass.OPTION)}::first-letter
 	{ text-decoration: underline; }
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.OPTION_LIST)}
-	{ display: none; position: absolute; flex-direction: column; width: max-content; padding: 0; margin: 0; z-index: 1; }
+	{ display: none; position: absolute; flex-direction: column; padding: 0; width: max-content; margin: 0 0 0 4px;
+	z-index: 1; font-size: max(14px, 0.8em); }
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.OPTION)}
-	{ display: block; padding-block: 2px; margin-left: 3px; font-size: small; background: hsl(0 0% 94% / 0.76);
+	{ display: block; padding-block: 2px; background: hsl(0 0% 94% / 0.76);
 	color: hsl(0 0% 6%); filter: grayscale(100%); width: 100%; text-align: left;
 	border-width: 2px; border-color: hsl(0 0% 40% / 0.7); border-left-style: solid; }
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.OPTION)}:hover
@@ -219,10 +220,10 @@ input:not(:focus, .${getSel(ElementClass.OVERRIDE_VISIBILITY)})
 #${getSel(ElementID.BAR_TERMS)} .${getSel(ElementClass.CONTROL)}
 	{ white-space: pre; }
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.CONTROL_PAD)}
-	{ display: flex; height: 1.3em; border-style: none; border-radius: 4px; box-shadow: 1px 1px 5px;
-	background: hsl(0 0% 90% / 0.8); color: #000; }
+	{ display: flex; height: 1.3em; background: hsl(0 0% 90% / ${controlsInfo.barLook.opacityControl}); color: hsl(0 0% 0%);
+	border-style: none; border-radius: ${controlsInfo.barLook.borderRadius}; box-shadow: 1px 1px 5px; }
 #${getSel(ElementID.BAR)}.${getSel(ElementClass.DISABLED)} .${getSel(ElementClass.CONTROL_PAD)}
-	{ background: hsl(0 0% 90% / 0.4); }
+	{ background: hsl(0 0% 90% / min(${controlsInfo.barLook.opacityControl}, 0.4)); }
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.CONTROL_PAD)} button:hover
 	{ background: hsl(0 0% 65%); }
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.CONTROL_PAD)} button:active
@@ -230,9 +231,9 @@ input:not(:focus, .${getSel(ElementClass.OVERRIDE_VISIBILITY)})
 #${getSel(ElementID.BAR)} > :not(#${getSel(ElementID.BAR_TERMS)})
 > .${getSel(ElementClass.DISABLED)}:not(:focus-within, .${getSel(ElementClass.OVERRIDE_VISIBILITY)})
 	{ display: none; }
-#${getSel(ElementID.BAR)} #${getSel(ElementID.BAR_TERMS)}
+#${getSel(ElementID.BAR)}:not(.${getSel(ElementClass.DISABLED)}) #${getSel(ElementID.BAR_TERMS)}
 .${getSel(ElementClass.CONTROL_PAD)}.${getSel(ElementClass.DISABLED)}
-	{ display: flex; background: hsl(0 0% 80% / 0.6); }
+	{ display: flex; background: hsl(0 0% 80% / min(${controlsInfo.barLook.opacityTerm}, 0.6)); }
 /**/
 
 /* || Term Scroll Markers */
@@ -284,10 +285,11 @@ mms-h
 /* || Term Control Buttons */
 #${getSel(ElementID.BAR_TERMS)} .${getSel(ElementClass.TERM, term.selector)}
 .${getSel(ElementClass.CONTROL_PAD)}
-	{ background: ${getBackgroundStyle(`hsl(${hue} 70% 70% / 0.8)`, `hsl(${hue} 70% 88% / 0.8)`)}; }
-#${getSel(ElementID.BAR_TERMS)}.${getSel(ElementClass.DISABLED)} .${getSel(ElementClass.TERM, term.selector)}
+	{ background: ${getBackgroundStyle(`hsl(${hue} 70% 70% / ${controlsInfo.barLook.opacityTerm})`, `hsl(${hue} 70% 88% / ${controlsInfo.barLook.opacityTerm})`)}; }
+#${getSel(ElementID.BAR)}.${getSel(ElementClass.DISABLED)}
+#${getSel(ElementID.BAR_TERMS)} .${getSel(ElementClass.TERM, term.selector)}
 .${getSel(ElementClass.CONTROL_PAD)}
-	{ background: ${getBackgroundStyle(`hsl(${hue} 70% 70% / 0.4)`, `hsl(${hue} 70% 88% / 0.4)`)}; }
+	{ background: ${getBackgroundStyle(`hsl(${hue} 70% 70% / min(${controlsInfo.barLook.opacityTerm}, 0.4))`, `hsl(${hue} 70% 88% / min(${controlsInfo.barLook.opacityTerm}, 0.4))`)}; }
 #${getSel(ElementID.BAR_TERMS)} .${getSel(ElementClass.TERM, term.selector)}
 .${getSel(ElementClass.CONTROL_BUTTON)}:hover:not(:disabled)
 	{ background: hsl(${hue} 70% 80%); }
@@ -1135,7 +1137,7 @@ const insertControls = (() => {
         }[barControlName], hideWhenInactive);
     })();
     return (terms, controlsInfo, commands, highlightTags, hues) => {
-        fillStylesheetContent(terms, hues);
+        fillStylesheetContent(terms, hues, controlsInfo);
         const bar = document.createElement("div");
         bar.id = getSel(ElementID.BAR);
         bar.ondragstart = event => event.preventDefault();
@@ -1563,7 +1565,7 @@ const getTermsFromSelection = () => {
                         removeTermControl(termRemovedPreviousIdx);
                         terms.splice(termRemovedPreviousIdx, 1);
                         restoreNodes([getSel(ElementClass.TERM, termUpdate.selector)]);
-                        fillStylesheetContent(terms, hues);
+                        fillStylesheetContent(terms, hues, controlsInfo);
                         requestRefreshIndicators.next();
                         return;
                     }
@@ -1577,7 +1579,7 @@ const getTermsFromSelection = () => {
             else {
                 return;
             }
-            fillStylesheetContent(terms, hues);
+            fillStylesheetContent(terms, hues, controlsInfo);
             beginHighlighting(termsToHighlight.length ? termsToHighlight : terms, termsToPurge, controlsInfo.pageModifyEnabled, highlightTags, requestRefreshIndicators, observer);
         };
     })();
@@ -1730,15 +1732,19 @@ const getTermsFromSelection = () => {
             pageModifyEnabled: false,
             highlightsShown: false,
             barControlsShown: {
-                disableTabResearch: true,
+                disableTabResearch: false,
                 performSearch: false,
-                toggleHighlights: true,
-                appendTerm: true,
-                pinTerms: true,
+                toggleHighlights: false,
+                appendTerm: false,
+                pinTerms: false,
             },
             barLook: {
-                showEditIcon: true,
-                showRevealIcon: true,
+                showEditIcon: false,
+                showRevealIcon: false,
+                fontSize: "",
+                opacityControl: 0,
+                opacityTerm: 0,
+                borderRadius: "",
             },
             matchMode: {
                 regex: false,
@@ -1749,7 +1755,7 @@ const getTermsFromSelection = () => {
             },
         };
         const highlightTags = {
-            reject: getHighlightTagsSet(["meta", "style", "script", "noscript", "title"]),
+            reject: getHighlightTagsSet(["meta", "style", "script", "noscript", "title", "textarea"]),
             flow: getHighlightTagsSet(["b", "i", "u", "strong", "em", "cite", "span", "mark", "wbr", "code", "data", "dfn", "ins",
                 "mms-h"]),
             // break: any other class of element
