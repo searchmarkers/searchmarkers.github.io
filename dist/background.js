@@ -222,7 +222,7 @@ const updateActionIcon = (enabled) => enabled === undefined
      * Registers items to selectively appear in context menus, if not present, to serve as shortcuts for managing the extension.
      */
     const createContextMenuItems = () => {
-        if (useChromeAPI() && chrome.contextMenus.onClicked["hasListeners"]()) {
+        if (chrome.contextMenus.onClicked.hasListeners()) {
             return;
         }
         chrome.contextMenus.removeAll();
@@ -253,8 +253,6 @@ const updateActionIcon = (enabled) => enabled === undefined
             //browser.commands.update({ name: "toggle-bar", shortcut: "Ctrl+Shift+F" });
             browser.commands.update({ name: "toggle-research-global", shortcut: "Alt+Shift+J" });
             browser.commands.update({ name: "focus-term-append", shortcut: "Alt+Period" });
-            browser.commands.update({ name: "step-global", shortcut: "F2" });
-            browser.commands.update({ name: "step-global-reverse", shortcut: "Shift+F2" });
             for (let i = 0; i < 10; i++) {
                 browser.commands.update({ name: `select-term-${i}`, shortcut: `Alt+Shift+${(i + 1) % 10}` });
                 browser.commands.update({ name: `select-term-${i}-reverse`, shortcut: `Ctrl+Shift+${(i + 1) % 10}` });

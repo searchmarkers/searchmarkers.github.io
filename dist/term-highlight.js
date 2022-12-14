@@ -105,7 +105,7 @@ const getSel = (identifier, argument) => argument === undefined ? `markmysearch-
  * @param terms Terms to account for and style.
  * @param hues Color hues for term styles to cycle through.
  */
-const fillStylesheetContent = (terms, hues, controlsInfo) => {
+const fillStylesheetContent = (terms, hues) => {
     const style = document.getElementById(getSel(ElementID.STYLE));
     const zIndexMax = 2 ** 31 - 1;
     const makeImportant = (styleText) => styleText.replace(/;/g, " !important;"); // Prevent websites from overriding rules with !important;
@@ -116,7 +116,7 @@ const fillStylesheetContent = (terms, hues, controlsInfo) => {
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.CONTROL_PAD)} input,
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.BAR_CONTROL)} input
 	{ width: 5em; padding: 0 2px 0 2px; margin-left: 4px; border: none; outline: revert;
-	box-sizing: unset; font-family: revert; white-space: pre; color: hsl(0 0% 0%); }
+	box-sizing: unset; font-family: revert; white-space: pre; color: #000; }
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.CONTROL_PAD)} button:disabled,
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.CONTROL_PAD)} button:disabled *,
 #${getSel(ElementID.BAR)}:not(:hover) .${getSel(ElementClass.CONTROL_PAD)}
@@ -182,7 +182,7 @@ input:not(:focus, .${getSel(ElementClass.OVERRIDE_VISIBILITY)})
 /* || Bar */
 #${getSel(ElementID.BAR)}
 	{ all: revert; position: fixed; top: 0; left: 0; z-index: ${zIndexMax};
-	color-scheme: light; font-size: ${controlsInfo.barLook.fontSize}; line-height: initial; user-select: none; }
+	color-scheme: light; font-size: 14.6px; line-height: initial; user-select: none; }
 #${getSel(ElementID.BAR)}.${getSel(ElementClass.BAR_HIDDEN)}
 	{ display: none; }
 #${getSel(ElementID.BAR)} *
@@ -206,10 +206,9 @@ input:not(:focus, .${getSel(ElementClass.OVERRIDE_VISIBILITY)})
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.OPTION_LIST)}:focus .${getSel(ElementClass.OPTION)}::first-letter
 	{ text-decoration: underline; }
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.OPTION_LIST)}
-	{ display: none; position: absolute; flex-direction: column; padding: 0; width: max-content; margin: 0 0 0 4px;
-	z-index: 1; font-size: max(14px, 0.8em); }
+	{ display: none; position: absolute; flex-direction: column; width: max-content; padding: 0; margin: 0; z-index: 1; }
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.OPTION)}
-	{ display: block; padding-block: 2px; background: hsl(0 0% 94% / 0.76);
+	{ display: block; padding-block: 2px; margin-left: 3px; font-size: small; background: hsl(0 0% 94% / 0.76);
 	color: hsl(0 0% 6%); filter: grayscale(100%); width: 100%; text-align: left;
 	border-width: 2px; border-color: hsl(0 0% 40% / 0.7); border-left-style: solid; }
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.OPTION)}:hover
@@ -220,10 +219,10 @@ input:not(:focus, .${getSel(ElementClass.OVERRIDE_VISIBILITY)})
 #${getSel(ElementID.BAR_TERMS)} .${getSel(ElementClass.CONTROL)}
 	{ white-space: pre; }
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.CONTROL_PAD)}
-	{ display: flex; height: 1.3em; background: hsl(0 0% 90% / ${controlsInfo.barLook.opacityControl}); color: hsl(0 0% 0%);
-	border-style: none; border-radius: ${controlsInfo.barLook.borderRadius}; box-shadow: 1px 1px 5px; }
+	{ display: flex; height: 1.3em; border-style: none; border-radius: 4px; box-shadow: 1px 1px 5px;
+	background: hsl(0 0% 90% / 0.8); color: #000; }
 #${getSel(ElementID.BAR)}.${getSel(ElementClass.DISABLED)} .${getSel(ElementClass.CONTROL_PAD)}
-	{ background: hsl(0 0% 90% / min(${controlsInfo.barLook.opacityControl}, 0.4)); }
+	{ background: hsl(0 0% 90% / 0.4); }
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.CONTROL_PAD)} button:hover
 	{ background: hsl(0 0% 65%); }
 #${getSel(ElementID.BAR)} .${getSel(ElementClass.CONTROL_PAD)} button:active
@@ -231,9 +230,9 @@ input:not(:focus, .${getSel(ElementClass.OVERRIDE_VISIBILITY)})
 #${getSel(ElementID.BAR)} > :not(#${getSel(ElementID.BAR_TERMS)})
 > .${getSel(ElementClass.DISABLED)}:not(:focus-within, .${getSel(ElementClass.OVERRIDE_VISIBILITY)})
 	{ display: none; }
-#${getSel(ElementID.BAR)}:not(.${getSel(ElementClass.DISABLED)}) #${getSel(ElementID.BAR_TERMS)}
+#${getSel(ElementID.BAR)} #${getSel(ElementID.BAR_TERMS)}
 .${getSel(ElementClass.CONTROL_PAD)}.${getSel(ElementClass.DISABLED)}
-	{ display: flex; background: hsl(0 0% 80% / min(${controlsInfo.barLook.opacityTerm}, 0.6)); }
+	{ display: flex; background: hsl(0 0% 80% / 0.6); }
 /**/
 
 /* || Term Scroll Markers */
@@ -285,11 +284,10 @@ mms-h
 /* || Term Control Buttons */
 #${getSel(ElementID.BAR_TERMS)} .${getSel(ElementClass.TERM, term.selector)}
 .${getSel(ElementClass.CONTROL_PAD)}
-	{ background: ${getBackgroundStyle(`hsl(${hue} 70% 70% / ${controlsInfo.barLook.opacityTerm})`, `hsl(${hue} 70% 88% / ${controlsInfo.barLook.opacityTerm})`)}; }
-#${getSel(ElementID.BAR)}.${getSel(ElementClass.DISABLED)}
-#${getSel(ElementID.BAR_TERMS)} .${getSel(ElementClass.TERM, term.selector)}
+	{ background: ${getBackgroundStyle(`hsl(${hue} 70% 70% / 0.8)`, `hsl(${hue} 70% 88% / 0.8)`)}; }
+#${getSel(ElementID.BAR_TERMS)}.${getSel(ElementClass.DISABLED)} .${getSel(ElementClass.TERM, term.selector)}
 .${getSel(ElementClass.CONTROL_PAD)}
-	{ background: ${getBackgroundStyle(`hsl(${hue} 70% 70% / min(${controlsInfo.barLook.opacityTerm}, 0.4))`, `hsl(${hue} 70% 88% / min(${controlsInfo.barLook.opacityTerm}, 0.4))`)}; }
+	{ background: ${getBackgroundStyle(`hsl(${hue} 70% 70% / 0.4)`, `hsl(${hue} 70% 88% / 0.4)`)}; }
 #${getSel(ElementID.BAR_TERMS)} .${getSel(ElementClass.TERM, term.selector)}
 .${getSel(ElementClass.CONTROL_BUTTON)}:hover:not(:disabled)
 	{ background: hsl(${hue} 70% 80%); }
@@ -336,94 +334,6 @@ const revertElementsUnfocusable = (root = document.body) => {
         element.classList.remove(getSel(ElementClass.FOCUS_REVERT));
     });
 };
-// TODO document
-const stepToTerm = (() => {
-    // FIXME borrowed from simplified Paint version, make global definition
-    const getNodeFinal = (node) => node.lastChild ? getNodeFinal(node.lastChild) : node;
-    const getSiblingHighlightFinal = (highlight, node, nextSiblingMethod) => node[nextSiblingMethod]
-        ? node[nextSiblingMethod].nodeType === Node.ELEMENT_NODE
-            ? node[nextSiblingMethod].tagName === "MMS-H"
-                ? getSiblingHighlightFinal(node[nextSiblingMethod], node[nextSiblingMethod], nextSiblingMethod)
-                : highlight
-            : node[nextSiblingMethod].nodeType === Node.TEXT_NODE
-                ? node[nextSiblingMethod].textContent === ""
-                    ? getSiblingHighlightFinal(highlight, node[nextSiblingMethod], nextSiblingMethod)
-                    : highlight
-                : highlight
-        : highlight;
-    const getContainingHighlight = (element) => 
-    // Technically this should not be needed - however, the current Classic algorithm can incorrectly nest highlights.
-    element.parentElement.closest("mms-h")
-        ? getContainingHighlight(element.closest("mms-h"))
-        : element;
-    /** FIXME needs global definition
-     * Determines heuristically whether or not an element is visible. The element need not be currently scrolled into view.
-     * @param element An element.
-     * @returns `true` if visible, `false` otherwise.
-     */
-    const isVisible = (element) => // TODO improve
-     (element.offsetWidth || element.offsetHeight || element.getClientRects().length)
-        && getComputedStyle(element).visibility !== "hidden";
-    // FIXME needs global definition
-    // TODO document
-    const jumpToScrollMarkerDuplicate = (term, container) => {
-        const scrollMarkerGutter = document.getElementById(getSel(ElementID.MARKER_GUTTER));
-        purgeClass(getSel(ElementClass.FOCUS), scrollMarkerGutter);
-        // eslint-disable-next-line no-constant-condition
-        [6, 5, 4, 3, 2].some(precisionFactor => {
-            const precision = 10 ** precisionFactor;
-            const scrollMarker = scrollMarkerGutter.querySelector(`${term ? `.${getSel(ElementClass.TERM, term.selector)}` : ""}[top^="${Math.trunc(getElementYRelative(container) * precision) / precision}"]`);
-            if (scrollMarker) {
-                scrollMarker.classList.add(getSel(ElementClass.FOCUS));
-                return true;
-            }
-            return false;
-        });
-    };
-    const stepToElement = (element, highlightTags) => {
-        element = getContainingHighlight(element);
-        const elementFirst = getSiblingHighlightFinal(element, element, "previousSibling");
-        const elementLast = getSiblingHighlightFinal(element, element, "nextSibling");
-        document.getSelection().setBaseAndExtent(elementFirst, 0, elementLast, elementLast.childNodes.length);
-        element.scrollIntoView({ block: "center" });
-        jumpToScrollMarkerDuplicate(undefined, getContainerBlock(element, highlightTags));
-    };
-    return (highlightTags, reversed, nodeStart) => {
-        purgeClass(getSel(ElementClass.FOCUS_CONTAINER));
-        purgeClass(getSel(ElementClass.FOCUS));
-        const selection = document.getSelection();
-        const bar = document.getElementById(getSel(ElementID.BAR));
-        if (!selection || !bar) {
-            return;
-        }
-        if (document.activeElement && bar.contains(document.activeElement)) {
-            document.activeElement.blur();
-        }
-        const nodeBegin = reversed ? getNodeFinal(document.body) : document.body;
-        const nodeSelected = reversed ? selection.anchorNode : selection.focusNode;
-        const nodeFocused = document.activeElement
-            ? (document.activeElement === document.body || bar.contains(document.activeElement))
-                ? null
-                : document.activeElement
-            : null;
-        const nodeCurrent = nodeStart !== null && nodeStart !== void 0 ? nodeStart : (nodeFocused
-            ? (nodeSelected ? (nodeFocused.contains(nodeSelected) ? nodeSelected : nodeFocused) : nodeFocused)
-            : nodeSelected !== null && nodeSelected !== void 0 ? nodeSelected : nodeBegin);
-        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT, (element) => (element.tagName === "MMS-H" && isVisible(element)) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP);
-        walker.currentNode = nodeCurrent;
-        const element = walker[reversed ? "previousNode" : "nextNode"]();
-        if (!element) {
-            if (!nodeStart) {
-                stepToTerm(highlightTags, reversed, nodeBegin);
-            }
-            return;
-        }
-        if (document.activeElement) {
-            document.activeElement.blur();
-        }
-        stepToElement(element, highlightTags);
-    };
-})();
 /**
  * Scrolls to the next (downwards) occurrence of a term in the document. Testing begins from the current selection position.
  * @param highlightTags Element tags to reject from highlighting or form blocks of consecutive text nodes.
@@ -1225,7 +1135,7 @@ const insertControls = (() => {
         }[barControlName], hideWhenInactive);
     })();
     return (terms, controlsInfo, commands, highlightTags, hues) => {
-        fillStylesheetContent(terms, hues, controlsInfo);
+        fillStylesheetContent(terms, hues);
         const bar = document.createElement("div");
         bar.id = getSel(ElementID.BAR);
         bar.ondragstart = event => event.preventDefault();
@@ -1653,7 +1563,7 @@ const getTermsFromSelection = () => {
                         removeTermControl(termRemovedPreviousIdx);
                         terms.splice(termRemovedPreviousIdx, 1);
                         restoreNodes([getSel(ElementClass.TERM, termUpdate.selector)]);
-                        fillStylesheetContent(terms, hues, controlsInfo);
+                        fillStylesheetContent(terms, hues);
                         requestRefreshIndicators.next();
                         return;
                     }
@@ -1667,7 +1577,7 @@ const getTermsFromSelection = () => {
             else {
                 return;
             }
-            fillStylesheetContent(terms, hues, controlsInfo);
+            fillStylesheetContent(terms, hues);
             beginHighlighting(termsToHighlight.length ? termsToHighlight : terms, termsToPurge, controlsInfo.pageModifyEnabled, highlightTags, requestRefreshIndicators, observer);
         };
     })();
@@ -1723,7 +1633,7 @@ const getTermsFromSelection = () => {
      * @param terms Terms being controlled, highlighted, and jumped to.
      */
     const produceEffectOnCommandFn = function* (terms, highlightTags) {
-        var _a, _b, _c;
+        var _a, _b;
         let selectModeFocus = false;
         let focusedIdx = 0;
         while (true) {
@@ -1743,16 +1653,12 @@ const getTermsFromSelection = () => {
                     selectModeFocus = !selectModeFocus;
                     break;
                 }
-                case CommandType.STEP_GLOBAL: {
-                    stepToTerm(highlightTags, (_a = commandInfo.reversed) !== null && _a !== void 0 ? _a : false);
-                    break;
-                }
                 case CommandType.ADVANCE_GLOBAL: {
                     if (selectModeFocus) {
-                        jumpToTerm(highlightTags, (_b = commandInfo.reversed) !== null && _b !== void 0 ? _b : false, terms[focusedIdx]);
+                        jumpToTerm(highlightTags, (_a = commandInfo.reversed) !== null && _a !== void 0 ? _a : false, terms[focusedIdx]);
                     }
                     else {
-                        jumpToTerm(highlightTags, (_c = commandInfo.reversed) !== null && _c !== void 0 ? _c : false);
+                        jumpToTerm(highlightTags, (_b = commandInfo.reversed) !== null && _b !== void 0 ? _b : false);
                     }
                     break;
                 }
@@ -1824,19 +1730,15 @@ const getTermsFromSelection = () => {
             pageModifyEnabled: false,
             highlightsShown: false,
             barControlsShown: {
-                disableTabResearch: false,
+                disableTabResearch: true,
                 performSearch: false,
-                toggleHighlights: false,
-                appendTerm: false,
-                pinTerms: false,
+                toggleHighlights: true,
+                appendTerm: true,
+                pinTerms: true,
             },
             barLook: {
-                showEditIcon: false,
-                showRevealIcon: false,
-                fontSize: "",
-                opacityControl: 0,
-                opacityTerm: 0,
-                borderRadius: "",
+                showEditIcon: true,
+                showRevealIcon: true,
             },
             matchMode: {
                 regex: false,
@@ -1847,7 +1749,7 @@ const getTermsFromSelection = () => {
             },
         };
         const highlightTags = {
-            reject: getHighlightTagsSet(["meta", "style", "script", "noscript", "title", "textarea"]),
+            reject: getHighlightTagsSet(["meta", "style", "script", "noscript", "title"]),
             flow: getHighlightTagsSet(["b", "i", "u", "strong", "em", "cite", "span", "mark", "wbr", "code", "data", "dfn", "ins",
                 "mms-h"]),
             // break: any other class of element

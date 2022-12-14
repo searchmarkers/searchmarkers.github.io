@@ -81,14 +81,11 @@ const defaultOptions = {
             "searchTerm",
             "search",
             "query",
-            "phrase",
             "keywords",
             "keyword",
             "terms",
             "term",
-            "s", "q", "p", "k",
-            // Special cases:
-            "_nkw", // eBay
+            "q", "s", "k",
         ],
         stoplist: [
             "i", "a", "an", "and", "or", "not", "the", "that", "there", "where", "which", "to", "do", "of", "in", "on", "at", "too",
@@ -119,10 +116,6 @@ const defaultOptions = {
     barLook: {
         showEditIcon: true,
         showRevealIcon: true,
-        fontSize: "14.6px",
-        opacityControl: 0.8,
-        opacityTerm: 0.86,
-        borderRadius: "4px",
     },
     highlightLook: {
         hues: [300, 60, 110, 220, 30, 190, 0],
@@ -189,20 +182,15 @@ const getStorageSync = async (keys) => {
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const initializeStorage = async () => {
-    const local = await getStorageLocal();
-    const localOld = { ...local };
+    const local = await getStorageLocal([StorageLocal.ENABLED]);
     const toRemove = [];
-    if (fixObjectWithDefaults(local, {
+    fixObjectWithDefaults(local, {
         enabled: true,
         followLinks: true,
         persistResearchInstances: true,
-    }, toRemove)) {
-        console.warn("Storage 'local' cleanup rectified issues. Results:", localOld, local); // Use standard logging system?
-    }
+    }, toRemove);
     await setStorageLocal(local);
-    if (chrome.storage["session"]) { // Temporary fix. Without the 'session' API, its values may be stored in 'local'.
-        await chrome.storage.local.remove(toRemove);
-    }
+    await chrome.storage.local.remove(toRemove);
     await setStorageSession({
         researchInstances: {},
         engines: {},
@@ -215,32 +203,25 @@ const initializeStorage = async () => {
  * @param defaults An object of default items to be compared with the first object.
  * @param toRemove An empty array to be filled with deleted top-level keys.
  * @param atTopLevel Indicates whether or not the function is currently at the top level of the object.
- * @returns Whether or not any fixes were applied.
  */
 const fixObjectWithDefaults = (object, defaults, toRemove, atTopLevel = true) => {
-    let hasModified = false;
     Object.keys(object).forEach(objectKey => {
         if (defaults[objectKey] === undefined) {
             delete object[objectKey];
             if (atTopLevel) {
                 toRemove.push(objectKey);
             }
-            hasModified = true;
         }
         else if (typeof (object[objectKey]) === "object" && !Array.isArray(object[objectKey])) {
-            if (fixObjectWithDefaults(object[objectKey], defaults[objectKey], toRemove, false)) {
-                hasModified = true;
-            }
+            fixObjectWithDefaults(object[objectKey], defaults[objectKey], toRemove, false);
         }
     });
     Object.keys(defaults).forEach(defaultsKey => {
         if (typeof (object[defaultsKey]) !== typeof (defaults[defaultsKey])
             || Array.isArray(object[defaultsKey]) !== Array.isArray(defaults[defaultsKey])) {
             object[defaultsKey] = defaults[defaultsKey];
-            hasModified = true;
         }
     });
-    return hasModified;
 };
 /**
  * Checks persistent options storage for unwanted or misconfigured values, then restores it to a normal state.
@@ -248,11 +229,8 @@ const fixObjectWithDefaults = (object, defaults, toRemove, atTopLevel = true) =>
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const repairOptions = async () => {
     const sync = await getStorageSync();
-    const syncOld = { ...sync };
     const toRemove = [];
-    if (fixObjectWithDefaults(sync, defaultOptions, toRemove)) {
-        console.warn("Storage 'sync' cleanup rectified issues. Results:", syncOld, sync); // Use standard logging system?
-    }
-    await setStorageSync(sync);
-    await chrome.storage.sync.remove(toRemove);
+    fixObjectWithDefaults(sync, defaultOptions, toRemove);
+    setStorageSync(sync);
+    chrome.storage.sync.remove(toRemove);
 };
