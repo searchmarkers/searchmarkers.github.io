@@ -336,6 +336,94 @@ const revertElementsUnfocusable = (root = document.body) => {
         element.classList.remove(getSel(ElementClass.FOCUS_REVERT));
     });
 };
+// TODO document
+const stepToTerm = (() => {
+    // FIXME borrowed from simplified Paint version, make global definition
+    const getNodeFinal = (node) => node.lastChild ? getNodeFinal(node.lastChild) : node;
+    const getSiblingHighlightFinal = (highlight, node, nextSiblingMethod) => node[nextSiblingMethod]
+        ? node[nextSiblingMethod].nodeType === Node.ELEMENT_NODE
+            ? node[nextSiblingMethod].tagName === "MMS-H"
+                ? getSiblingHighlightFinal(node[nextSiblingMethod], node[nextSiblingMethod], nextSiblingMethod)
+                : highlight
+            : node[nextSiblingMethod].nodeType === Node.TEXT_NODE
+                ? node[nextSiblingMethod].textContent === ""
+                    ? getSiblingHighlightFinal(highlight, node[nextSiblingMethod], nextSiblingMethod)
+                    : highlight
+                : highlight
+        : highlight;
+    const getContainingHighlight = (element) => 
+    // Technically this should not be needed - however, the current Classic algorithm can incorrectly nest highlights.
+    element.parentElement.closest("mms-h")
+        ? getContainingHighlight(element.closest("mms-h"))
+        : element;
+    /** FIXME needs global definition
+     * Determines heuristically whether or not an element is visible. The element need not be currently scrolled into view.
+     * @param element An element.
+     * @returns `true` if visible, `false` otherwise.
+     */
+    const isVisible = (element) => // TODO improve
+     (element.offsetWidth || element.offsetHeight || element.getClientRects().length)
+        && getComputedStyle(element).visibility !== "hidden";
+    // FIXME needs global definition
+    // TODO document
+    const jumpToScrollMarkerDuplicate = (term, container) => {
+        const scrollMarkerGutter = document.getElementById(getSel(ElementID.MARKER_GUTTER));
+        purgeClass(getSel(ElementClass.FOCUS), scrollMarkerGutter);
+        // eslint-disable-next-line no-constant-condition
+        [6, 5, 4, 3, 2].some(precisionFactor => {
+            const precision = 10 ** precisionFactor;
+            const scrollMarker = scrollMarkerGutter.querySelector(`${term ? `.${getSel(ElementClass.TERM, term.selector)}` : ""}[top^="${Math.trunc(getElementYRelative(container) * precision) / precision}"]`);
+            if (scrollMarker) {
+                scrollMarker.classList.add(getSel(ElementClass.FOCUS));
+                return true;
+            }
+            return false;
+        });
+    };
+    const stepToElement = (element, highlightTags) => {
+        element = getContainingHighlight(element);
+        const elementFirst = getSiblingHighlightFinal(element, element, "previousSibling");
+        const elementLast = getSiblingHighlightFinal(element, element, "nextSibling");
+        document.getSelection().setBaseAndExtent(elementFirst, 0, elementLast, elementLast.childNodes.length);
+        element.scrollIntoView({ block: "center" });
+        jumpToScrollMarkerDuplicate(undefined, getContainerBlock(element, highlightTags));
+    };
+    return (highlightTags, reversed, nodeStart) => {
+        purgeClass(getSel(ElementClass.FOCUS_CONTAINER));
+        purgeClass(getSel(ElementClass.FOCUS));
+        const selection = document.getSelection();
+        const bar = document.getElementById(getSel(ElementID.BAR));
+        if (!selection || !bar) {
+            return;
+        }
+        if (document.activeElement && bar.contains(document.activeElement)) {
+            document.activeElement.blur();
+        }
+        const nodeBegin = reversed ? getNodeFinal(document.body) : document.body;
+        const nodeSelected = reversed ? selection.anchorNode : selection.focusNode;
+        const nodeFocused = document.activeElement
+            ? (document.activeElement === document.body || bar.contains(document.activeElement))
+                ? null
+                : document.activeElement
+            : null;
+        const nodeCurrent = nodeStart !== null && nodeStart !== void 0 ? nodeStart : (nodeFocused
+            ? (nodeSelected ? (nodeFocused.contains(nodeSelected) ? nodeSelected : nodeFocused) : nodeFocused)
+            : nodeSelected !== null && nodeSelected !== void 0 ? nodeSelected : nodeBegin);
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT, (element) => (element.tagName === "MMS-H" && isVisible(element)) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP);
+        walker.currentNode = nodeCurrent;
+        const element = walker[reversed ? "previousNode" : "nextNode"]();
+        if (!element) {
+            if (!nodeStart) {
+                stepToTerm(highlightTags, reversed, nodeBegin);
+            }
+            return;
+        }
+        if (document.activeElement) {
+            document.activeElement.blur();
+        }
+        stepToElement(element, highlightTags);
+    };
+})();
 /**
  * Scrolls to the next (downwards) occurrence of a term in the document. Testing begins from the current selection position.
  * @param highlightTags Element tags to reject from highlighting or form blocks of consecutive text nodes.
@@ -1635,7 +1723,7 @@ const getTermsFromSelection = () => {
      * @param terms Terms being controlled, highlighted, and jumped to.
      */
     const produceEffectOnCommandFn = function* (terms, highlightTags) {
-        var _a, _b;
+        var _a, _b, _c;
         let selectModeFocus = false;
         let focusedIdx = 0;
         while (true) {
@@ -1655,12 +1743,16 @@ const getTermsFromSelection = () => {
                     selectModeFocus = !selectModeFocus;
                     break;
                 }
+                case CommandType.STEP_GLOBAL: {
+                    stepToTerm(highlightTags, (_a = commandInfo.reversed) !== null && _a !== void 0 ? _a : false);
+                    break;
+                }
                 case CommandType.ADVANCE_GLOBAL: {
                     if (selectModeFocus) {
-                        jumpToTerm(highlightTags, (_a = commandInfo.reversed) !== null && _a !== void 0 ? _a : false, terms[focusedIdx]);
+                        jumpToTerm(highlightTags, (_b = commandInfo.reversed) !== null && _b !== void 0 ? _b : false, terms[focusedIdx]);
                     }
                     else {
-                        jumpToTerm(highlightTags, (_b = commandInfo.reversed) !== null && _b !== void 0 ? _b : false);
+                        jumpToTerm(highlightTags, (_c = commandInfo.reversed) !== null && _c !== void 0 ? _c : false);
                     }
                     break;
                 }

@@ -161,7 +161,8 @@ var CommandType;
     CommandType[CommandType["TOGGLE_SELECT"] = 7] = "TOGGLE_SELECT";
     CommandType[CommandType["ADVANCE_GLOBAL"] = 8] = "ADVANCE_GLOBAL";
     CommandType[CommandType["SELECT_TERM"] = 9] = "SELECT_TERM";
-    CommandType[CommandType["FOCUS_TERM_INPUT"] = 10] = "FOCUS_TERM_INPUT";
+    CommandType[CommandType["STEP_GLOBAL"] = 10] = "STEP_GLOBAL";
+    CommandType[CommandType["FOCUS_TERM_INPUT"] = 11] = "FOCUS_TERM_INPUT";
 })(CommandType || (CommandType = {}));
 /**
  * Sanitizes a string for regex use by escaping all potential regex control characters.
@@ -233,6 +234,14 @@ const parseCommand = (commandString) => {
                 }
                 case "select": {
                     return { type: CommandType.TOGGLE_SELECT };
+                }
+            }
+            break;
+        }
+        case "step": {
+            switch (parts[1]) {
+                case "global": {
+                    return { type: CommandType.STEP_GLOBAL, reversed: parts[2] === "reverse" };
                 }
             }
             break;
