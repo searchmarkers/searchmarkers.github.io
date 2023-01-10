@@ -87,7 +87,7 @@ class MatchTerm {
         const getDiacriticsMatchingPatternStringSafe = (chars) => this.matchMode.diacritics ? getDiacriticsMatchingPatternString(chars) : chars;
         const getHyphenatedPatternString = (word) => word.replace(/(\w\?|\w)/g, `$1${optionalHyphenStandin}`);
         const getBoundaryTest = (charBoundary) => this.matchMode.whole && /\w/g.test(charBoundary) ? "\\b" : "";
-        const patternString = `${getBoundaryTest(patternStringPrefix[0])}${getDiacriticsMatchingPatternStringSafe(getHyphenatedPatternString(sanitize(patternStringPrefix.slice(0, -1))))}${getDiacriticsMatchingPatternStringSafe(sanitize(patternStringPrefix.at(-1)))}(?:${patternStringSuffix ? optionalHyphenStandin + getDiacriticsMatchingPatternStringSafe(patternStringSuffix) : ""})?${getBoundaryTest(patternStringPrefix.at(-1))}`.replace(new RegExp(optionalHyphenStandin, "g"), optionalHyphen);
+        const patternString = `${getBoundaryTest(patternStringPrefix[0])}${getDiacriticsMatchingPatternStringSafe(getHyphenatedPatternString(sanitize(patternStringPrefix.slice(0, -1))))}${getDiacriticsMatchingPatternStringSafe(sanitize(patternStringPrefix[patternStringPrefix.length - 1]))}(?:${patternStringSuffix ? optionalHyphenStandin + getDiacriticsMatchingPatternStringSafe(patternStringSuffix) : ""})?${getBoundaryTest(patternStringPrefix[patternStringPrefix.length - 1])}`.replace(new RegExp(optionalHyphenStandin, "g"), optionalHyphen);
         this.pattern = new RegExp(patternString, flags);
     }
 }
@@ -97,7 +97,6 @@ class MatchTerm {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class Engine {
     constructor(args) {
-        var _a;
         if (!args)
             return;
         const urlDynamic = new URL(args.urlDynamicString);
@@ -108,7 +107,8 @@ class Engine {
         }
         else {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const [param, arg] = (_a = Array.from(urlDynamic.searchParams).find(param => param[1].includes("%s"))) !== null && _a !== void 0 ? _a : ["", ""];
+            const [param, arg] = (Array.from(urlDynamic.searchParams))
+                .find(param => param[1].includes("%s")) ?? ["", ""];
             this.param = param;
         }
     }
@@ -119,7 +119,6 @@ class Engine {
      * @returns An array of the phrases extracted from the URL dynamic query section, or null if the URL does not match the engine.
      */
     extract(urlString, matchOnly = false) {
-        var _a;
         // TODO generalise functionality? Allow for phrase groups?
         const url = new URL(urlString);
         return url.hostname !== this.hostname ? null : this.pathname
@@ -127,7 +126,7 @@ class Engine {
                 ? matchOnly ? [] : url.pathname.slice(url.pathname.indexOf(this.pathname[0]) + this.pathname[0].length, url.pathname.lastIndexOf(this.pathname[1])).split("+")
                 : null
             : url.searchParams.has(this.param)
-                ? matchOnly ? [] : ((_a = url.searchParams.get(this.param)) !== null && _a !== void 0 ? _a : "").split(" ")
+                ? matchOnly ? [] : (url.searchParams.get(this.param) ?? "").split(" ")
                 : null;
     }
     /**
@@ -161,7 +160,8 @@ var CommandType;
     CommandType[CommandType["TOGGLE_SELECT"] = 7] = "TOGGLE_SELECT";
     CommandType[CommandType["ADVANCE_GLOBAL"] = 8] = "ADVANCE_GLOBAL";
     CommandType[CommandType["SELECT_TERM"] = 9] = "SELECT_TERM";
-    CommandType[CommandType["FOCUS_TERM_INPUT"] = 10] = "FOCUS_TERM_INPUT";
+    CommandType[CommandType["STEP_GLOBAL"] = 10] = "STEP_GLOBAL";
+    CommandType[CommandType["FOCUS_TERM_INPUT"] = 11] = "FOCUS_TERM_INPUT";
 })(CommandType || (CommandType = {}));
 /**
  * Sanitizes a string for regex use by escaping all potential regex control characters.
@@ -233,6 +233,14 @@ const parseCommand = (commandString) => {
                 }
                 case "select": {
                     return { type: CommandType.TOGGLE_SELECT };
+                }
+            }
+            break;
+        }
+        case "step": {
+            switch (parts[1]) {
+                case "global": {
+                    return { type: CommandType.STEP_GLOBAL, reversed: parts[2] === "reverse" };
                 }
             }
             break;

@@ -500,8 +500,9 @@ const loadPopup = (() => {
                                         const sync = await getStorageSync([StorageSync.TERM_LISTS]);
                                         const session = await getStorageSession([StorageSession.RESEARCH_INSTANCES]);
                                         const researchInstance = session.researchInstances[tab.id];
-                                        if (researchInstance && !researchInstance.enabled) {
+                                        if (researchInstance && (!researchInstance.enabled || !researchInstance.autoOverwritable)) {
                                             researchInstance.enabled = true;
+                                            researchInstance.autoOverwritable = false;
                                             await setStorageSession(session);
                                         }
                                         chrome.runtime.sendMessage({
@@ -510,6 +511,7 @@ const loadPopup = (() => {
                                                 : sync.termLists[index].terms,
                                             makeUnique: true,
                                             toggleHighlightsOn: true,
+                                            toggleAutoOverwritableOn: false,
                                         });
                                         onSuccess();
                                     },
@@ -522,15 +524,14 @@ const loadPopup = (() => {
         },
     ];
     return () => {
-        var _a, _b;
         loadPage(panelsInfo, `
 body
 	{ width: 300px; height: 540px; user-select: none; }
 .container-panel > .panel, .brand
 	{ margin-inline: 0; }
 		`, false);
-        pageInsertWarning((_a = document.querySelector(".container-panel .panel-sites_search_research")) !== null && _a !== void 0 ? _a : document.body, "List entries are saved as you type them. This will be more clear in future.");
-        pageInsertWarning((_b = document.querySelector(".container-panel .panel-term_lists")) !== null && _b !== void 0 ? _b : document.body, "Keyword lists are highly experimental. Please report any issues.");
+        pageInsertWarning(document.querySelector(".container-panel .panel-sites_search_research") ?? document.body, "List entries are saved as you type them. This will be more clear in future.");
+        pageInsertWarning(document.querySelector(".container-panel .panel-term_lists") ?? document.body, "Keyword lists are highly experimental. Please report any issues.");
     };
 })();
 (() => {

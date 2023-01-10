@@ -39,8 +39,7 @@ const getDiacriticsMatchingPatternString = (() => {
         let patternString = "";
         const characterGroups = getCharacterGroups();
         Array.from(chars.matchAll(getCharacterGroupsPattern(characterGroups))).slice(0, -1).forEach((matchArray, i) => {
-            var _a;
-            patternString += (_a = characterGroups[matchArray.slice(1).findIndex(match => match)]) !== null && _a !== void 0 ? _a : chars[i];
+            patternString += characterGroups[matchArray.slice(1).findIndex(match => match)] ?? chars[i];
         });
         return patternString;
     };

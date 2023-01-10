@@ -16,8 +16,10 @@ var OptionClass;
 var PreferenceType;
 (function (PreferenceType) {
     PreferenceType[PreferenceType["BOOLEAN"] = 0] = "BOOLEAN";
-    PreferenceType[PreferenceType["TEXT"] = 1] = "TEXT";
-    PreferenceType[PreferenceType["ARRAY"] = 2] = "ARRAY";
+    PreferenceType[PreferenceType["INTEGER"] = 1] = "INTEGER";
+    PreferenceType[PreferenceType["FLOAT"] = 2] = "FLOAT";
+    PreferenceType[PreferenceType["TEXT"] = 3] = "TEXT";
+    PreferenceType[PreferenceType["ARRAY"] = 4] = "ARRAY";
 })(PreferenceType || (PreferenceType = {}));
 /**
  * Loads the options content into the page.
@@ -88,39 +90,39 @@ label[for]:hover
         save.textContent = "Save Changes";
         form.appendChild(save);
         const valuesCurrent = {};
-        form.onsubmit = event => {
+        form.addEventListener("submit", event => {
             event.preventDefault();
             // TODO remove code duplication using function
             Object.keys(tabInfo.options).forEach(optionKey => {
-                var _a;
                 const optionInfo = tabInfo.options[optionKey];
-                const preferences = (_a = optionInfo.preferences) !== null && _a !== void 0 ? _a : { [optionKey]: optionInfo };
+                const preferences = optionInfo.preferences ?? { [optionKey]: optionInfo };
                 Object.keys(preferences).forEach(preferenceKey => {
-                    const isSinglePreference = optionKey === preferenceKey;
-                    const preferenceInfo = isSinglePreference ? optionInfo : preferences[preferenceKey];
-                    const className = isSinglePreference ? optionKey : `${optionKey}-${preferenceKey}`;
+                    const preferenceInfo = preferences[preferenceKey];
+                    const className = `${optionKey}-${preferenceKey}`;
                     const input = document.getElementsByClassName(className)[0];
                     if (!input) {
                         return;
                     }
-                    const valueNew = input["type"] === "checkbox" ? input["checked"] : input["value"];
-                    const value = preferenceInfo.type === PreferenceType.ARRAY
-                        ? valueNew.split(",") : valueNew;
-                    if (isSinglePreference) {
-                        sync[optionKey] = value;
-                    }
-                    else {
-                        sync[optionKey][preferenceKey] = value;
-                    }
-                    valuesCurrent[optionKey][preferenceKey] = valueNew;
+                    const valueEnteredString = input["value"];
+                    const valueEnteredBool = input["checked"];
+                    const valueEntered = preferenceInfo.type === PreferenceType.BOOLEAN ? valueEnteredBool : valueEnteredString;
+                    sync[optionKey][preferenceKey] = ((type) => {
+                        if (type === PreferenceType.ARRAY) {
+                            return valueEnteredString.split(",");
+                        }
+                        else if (type === PreferenceType.INTEGER || type === PreferenceType.FLOAT) {
+                            return Number(valueEnteredString);
+                        }
+                        return valueEntered;
+                    })(preferenceInfo.type);
+                    valuesCurrent[optionKey][preferenceKey] = valueEntered;
                     Array.from(document.getElementsByClassName(OptionClass.MODIFIED))
                         .forEach((preferenceLabel) => preferenceLabel.classList.remove(OptionClass.MODIFIED));
                 });
             });
             setStorageSync(sync);
-        };
+        });
         Object.keys(tabInfo.options).forEach(optionKey => {
-            var _a;
             valuesCurrent[optionKey] = {};
             const optionInfo = tabInfo.options[optionKey];
             const section = document.createElement("div");
@@ -137,10 +139,9 @@ label[for]:hover
                 optionLabel.classList.add(OptionClass.ERRONEOUS);
                 return;
             }
-            const preferences = (_a = optionInfo.preferences) !== null && _a !== void 0 ? _a : { [optionKey]: optionInfo };
+            const preferences = optionInfo.preferences ?? { [optionKey]: optionInfo };
             Object.keys(preferences).forEach((preferenceKey, i) => {
                 const preferenceInfo = preferences[preferenceKey];
-                const isSinglePreference = optionKey === preferenceKey; // TODO replace heuristic of 'optionKey === preferenceKey'
                 const row = document.createElement("div");
                 const addCell = (node, isInFirstColumn = false) => {
                     const cell = document.createElement("div");
@@ -160,15 +161,15 @@ label[for]:hover
                 const input = document.createElement("input");
                 input.id = inputId;
                 input.type = inputDefault.type;
-                input.classList.add(isSinglePreference ? optionKey : `${optionKey}-${preferenceKey}`);
+                input.classList.add(`${optionKey}-${preferenceKey}`);
                 addCell(preferenceLabel, true);
                 addCell(input);
                 addCell(inputDefault);
                 table.appendChild(row);
                 row.classList.add(OptionClass.PREFERENCE_ROW);
                 row.classList.add(i % 2 ? OptionClass.ODD : OptionClass.EVEN);
-                const valueDefault = isSinglePreference ? defaultOptions[optionKey] : defaultOptions[optionKey][preferenceKey];
-                const value = isSinglePreference ? sync[optionKey] : sync[optionKey][preferenceKey];
+                const valueDefault = defaultOptions[optionKey][preferenceKey];
+                const value = sync[optionKey][preferenceKey];
                 if (value === undefined) {
                     preferenceLabel.classList.add(OptionClass.ERRONEOUS);
                     input.disabled = true;
@@ -178,8 +179,7 @@ label[for]:hover
                     inputDefault[propertyKey] = valueDefault;
                     input[propertyKey] = value;
                     valuesCurrent[optionKey][preferenceKey] = input[propertyKey];
-                    input.oninput = () => preferenceLabel.classList[input[propertyKey] === valuesCurrent[optionKey][preferenceKey]
-                        ? "remove" : "add"](OptionClass.MODIFIED);
+                    input.addEventListener("input", () => preferenceLabel.classList[input[propertyKey] === valuesCurrent[optionKey][preferenceKey] ? "remove" : "add"](OptionClass.MODIFIED));
                 }
             });
         });
@@ -230,6 +230,22 @@ label[for]:hover
                         showRevealIcon: {
                             label: "Display a menu button in controls with match options",
                             type: PreferenceType.BOOLEAN,
+                        },
+                        fontSize: {
+                            label: "Font size",
+                            type: PreferenceType.TEXT,
+                        },
+                        opacityTerm: {
+                            label: "Opacity of keyword buttons",
+                            type: PreferenceType.FLOAT,
+                        },
+                        opacityControl: {
+                            label: "Opacity of other buttons",
+                            type: PreferenceType.FLOAT,
+                        },
+                        borderRadius: {
+                            label: "Radius of rounded corners",
+                            type: PreferenceType.TEXT,
                         },
                     },
                 },

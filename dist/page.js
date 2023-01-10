@@ -34,7 +34,7 @@ const sendProblemReport = async (userMessage = "", formFields) => {
         phrases,
         user_message: userMessage,
     };
-    (formFields !== null && formFields !== void 0 ? formFields : []).forEach((formField, i) => {
+    (formFields ?? []).forEach((formField, i) => {
         message[`item_${i}_question`] = formField.question;
         message[`item_${i}_response`] = formField.response;
     });
@@ -230,7 +230,7 @@ textarea
         document.head.appendChild(style);
     };
     const classNameIsPanel = (className) => className.split("-")[0] === "panel";
-    const getPanelClassName = (classArray) => { var _a; return (_a = classArray.find(className => classNameIsPanel(className))) !== null && _a !== void 0 ? _a : ""; };
+    const getPanelClassName = (classArray) => classArray.find(className => classNameIsPanel(className)) ?? "";
     const focusActivePanel = () => {
         const frame = document.querySelector("#frame");
         const className = getPanelClassName(Array.from(frame.classList));
@@ -247,13 +247,12 @@ textarea
     };
     const getTabs = () => document.querySelectorAll(".container-tab .tab");
     const shiftTabFromTab = (tabCurrent, toRight, cycle) => {
-        var _a;
         const tabNext = ( //
-        (_a = tabCurrent[toRight ? "nextElementSibling" : "previousElementSibling"] //
-        ) !== null && _a !== void 0 ? _a : (cycle //
-            ? tabCurrent.parentElement[toRight ? "firstElementChild" : "lastElementChild"] //
-            : null //
-        ));
+        tabCurrent[toRight ? "nextElementSibling" : "previousElementSibling"] //
+            ?? (cycle //
+                ? tabCurrent.parentElement[toRight ? "firstElementChild" : "lastElementChild"] //
+                : null //
+            ));
         if (tabNext) {
             tabNext.focus();
             tabNext.dispatchEvent(new MouseEvent("mousedown"));
@@ -321,11 +320,10 @@ textarea
         });
     };
     const insertAlert = (alertType, alertsInfo, previousSibling, timeoutDefault = -1, tooltip = "", formatText = (text) => text) => {
-        var _a;
         if (!alertsInfo) {
             return;
         }
-        const timeout = (_a = alertsInfo[alertType].timeout) !== null && _a !== void 0 ? _a : timeoutDefault;
+        const timeout = alertsInfo[alertType].timeout ?? timeoutDefault;
         const alert = document.createElement("label");
         alert.classList.add("alert");
         alert.classList.add(alertType);
@@ -411,7 +409,7 @@ textarea
                 checkboxInfo.onLoad(checked => checkbox.checked = checked, getObjectIndex(), containerIndex);
             }
             if (checkboxInfo.onToggle) {
-                checkbox.onchange = () => checkboxInfo.onToggle ? checkboxInfo.onToggle(checkbox.checked, getObjectIndex(), containerIndex) : undefined;
+                checkbox.addEventListener("change", () => checkboxInfo.onToggle ? checkboxInfo.onToggle(checkbox.checked, getObjectIndex(), containerIndex) : undefined);
             }
             return checkbox;
         };
@@ -453,7 +451,7 @@ textarea
                 textbox.addEventListener("blur", () => onChangeInternal(true));
                 textbox.addEventListener("keydown", event => {
                     if (event.key === "Enter") {
-                        const textboxes = Array.from((containerOverall !== null && containerOverall !== void 0 ? containerOverall : container).querySelectorAll("input[type=text]"));
+                        const textboxes = Array.from((containerOverall ?? container).querySelectorAll("input[type=text]"));
                         const textboxIndex = textboxes.indexOf(textbox) + (event.shiftKey ? -1 : 1);
                         if (textboxIndex < 0 || textboxIndex >= textboxes.length) {
                             onChangeInternal(true);
@@ -532,7 +530,7 @@ textarea
                 }
                 const inputMain = objectElement.querySelector("input");
                 let newElementQueued = false;
-                inputMain.oninput = () => {
+                inputMain.addEventListener("input", () => {
                     if (inputMain.value && container.lastElementChild.querySelector("input").value && !newElementQueued) {
                         newElementQueued = true;
                         getArray().then(async (array) => {
@@ -547,7 +545,7 @@ textarea
                             newElementQueued = false;
                         });
                     }
-                };
+                });
                 const onChangeInternal = (commitIfEmpty = false) => {
                     if (!inputMain.value && commitIfEmpty) {
                         getArray().then(array => {
@@ -582,7 +580,6 @@ textarea
             container.appendChild(list);
         };
         const insertAnchor = (container, anchorInfo) => {
-            var _a;
             if (!anchorInfo) {
                 return;
             }
@@ -590,7 +587,7 @@ textarea
             anchor.href = anchorInfo.url;
             anchor.target = "_blank"; // New tab
             anchor.rel = "noopener noreferrer";
-            anchor.textContent = (_a = anchorInfo.text) !== null && _a !== void 0 ? _a : anchor.href;
+            anchor.textContent = anchorInfo.text ?? anchor.href;
             container.appendChild(anchor);
         };
         const insertSubmitter = (container, submitterInfo, getObjectIndex) => {
@@ -608,12 +605,11 @@ textarea
                 });
                 container.appendChild(list);
                 getFormFields = () => Array.from(list.querySelectorAll("label")).map((label) => {
-                    var _a, _b;
                     const input = list.querySelector(`input#${label.htmlFor}`);
                     return {
-                        question: (_a = label.textContent) !== null && _a !== void 0 ? _a : "",
+                        question: label.textContent ?? "",
                         response: input
-                            ? input.checked === undefined ? (_b = input.value) !== null && _b !== void 0 ? _b : "" : input.checked.toString()
+                            ? input.checked === undefined ? input.value ?? "" : input.checked.toString()
                             : "",
                     };
                 });
@@ -624,7 +620,7 @@ textarea
             button.textContent = submitterInfo.text;
             container.appendChild(button);
             let getMessageText = () => "";
-            button.onclick = () => {
+            button.addEventListener("click", () => {
                 button.disabled = true;
                 clearAlerts(container, [PageAlertType.PENDING, PageAlertType.FAILURE]);
                 submitterInfo.onClick(getMessageText(), getFormFields(), () => {
@@ -653,7 +649,7 @@ textarea
                 insertAlert(PageAlertType.PENDING, //
                 submitterInfo.alerts, //
                 button);
-            };
+            });
             if (submitterInfo.message) {
                 const messageInfo = submitterInfo.message;
                 const messageBox = (messageInfo.singleline
@@ -837,6 +833,38 @@ textarea
             tab.classList.add(panelInfo.className);
             tab.textContent = panelInfo.name.text;
             tabContainer.appendChild(tab);
+        });
+        // TODO handle multiple tabs correctly
+        // TODO visual indication of letter
+        const lettersTaken = new Set;
+        const info = panelsInfo.flatMap(panelInfo => panelInfo.sections.flatMap(sectionInfo => sectionInfo.interactions
+            .map(interactionInfo => {
+            if (interactionInfo.checkbox && interactionInfo.label) {
+                const letter = Array.from(interactionInfo.label.text).find(letter => !lettersTaken.has(letter));
+                if (letter) {
+                    lettersTaken.add(letter);
+                    return { letter, checkboxInfo: interactionInfo.checkbox };
+                }
+            }
+            return { letter: "" };
+        })
+            .filter(info => info.letter !== "")));
+        addEventListener("keydown", event => {
+            if (!event.altKey || !event.shiftKey) {
+                return;
+            }
+            info.some(info => {
+                if (info.letter !== event.key) {
+                    return false;
+                }
+                if (info.checkboxInfo && info.checkboxInfo.autoId) {
+                    const checkbox = document.getElementById(info.checkboxInfo.autoId);
+                    checkbox.focus();
+                    checkbox.click();
+                    event.preventDefault();
+                }
+                return true;
+            });
         });
         handleTabs(shiftModifierIsRequired);
         chrome.storage.onChanged.addListener(() => reload(panelsInfo));
