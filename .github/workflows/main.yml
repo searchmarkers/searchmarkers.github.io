@@ -50,6 +50,7 @@ jobs:
             mv $file_path ${{ env.REPO_NAME }}/pages/$file_name/index.html
           done
           cd ${{ env.REPO_NAME }}
+          ls -R
           cat polyfill.js dist/include/storage.js > temp
           cat temp > dist/include/storage.js
           rm temp
