@@ -54,7 +54,7 @@ jobs:
           cat temp > dist/manage-storage.js
           rm temp
           git config user.name "searchmarkers"
-          git config user.email "dev@example.com"
+          git config user.email "bot@searchmarkers.github.io"
           if [ -z "$( git status --short )" ]
           then
             echo "nothing to commit"
