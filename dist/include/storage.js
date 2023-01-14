@@ -1,97 +1,3 @@
-"use strict"
-window["chrome"] = {
-    runtime: {
-        getURL: path => "",
-        getManifest: () => ({
-            name: "Mark My Search",
-            version: "X.Y.Z",
-        }),
-        sendMessage: async () => undefined,
-        openOptionsPage: () => undefined,
-    },
-    storage: {
-        session: {
-            set: async () => undefined,
-            get: async () => {
-                const store = {};
-                Object.values(StorageSession).forEach(key => store[key] = {});
-                return store;
-            },
-        },
-        local: {
-            set: async () => undefined,
-            get: async () => {
-                const store = {};
-                Object.values(StorageLocal).forEach(key => store[key] = {});
-                return store;
-            },
-        },
-        sync: {
-            set: async () => undefined,
-            get: async () => defaultOptions,
-        },
-        onChanged: {
-            addListener: () => undefined,
-        },
-    },
-    tabs: {
-        query: async () => ([ {
-            id: -1,
-            url: window.location.href,
-        } ]),
-        onActivated: {
-            addListener: () => undefined,
-        },
-        create: () => undefined,
-    },
-};
-"use strict"
-window["chrome"] = {
-    runtime: {
-        getURL: path => "",
-        getManifest: () => ({
-            name: "Mark My Search",
-            version: "X.Y.Z",
-        }),
-        sendMessage: async () => undefined,
-        openOptionsPage: () => undefined,
-    },
-    storage: {
-        session: {
-            set: async () => undefined,
-            get: async () => {
-                const store = {};
-                Object.values(StorageSession).forEach(key => store[key] = {});
-                return store;
-            },
-        },
-        local: {
-            set: async () => undefined,
-            get: async () => {
-                const store = {};
-                Object.values(StorageLocal).forEach(key => store[key] = {});
-                return store;
-            },
-        },
-        sync: {
-            set: async () => undefined,
-            get: async () => defaultOptions,
-        },
-        onChanged: {
-            addListener: () => undefined,
-        },
-    },
-    tabs: {
-        query: async () => ([ {
-            id: -1,
-            url: window.location.href,
-        } ]),
-        onActivated: {
-            addListener: () => undefined,
-        },
-        create: () => undefined,
-    },
-};
 "use strict";
 var _a;
 const useChromeAPI = () => !this.browser;
@@ -112,7 +18,6 @@ var StorageSync;
 (function (StorageSync) {
     StorageSync["AUTO_FIND_OPTIONS"] = "autoFindOptions";
     StorageSync["MATCH_MODE_DEFAULTS"] = "matchModeDefaults";
-    StorageSync["LINK_RESEARCH_TABS"] = "linkResearchTabs";
     StorageSync["SHOW_HIGHLIGHTS"] = "showHighlights";
     StorageSync["BAR_CONTROLS_SHOWN"] = "barControlsShown";
     StorageSync["BAR_LOOK"] = "barLook";
@@ -120,18 +25,17 @@ var StorageSync;
     StorageSync["URL_FILTERS"] = "urlFilters";
     StorageSync["TERM_LISTS"] = "termLists";
 })(StorageSync || (StorageSync = {}));
-const defaultOptions = {
+const optionsDefault = {
     autoFindOptions: {
         searchParams: [
-            "searchTerms",
-            "searchTerm",
+            "search_terms", "search_term", "searchTerms", "searchTerm",
+            "search_query", "searchQuery",
             "search",
             "query",
             "phrase",
-            "keywords",
-            "keyword",
-            "terms",
-            "term",
+            "keywords", "keyword",
+            "terms", "term",
+            // Short forms:
             "s", "q", "p", "k",
             // Special cases:
             "_nkw", // eBay
@@ -149,7 +53,6 @@ const defaultOptions = {
         whole: false,
         diacritics: false,
     },
-    linkResearchTabs: false,
     showHighlights: {
         default: true,
         overrideSearchPages: true,
@@ -179,77 +82,53 @@ const defaultOptions = {
     },
     termLists: [],
 };
-/**
- * Stores items to browser session storage.
- * @param items An object of items to create or update.
- */
-const setStorageSession = (items) => {
-    return chrome.storage.session.set(items);
+const storageCache = {
+    session: {},
+    local: {},
+    sync: {},
 };
-/**
- * Retrieves items from browser session storage.
- * @param keys An array of storage keys for which to retrieve the items.
- * @returns A promise that resolves with an object containing the requested items.
- */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getStorageSession = async (keys) => {
-    const session = await chrome.storage.session.get(keys);
-    if (session.engines) {
-        const engines = session.engines;
+const storageGet = async (area, keys) => {
+    if (keys && keys.every(key => storageCache[area][key] !== undefined)) {
+        return { ...storageCache[area] };
+    }
+    const store = await chrome.storage[area].get(keys);
+    const storeAsSession = store;
+    if (storeAsSession.engines) {
+        const engines = storeAsSession.engines;
         Object.keys(engines).forEach(id => engines[id] = Object.assign(new Engine, engines[id]));
     }
-    return session;
+    Object.entries(store).forEach(([key, value]) => {
+        storageCache[area][key] = value;
+    });
+    return { ...store };
 };
-/**
- * Stores items to browser local storage.
- * @param items An object of items to create or update.
- */
-const setStorageLocal = (items) => {
-    return chrome.storage.local.set(items);
-};
-/**
- * Retrieves items from browser local storage.
- * @param keys An array of storage keys for which to retrieve the items.
- * @returns A promise that resolves with an object containing the requested items.
- */
-const getStorageLocal = async (keys) => {
-    return chrome.storage.local.get(keys);
-};
-/**
- * Stores items to browser sync storage.
- * @param items An object of items to create or update.
- */
-const setStorageSync = (items) => {
-    return chrome.storage.sync.set(items);
-};
-/**
- * Retrieves items from browser synced storage.
- * @param keys An array of storage keys for which to retrieve the items.
- * @returns A promise that resolves with an object containing the requested items.
- */
-const getStorageSync = async (keys) => {
-    return chrome.storage.sync.get(keys);
+const storageSet = async (area, store) => {
+    Object.entries(store).forEach(([key, value]) => {
+        storageCache[area][key] = value;
+    });
+    await chrome.storage[area].set(store);
 };
 /**
  * Sets internal storage to its default working values.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const initializeStorage = async () => {
-    const local = await getStorageLocal();
+const storageInitialize = async () => {
+    const local = await storageGet("local");
     const localOld = { ...local };
     const toRemove = [];
-    if (fixObjectWithDefaults(local, {
+    if (objectFixWithDefaults(local, {
         enabled: true,
         followLinks: true,
         persistResearchInstances: true,
     }, toRemove)) {
         console.warn("Storage 'local' cleanup rectified issues. Results:", localOld, local); // Use standard logging system?
     }
-    await setStorageLocal(local);
+    await storageSet("local", local);
     if (chrome.storage["session"]) { // Temporary fix. Without the 'session' API, its values may be stored in 'local'.
         await chrome.storage.local.remove(toRemove);
     }
-    await setStorageSession({
+    await storageSet("session", {
         researchInstances: {},
         engines: {},
     });
@@ -263,7 +142,7 @@ const initializeStorage = async () => {
  * @param atTopLevel Indicates whether or not the function is currently at the top level of the object.
  * @returns Whether or not any fixes were applied.
  */
-const fixObjectWithDefaults = (object, defaults, toRemove, atTopLevel = true) => {
+const objectFixWithDefaults = (object, defaults, toRemove, atTopLevel = true) => {
     let hasModified = false;
     Object.keys(object).forEach(objectKey => {
         if (defaults[objectKey] === undefined) {
@@ -274,7 +153,7 @@ const fixObjectWithDefaults = (object, defaults, toRemove, atTopLevel = true) =>
             hasModified = true;
         }
         else if (typeof (object[objectKey]) === "object" && !Array.isArray(object[objectKey])) {
-            if (fixObjectWithDefaults(object[objectKey], defaults[objectKey], toRemove, false)) {
+            if (objectFixWithDefaults(object[objectKey], defaults[objectKey], toRemove, false)) {
                 hasModified = true;
             }
         }
@@ -292,13 +171,21 @@ const fixObjectWithDefaults = (object, defaults, toRemove, atTopLevel = true) =>
  * Checks persistent options storage for unwanted or misconfigured values, then restores it to a normal state.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const repairOptions = async () => {
-    const sync = await getStorageSync();
+const optionsRepair = async () => {
+    const sync = await storageGet("sync");
     const syncOld = { ...sync };
     const toRemove = [];
-    if (fixObjectWithDefaults(sync, defaultOptions, toRemove)) {
+    if (objectFixWithDefaults(sync, optionsDefault, toRemove)) {
         console.warn("Storage 'sync' cleanup rectified issues. Results:", syncOld, sync); // Use standard logging system?
     }
-    await setStorageSync(sync);
+    storageSet("sync", sync);
     await chrome.storage.sync.remove(toRemove);
 };
+chrome.storage.onChanged.addListener((changes, area) => {
+    if (["researchInstances", "engines"].some(key => changes[key])) {
+        area = "session";
+    }
+    Object.entries(changes).forEach(([key, value]) => {
+        storageCache[area][key] = value.newValue;
+    });
+});
