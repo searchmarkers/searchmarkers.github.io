@@ -41,7 +41,8 @@ jobs:
         run: |
           git clone https://user:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY
           rm -r ${{ env.REPO_NAME }}/dist/
-          cp -r releases/mark_my_search-firefox/dist/ ${{ env.REPO_NAME }}
+          ls -R releases/mark_my_search-firefox/dist/
+          cp -r releases/mark_my_search-firefox/dist/ ${{ env.REPO_NAME }}/
           FILES="releases/mark_my_search-firefox/pages/*"
           for file_path in $FILES; do
             file_fullname="${file_path##*/}"
