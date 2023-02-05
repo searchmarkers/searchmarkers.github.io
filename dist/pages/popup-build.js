@@ -152,14 +152,15 @@ const loadPopup = (() => {
                                             highlightsShown: true,
                                             terms: [],
                                         };
+                                        await storageSet("session", session);
                                     }
                                     else {
                                         delete session.researchInstances[tab.id];
+                                        await storageSet("session", session);
                                         chrome.runtime.sendMessage({
                                             disableTabResearch: true,
                                         });
                                     }
-                                    storageSet("session", session);
                                 },
                             },
                         },
