@@ -43,10 +43,11 @@ const assert = (condition, problem, reason, metadata = {}) => {
     return !!condition;
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-var WindowFlag;
-(function (WindowFlag) {
-    WindowFlag["EXECUTION_UNNECESSARY"] = "executionUnnecessary";
-})(WindowFlag || (WindowFlag = {}));
+var WindowVariable;
+(function (WindowVariable) {
+    WindowVariable["SCRIPTS_LOADED"] = "scriptsAreLoaded";
+    WindowVariable["CONFIG_HARD"] = "configHard";
+})(WindowVariable || (WindowVariable = {}));
 /**
  * Represents a search term with regex matching options. Used by the DOM text finding algorithm and supporting components.
  */
@@ -159,11 +160,18 @@ var CommandType;
     CommandType[CommandType["TOGGLE_BAR"] = 5] = "TOGGLE_BAR";
     CommandType[CommandType["TOGGLE_HIGHLIGHTS"] = 6] = "TOGGLE_HIGHLIGHTS";
     CommandType[CommandType["TOGGLE_SELECT"] = 7] = "TOGGLE_SELECT";
-    CommandType[CommandType["ADVANCE_GLOBAL"] = 8] = "ADVANCE_GLOBAL";
-    CommandType[CommandType["SELECT_TERM"] = 9] = "SELECT_TERM";
-    CommandType[CommandType["STEP_GLOBAL"] = 10] = "STEP_GLOBAL";
-    CommandType[CommandType["FOCUS_TERM_INPUT"] = 11] = "FOCUS_TERM_INPUT";
+    CommandType[CommandType["REPLACE_TERMS"] = 8] = "REPLACE_TERMS";
+    CommandType[CommandType["ADVANCE_GLOBAL"] = 9] = "ADVANCE_GLOBAL";
+    CommandType[CommandType["SELECT_TERM"] = 10] = "SELECT_TERM";
+    CommandType[CommandType["STEP_GLOBAL"] = 11] = "STEP_GLOBAL";
+    CommandType[CommandType["FOCUS_TERM_INPUT"] = 12] = "FOCUS_TERM_INPUT";
 })(CommandType || (CommandType = {}));
+// TODO document
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const messageSendHighlight = (tabId, message) => chrome.tabs.sendMessage(tabId, message);
+// TODO document
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const messageSendBackground = (message) => chrome.runtime.sendMessage(message);
 /**
  * Sanitizes a string for regex use by escaping all potential regex control characters.
  * @param word A string.
@@ -234,6 +242,14 @@ const parseCommand = (commandString) => {
                 }
                 case "select": {
                     return { type: CommandType.TOGGLE_SELECT };
+                }
+            }
+            break;
+        }
+        case "terms": {
+            switch (parts[1]) {
+                case "replace": {
+                    return { type: CommandType.REPLACE_TERMS };
                 }
             }
             break;

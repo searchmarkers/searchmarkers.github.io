@@ -66,12 +66,17 @@ var StorageSync;
     StorageSync["AUTO_FIND_OPTIONS"] = "autoFindOptions";
     StorageSync["MATCH_MODE_DEFAULTS"] = "matchModeDefaults";
     StorageSync["SHOW_HIGHLIGHTS"] = "showHighlights";
+    StorageSync["BAR_COLLAPSE"] = "barCollapse";
     StorageSync["BAR_CONTROLS_SHOWN"] = "barControlsShown";
     StorageSync["BAR_LOOK"] = "barLook";
-    StorageSync["HIGHLIGHT_LOOK"] = "highlightLook";
+    StorageSync["HIGHLIGHT_METHOD"] = "highlightMethod";
     StorageSync["URL_FILTERS"] = "urlFilters";
     StorageSync["TERM_LISTS"] = "termLists";
 })(StorageSync || (StorageSync = {}));
+/**
+ * The default options to be used for items missing from storage, or to which items may be reset.
+ * Set to sensible options for a generic first-time user of the extension.
+ */
 const optionsDefault = {
     autoFindOptions: {
         searchParams: [
@@ -90,7 +95,7 @@ const optionsDefault = {
         stoplist: [
             "i", "a", "an", "and", "or", "not", "the", "that", "there", "where", "which", "to", "do", "of", "in", "on", "at", "too",
             "if", "for", "while", "is", "as", "isn't", "are", "aren't", "can", "can't", "how", "vs",
-            "them", "their", "theirs", "her", "hers", "him", "his", "it", "its", "me", "my", "one", "one's",
+            "them", "their", "theirs", "her", "hers", "him", "his", "it", "its", "me", "my", "one", "one's", "you", "your", "yours",
         ],
     },
     matchModeDefaults: {
@@ -102,15 +107,20 @@ const optionsDefault = {
     },
     showHighlights: {
         default: true,
-        overrideSearchPages: true,
+        overrideSearchPages: false,
         overrideResearchPages: false,
     },
+    barCollapse: {
+        fromSearch: false,
+        fromTermListAuto: false,
+    },
     barControlsShown: {
+        toggleBarCollapsed: true,
         disableTabResearch: true,
         performSearch: false,
         toggleHighlights: true,
         appendTerm: true,
-        pinTerms: true,
+        replaceTerms: true,
     },
     barLook: {
         showEditIcon: true,
@@ -120,7 +130,9 @@ const optionsDefault = {
         opacityTerm: 0.86,
         borderRadius: "4px",
     },
-    highlightLook: {
+    highlightMethod: {
+        paintReplaceByClassic: true,
+        paintUseExperimental: false,
         hues: [300, 60, 110, 220, 30, 190, 0],
     },
     urlFilters: {
@@ -129,11 +141,21 @@ const optionsDefault = {
     },
     termLists: [],
 };
+/**
+ * The working cache of items retrieved from storage since the last background startup.
+ */
 const storageCache = {
     session: {},
     local: {},
     sync: {},
 };
+/**
+ * Gets an object of key-value pairs corresponding to a set of keys in the given area of storage.
+ * Storage may be fetched asynchronously or immediately retrieved from a cache.
+ * @param area The name of the storage area from which to retrieve values.
+ * @param keys The keys corresponding to the entries to retrieve.
+ * @returns A promise resolving to an object of storage entries.
+ */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const storageGet = async (area, keys) => {
     if (keys && keys.every(key => storageCache[area][key] !== undefined)) {
@@ -150,6 +172,11 @@ const storageGet = async (area, keys) => {
     });
     return { ...store };
 };
+/**
+ *
+ * @param area
+ * @param store
+ */
 const storageSet = async (area, store) => {
     Object.entries(store).forEach(([key, value]) => {
         storageCache[area][key] = value;
