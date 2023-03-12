@@ -2606,6 +2606,7 @@ const getTermsFromSelection = () => {
                 let styleRules = [];
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
+                        console.log(entry.target, "intersecting");
                         if (entry.target[ElementProperty.INFO]) {
                             elementsVisible.add(entry.target);
                             shiftObserver.observe(entry.target);
@@ -2613,6 +2614,7 @@ const getTermsFromSelection = () => {
                         }
                     }
                     else {
+                        console.log(entry.target, "not intersecting");
                         if (paintUsePaintingFallback && entry.target[ElementProperty.INFO]) {
                             document.getElementById(getSel(ElementID.DRAW_ELEMENT, entry.target[ElementProperty.INFO].id))?.remove();
                         }

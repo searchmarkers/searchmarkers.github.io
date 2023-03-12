@@ -17,7 +17,7 @@ if ( /*isBrowserChromium()*/!this.browser) {
     // Firefox accepts a list of event page scripts, whereas Chromium only accepts service workers.
     this["importScripts"](ScriptInclude.STORAGE, ScriptInclude.STEMMING, ScriptInclude.DIACRITICS, ScriptInclude.COMMON);
 }
-chrome.tabs.executeScript = useChromeAPI() ? chrome.tabs.executeScript : browser.tabs.executeScript;
+chrome.scripting = useChromeAPI() ? chrome.scripting : browser["scripting"];
 chrome.tabs.query = useChromeAPI() ? chrome.tabs.query : browser.tabs.query;
 chrome.tabs.sendMessage = useChromeAPI()
     ? chrome.tabs.sendMessage
@@ -211,7 +211,7 @@ const manageEnginesCacheOnBookmarkUpdate = (() => {
  */
 const updateActionIcon = (enabled) => enabled === undefined
     ? storageGet("local", [StorageLocal.ENABLED]).then(local => updateActionIcon(local.enabled))
-    : chrome.browserAction.setIcon({ path: useChromeAPI()
+    : chrome.action.setIcon({ path: useChromeAPI()
             ? enabled ? "/icons/dist/mms-32.png" : "/icons/dist/mms-off-32.png" // Chromium lacks SVG support for the icon.
             : enabled ? "/icons/mms.svg" : "/icons/mms-off.svg"
     });
@@ -417,8 +417,7 @@ const updateActionIcon = (enabled) => enabled === undefined
  * @param highlightMessageToReceive A message to be received by the tab's highlighting script.
  * This script will first be injected if not already present.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const activateHighlightingInTab3 = async (targetTabId, highlightMessageToReceive) => {
+const activateHighlightingInTab = async (targetTabId, highlightMessageToReceive) => {
     const logMetadata = { tabId: targetTabId };
     log("pilot function injection start", "", logMetadata);
     await chrome.scripting.executeScript({
@@ -426,7 +425,7 @@ const activateHighlightingInTab3 = async (targetTabId, highlightMessageToReceive
             Object.entries(windowObjects).forEach(([key, options]) => {
                 window[key] = options;
             });
-            messageSendBackground({
+            chrome.runtime.sendMessage({
                 executeInTabNoPilot: !window[flagLoaded],
                 tabId,
                 highlightMessage,
@@ -441,19 +440,6 @@ const activateHighlightingInTab3 = async (targetTabId, highlightMessageToReceive
         return value;
     }).catch(() => {
         log("pilot function injection fail", "injection not permitted in this tab", logMetadata);
-    });
-};
-const activateHighlightingInTab = async (targetTabId, highlightMessageToReceive) => {
-    highlightMessageToReceive = Object.assign({ extensionCommands: await chrome.commands.getAll() }, highlightMessageToReceive);
-    const logMetadata = { tabId: targetTabId };
-    log("script injection [highlighting activation] start", "", logMetadata);
-    await executeScriptsInTabUnsafe(targetTabId).then(value => {
-        log("script injection [highlighting activation] finish", "", logMetadata);
-        chrome.tabs.sendMessage(targetTabId, highlightMessageToReceive);
-        return value;
-    }).catch(() => {
-        log("script injection [highlighting activation] fail", "injection not permitted in this tab (perhaps scripts were already injected), sending message regardless", logMetadata);
-        chrome.tabs.sendMessage(targetTabId, highlightMessageToReceive);
     });
 };
 /**
@@ -548,8 +534,7 @@ const toggleHighlightsInTab = async (tabId, toggleHighlightsOn) => {
  * Injects a highlighting script, composed of the highlighting code preceded by its dependencies, into a tab.
  * @param tabId The ID of a tab to execute the script in.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const executeScriptsInTabUnsafe3 = async (tabId) => {
+const executeScriptsInTabUnsafe = async (tabId) => {
     const logMetadata = { tabId };
     log("script injection start", "", logMetadata);
     await chrome.scripting.executeScript({
@@ -578,29 +563,9 @@ const executeScriptsInTabUnsafe3 = async (tabId) => {
         log("script injection fail", "injection not permitted in this tab", logMetadata);
     });
 };
-const executeScriptsInTabUnsafe = async (tabId) => {
-    const logMetadata = { tabId };
-    log("script injection start", "", logMetadata);
-    await (async () => {
-        const executions = [chrome.tabs.executeScript(tabId, {
-                code: `window["${WindowVariable.CONFIG_HARD}"] = { paintUseExperimental: ${!!(await storageGet("sync", [StorageSync.HIGHLIGHT_METHOD])).highlightMethod.paintUseExperimental} }`,
-            })].concat([
-            ScriptInclude.STEMMING,
-            ScriptInclude.DIACRITICS,
-            ScriptInclude.COMMON,
-            Script.CONTENT,
-        ].map(file => chrome.tabs.executeScript(tabId, { file })));
-        while (executions.length) {
-            await executions.pop();
-        }
-        log("script injection finish", "", logMetadata);
-    })().catch(() => {
-        log("script injection fail", "injection not permitted in this tab", logMetadata);
-    });
-};
 chrome.commands.onCommand.addListener(async (commandString) => {
     if (commandString === "open-popup") {
-        (chrome.browserAction["openPopup"] ?? (() => undefined))();
+        (chrome.action["openPopup"] ?? (() => undefined))();
     }
     const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
     const tabId = tab.id; // `tab.id` always defined for this case.
@@ -742,6 +707,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
     sendResponse(); // Mitigates manifest V3 bug which otherwise logs an error message.
 });
-chrome.browserAction.onClicked.addListener(() => chrome.permissions.request({ permissions: ["bookmarks"] }));
+chrome.action.onClicked.addListener(() => chrome.permissions.request({ permissions: ["bookmarks"] }));
 chrome.permissions.onAdded.addListener(permissions => permissions && permissions.permissions && permissions.permissions.includes("bookmarks")
     ? manageEnginesCacheOnBookmarkUpdate() : undefined);
