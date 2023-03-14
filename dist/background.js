@@ -345,13 +345,12 @@ const updateActionIcon = (enabled) => enabled === undefined
             researchInstance.terms = researchInstance.enabled
                 ? researchInstance.terms.concat(getTermsAdditionalDistinct(researchInstance.terms, termsFromLists))
                 : termsFromLists;
-            researchInstance.enabled = true;
             if (!isTabResearchPage(session.researchInstances, tabId)) {
                 researchInstance.barCollapsed = sync.barCollapse.fromTermListAuto;
             }
+            researchInstance.enabled = true;
             highlightActivation = activateHighlightingInTab(tabId, {
                 terms: researchInstance.terms,
-                termsOnHold: searchDetails.isSearch ? undefined : [],
                 toggleHighlightsOn: determineToggleHighlightsOn(researchInstance.highlightsShown, overrideHighlightsShown),
                 toggleBarCollapsedOn: researchInstance.barCollapsed,
                 barControlsShown: sync.barControlsShown,
@@ -368,9 +367,8 @@ const updateActionIcon = (enabled) => enabled === undefined
         log("tab-communicate fulfillment finish", "", logMetadata);
     };
     chrome.tabs.onCreated.addListener(async (tab) => {
-        const local = await storageGet("local", [StorageLocal.FOLLOW_LINKS]);
         let openerTabId = tab.openerTabId;
-        if (!local.followLinks || tab.id === undefined || /\b\w+:(\/\/)?newtab\//.test(tab.pendingUrl ?? tab.url ?? "")) {
+        if (tab.id === undefined || /\b\w+:(\/\/)?newtab\//.test(tab.pendingUrl ?? tab.url ?? "")) {
             return;
         }
         if (openerTabId === undefined) {
@@ -435,6 +433,7 @@ const activateHighlightingInTab = async (targetTabId, highlightMessageToReceive)
                     paintUseExperimental: (await storageGet("sync", [StorageSync.HIGHLIGHT_METHOD])).highlightMethod.paintUseExperimental,
                 } }],
         target: { tabId: targetTabId },
+        injectImmediately: true,
     }).then(value => {
         log("pilot function injection finish", "", logMetadata);
         return value;
@@ -494,11 +493,16 @@ const activateResearchInTab = async (tabId) => {
  * Disables the highlighting information about a tab.
  * @param tabId The ID of a tab to be disconnected.
  */
-const disableResearchInstanceInTab = async (tabId) => {
+const disableResearchInTab = async (tabId) => {
     const session = await storageGet("session", [StorageSession.RESEARCH_INSTANCES]);
     const researchInstance = session.researchInstances[tabId];
     if (researchInstance) {
-        researchInstance.enabled = false;
+        if (researchInstance.terms.length) {
+            researchInstance.enabled = false;
+        }
+        else {
+            delete session.researchInstances[tabId];
+        }
         storageSet("session", session);
     }
 };
@@ -507,7 +511,7 @@ const disableResearchInstanceInTab = async (tabId) => {
  * @param tabId The ID of a tab to be forgotten and within which to deactivate highlighting.
  */
 const deactivateResearchInTab = (tabId) => {
-    disableResearchInstanceInTab(tabId);
+    disableResearchInTab(tabId);
     messageSendHighlight(tabId, { deactivate: true });
 };
 /**
@@ -547,6 +551,7 @@ const executeScriptsInTabUnsafe = async (tabId) => {
                     paintUseExperimental: (await storageGet("sync", [StorageSync.HIGHLIGHT_METHOD])).highlightMethod.paintUseExperimental,
                 } }],
         target: { tabId },
+        injectImmediately: true,
     });
     await chrome.scripting.executeScript({
         files: [

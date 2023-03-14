@@ -76,7 +76,7 @@ const loadStartpage = (() => {
                         {
                             className: "action",
                             label: {
-                                text: "Activate or deactivate with Alt+Shift+M",
+                                text: "Activate or deactivate with Alt+M",
                             },
                         },
                         {
@@ -216,7 +216,7 @@ or assign a shortcut like [Alt+Shift+1] for individual terms.`,
                                 text: "Settings - open the popup at any time to quickly change highlighting options.",
                             },
                             note: {
-                                text: "Settings - open the popup at any time to quickly change highlighting options.",
+                                text: "Click the extensions icon and pin Mark My Search to the toolbar.",
                             },
                         },
                         {

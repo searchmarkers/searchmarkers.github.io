@@ -53,18 +53,41 @@ const loadPopup = (() => {
         {
             className: "panel-general",
             name: {
-                text: "Options",
+                text: "Controls",
             },
             sections: [
                 {
+                    interactions: [
+                        {
+                            className: "action",
+                            submitters: [
+                                {
+                                    text: "Get started",
+                                    onClick: (messageText, formFields, onSuccess) => {
+                                        chrome.tabs.create({ url: chrome.runtime.getURL("/pages/startpage.html") });
+                                        onSuccess();
+                                    },
+                                },
+                                {
+                                    text: "Options",
+                                    onClick: (messageText, formFields, onSuccess) => {
+                                        chrome.runtime.openOptionsPage();
+                                        onSuccess();
+                                    },
+                                },
+                            ],
+                        },
+                    ]
+                },
+                {
                     title: {
-                        text: "Settings",
+                        text: "Tabs",
                     },
                     interactions: [
                         {
                             className: "option",
                             label: {
-                                text: "Highlight web searches",
+                                text: "Detect search engines", //"Highlight web searches",
                             },
                             checkbox: {
                                 onLoad: async (setChecked) => {
@@ -81,41 +104,15 @@ const loadPopup = (() => {
                         {
                             className: "option",
                             label: {
-                                text: "Follow links",
-                            },
-                            checkbox: getStorageFieldCheckboxInfo("local", StorageLocal.FOLLOW_LINKS),
-                        },
-                        {
-                            className: "option",
-                            label: {
-                                text: "Restore keywords in tabs",
+                                text: "Restore keywords on reactivation",
                             },
                             checkbox: getStorageFieldCheckboxInfo("local", StorageLocal.PERSIST_RESEARCH_INSTANCES),
-                        },
-                        {
-                            className: "action",
-                            submitters: [
-                                {
-                                    text: "Startpage",
-                                    onClick: (messageText, formFields, onSuccess) => {
-                                        chrome.tabs.create({ url: chrome.runtime.getURL("/pages/startpage.html") });
-                                        onSuccess();
-                                    },
-                                },
-                                {
-                                    text: "More options",
-                                    onClick: (messageText, formFields, onSuccess) => {
-                                        chrome.runtime.openOptionsPage();
-                                        onSuccess();
-                                    },
-                                },
-                            ],
                         },
                     ],
                 },
                 {
                     title: {
-                        text: "Current Tab Activation",
+                        text: "This Tab",
                     },
                     interactions: [
                         {
@@ -159,55 +156,41 @@ const loadPopup = (() => {
                             },
                         },
                         {
-                            className: "option",
-                            label: {
-                                text: "Keywords stored",
-                            },
-                            checkbox: {
-                                onLoad: async (setChecked) => {
-                                    const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-                                    setChecked(tab.id === undefined ? false :
-                                        !!(await storageGet("session", [StorageSession.RESEARCH_INSTANCES])).researchInstances[tab.id]);
-                                },
-                                onToggle: async (checked) => {
-                                    const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-                                    if (tab.id === undefined) {
-                                        return;
-                                    }
-                                    const session = await storageGet("session", [StorageSession.RESEARCH_INSTANCES]);
-                                    if (checked) {
-                                        session.researchInstances[tab.id] = {
-                                            terms: [],
-                                            highlightsShown: true,
-                                            barCollapsed: false,
-                                            enabled: false,
-                                        };
-                                        await storageSet("session", session);
-                                    }
-                                    else {
+                            className: "action",
+                            submitters: [{
+                                    text: "Delete keywords",
+                                    id: "keyword-delete",
+                                    onLoad: async (setEnabled) => {
+                                        const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+                                        setEnabled(tab.id === undefined ? false :
+                                            !!(await storageGet("session", [StorageSession.RESEARCH_INSTANCES])).researchInstances[tab.id]);
+                                    },
+                                    onClick: async () => {
+                                        const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+                                        if (tab.id === undefined) {
+                                            return;
+                                        }
+                                        const session = await storageGet("session", [StorageSession.RESEARCH_INSTANCES]);
                                         delete session.researchInstances[tab.id];
                                         await storageSet("session", session);
                                         messageSendBackground({
                                             disableTabResearch: true,
                                         });
-                                    }
-                                },
-                            },
+                                    },
+                                }],
                         },
                     ],
                 },
                 {
                     title: {
-                        text: "Contributing",
+                        text: "I Have A Problem",
+                        expands: true,
                     },
                     interactions: [
                         {
                             className: "action",
-                            label: {
-                                text: "Report a problem",
-                            },
                             submitters: [{
-                                    text: "Submit anonymously",
+                                    text: "Send anonymous feedback",
                                     onClick: (messageText, formFields, onSuccess, onError) => {
                                         sendProblemReport(messageText, formFields)
                                             .then(onSuccess)
@@ -215,7 +198,8 @@ const loadPopup = (() => {
                                     },
                                     message: {
                                         rows: 2,
-                                        placeholder: "Optional message",
+                                        placeholder: "Message",
+                                        required: true,
                                     },
                                     alerts: {
                                         [PageAlertType.SUCCESS]: {
@@ -466,7 +450,7 @@ const loadPopup = (() => {
     return () => {
         loadPage(panelsInfo, `
 body
-	{ width: 300px; height: 560px; user-select: none; }
+	{ width: 300px; height: 500px; user-select: none; }
 .container-panel > .panel, .brand
 	{ margin-inline: 0; }
 		`, false);
