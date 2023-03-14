@@ -28,7 +28,7 @@ window["chrome"] = {
         },
         sync: {
             set: async () => undefined,
-            get: async () => defaultOptions,
+            get: async () => optionsDefault,
         },
         onChanged: {
             addListener: () => undefined,
