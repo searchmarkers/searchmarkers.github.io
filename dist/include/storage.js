@@ -86,10 +86,12 @@ const optionsDefault = {
             "phrase",
             "keywords", "keyword",
             "terms", "term",
+            "text",
             // Short forms:
             "s", "q", "p", "k",
             // Special cases:
-            "_nkw", // eBay
+            "_nkw",
+            "wd", // Baidu
         ],
         stoplist: [
             "i", "a", "an", "and", "or", "not", "the", "that", "there", "where", "which", "to", "do", "of", "in", "on", "at", "too",

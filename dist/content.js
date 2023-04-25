@@ -918,6 +918,9 @@ const createTermOptionMenu = (term, terms, controlsInfo, onActivated = (matchTyp
     };
     optionList.addEventListener("keydown", event => handleKeyEvent(event, false));
     optionList.addEventListener("keyup", event => handleKeyEvent(event));
+    optionList.addEventListener("focusout", () => {
+        optionList.removeAttribute("tabindex");
+    });
     const controlReveal = document.createElement("button");
     controlReveal.type = "button";
     controlReveal.classList.add(getSel(ElementClass.CONTROL_BUTTON));
@@ -1192,14 +1195,26 @@ const controlsInsert = (() => {
                 }
             });
         };
+        const documentEventProperties = {
+            onkeydown: undefined,
+            onkeyup: undefined,
+            onkeypress: undefined,
+        };
         bar.addEventListener("focusin", () => {
             inputsSetFocusable(true);
+            Object.keys(documentEventProperties).forEach(property => {
+                documentEventProperties[property] = document[property];
+                document[property] = (e) => e.cancelBubble = true;
+            });
         });
         bar.addEventListener("focusout", event => {
             // Only if focus is not moving (and has not already moved) somewhere else within the bar.
             if (!bar.contains(event.relatedTarget) && !bar.contains(document.activeElement)) {
                 inputsSetFocusable(false);
             }
+            Object.keys(documentEventProperties).forEach(property => {
+                document[property] = documentEventProperties[property];
+            });
         });
         window.addEventListener("keydown", event => {
             if (event.key === "Tab") {
@@ -1365,6 +1380,7 @@ const cacheExtend = (element, highlightTags, cacheModify = (element) => {
 const highlightingAttributesCleanup = (root) => {
     root.querySelectorAll("[markmysearch-h_id]").forEach(element => {
         element.removeAttribute("markmysearch-h_id");
+        delete element["markmysearch-h_id"];
     });
     root.querySelectorAll("[markmysearch-h_beneath]").forEach(element => {
         element.removeAttribute("markmysearch-h_beneath");
@@ -1457,6 +1473,10 @@ const flowCacheWithBoxesInfo = (terms, textFlow, getHighlightingId, keepStyleUpd
                 textEnd += node.length;
             }
             node.parentElement.setAttribute("markmysearch-h_beneath", ""); // TODO optimise?
+            if (node.parentElement["markmysearch-h_id"]
+                && !node.parentElement.hasAttribute("markmysearch-h_id")) {
+                node.parentElement.setAttribute("markmysearch-h_id", node.parentElement["markmysearch-h_id"]);
+            }
             // eslint-disable-next-line no-constant-condition
             while (true) {
                 flow.boxesInfo.push({
@@ -1482,6 +1502,7 @@ const flowCacheWithBoxesInfo = (terms, textFlow, getHighlightingId, keepStyleUpd
             const highlighting = ancestorHighlightable[ElementProperty.INFO];
             highlighting.id = getHighlightingId.next().value;
             ancestorHighlightable.setAttribute("markmysearch-h_id", highlighting.id);
+            ancestorHighlightable["markmysearch-h_id"] = highlighting.id;
         }
         markElementsUpToHighlightable(ancestor);
     }
@@ -1772,7 +1793,6 @@ const generateTermHighlightsUnderNode = (() => {
      * @returns The new previous item (the item just highlighted).
      */
     const highlightInsideNode = (term, textEndNode, start, end, nodeItems, nodeItemPrevious) => {
-        // TODO add strategy for mitigating damage (caused by programmatic changes by the website)
         const text = textEndNode.textContent;
         const textStart = text.substring(0, start);
         const highlight = document.createElement("mms-h");
@@ -2203,6 +2223,11 @@ const getObserverNodeHighlighter = (() => {
                             generateTermHighlightsUnderNode(terms, node, highlightTags, termCountCheck);
                         }
                     }
+                    if (mutation.type === "characterData"
+                        && mutation.target.parentElement && canHighlightElement(rejectSelector, mutation.target.parentElement)
+                        && !mutation.target.parentElement.querySelector("mms-h")) {
+                        generateTermHighlightsUnderNode(terms, mutation.target.parentElement, highlightTags, termCountCheck);
+                    }
                 }
             }
             else {
@@ -2212,7 +2237,8 @@ const getObserverNodeHighlighter = (() => {
                             cacheExtend(node, highlightTags);
                         }
                     }
-                    if (mutation.target.parentElement && canHighlightElement(rejectSelector, mutation.target.parentElement) && mutation.type === "characterData") {
+                    if (mutation.type === "characterData"
+                        && mutation.target.parentElement && canHighlightElement(rejectSelector, mutation.target.parentElement)) {
                         boxesInfoCalculateForFlowOwnersFromContent(terms, mutation.target.parentElement, highlightTags, termCountCheck, getHighlightingId, keepStyleUpdated);
                     }
                     for (const node of Array.from(mutation.addedNodes)) {
