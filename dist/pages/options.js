@@ -155,7 +155,7 @@ label[for]:hover
                     }
                     row.appendChild(cell);
                 };
-                const inputId = getIdSequential.next().value;
+                const inputId = `input-${getIdSequential.next().value}`;
                 const preferenceLabel = document.createElement("label");
                 preferenceLabel.htmlFor = inputId;
                 preferenceLabel.textContent = preferenceInfo.label;
@@ -281,9 +281,10 @@ PAINT
 • Has no effect on webpages, but backgrounds which obscure highlights become hidden.`,
                             type: PreferenceType.BOOLEAN,
                         },
-                        paintUseExperimental: {
+                        /*paintUseExperimental: {
                             label: "Use experimental browser APIs (hover for details)",
-                            tooltip: `Mark My Search can highlight using experimental APIs. The behavior of this flag will change over time.
+                            tooltip:
+`Mark My Search can highlight using experimental APIs. The behavior of this flag will change over time.
 Current effects:
 
 CLASSIC
@@ -291,9 +292,10 @@ CLASSIC
 
 PAINT
 • Firefox: The CSS element() function is used instead of SVG rendering.
-• Chromium: The CSS [Houdini] Painting API is used instead of SVG rendering.`,
+• Chromium: The CSS [Houdini] Painting API is used instead of SVG rendering.`
+                            ,
                             type: PreferenceType.BOOLEAN,
-                        },
+                        },*/
                         hues: {
                             label: "Highlight color hue cycle",
                             type: PreferenceType.ARRAY_NUMBER,

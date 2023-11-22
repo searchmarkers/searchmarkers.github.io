@@ -95,8 +95,8 @@ const loadPopup = (() => {
                                     setChecked(local.enabled);
                                 },
                                 onToggle: checked => {
-                                    messageSendBackground({
-                                        toggleResearchOn: checked,
+                                    storageSet("local", {
+                                        enabled: checked,
                                     });
                                 },
                             },
@@ -123,9 +123,7 @@ const loadPopup = (() => {
                             checkbox: {
                                 onLoad: async (setChecked) => {
                                     const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-                                    const session = await storageGet("session", [StorageSession.RESEARCH_INSTANCES]);
-                                    setChecked(tab.id === undefined ? false :
-                                        isTabResearchPage(session.researchInstances, tab.id));
+                                    setChecked(tab.id === undefined ? false : await isTabResearchPage(tab.id));
                                 },
                                 onToggle: checked => {
                                     if (checked) {
@@ -141,15 +139,16 @@ const loadPopup = (() => {
                                             }
                                             messageSendBackground({
                                                 terms: (researchInstance && researchInstance.enabled) ? researchInstance.terms : [],
-                                                makeUnique: true,
-                                                makeUniqueNoCreate: true,
-                                                toggleHighlightsOn: true,
+                                                termsSend: true,
+                                                toggle: {
+                                                    highlightsShownOn: true,
+                                                },
                                             });
                                         });
                                     }
                                     else {
                                         messageSendBackground({
-                                            disableTabResearch: true,
+                                            deactivateTabResearch: true,
                                         });
                                     }
                                 }
@@ -174,7 +173,7 @@ const loadPopup = (() => {
                                         delete session.researchInstances[tab.id];
                                         await storageSet("session", session);
                                         messageSendBackground({
-                                            disableTabResearch: true,
+                                            deactivateTabResearch: true,
                                         });
                                     },
                                 }],
@@ -434,8 +433,10 @@ const loadPopup = (() => {
                                             terms: researchInstance
                                                 ? researchInstance.terms.concat(sync.termLists[index].terms.filter(termFromList => !researchInstance.terms.find(term => term.phrase === termFromList.phrase)))
                                                 : sync.termLists[index].terms,
-                                            makeUnique: true,
-                                            toggleHighlightsOn: true,
+                                            termsSend: true,
+                                            toggle: {
+                                                highlightsShownOn: true,
+                                            },
                                         });
                                         onSuccess();
                                     },

@@ -10,7 +10,7 @@ globalThis.registerPaint("markmysearch-highlights", class {
         const selectorStyles = JSON.parse(properties.get("--markmysearch-styles").toString() || "{}");
         const boxes = JSON.parse(properties.get("--markmysearch-boxes").toString() || "[]");
         boxes.forEach(box => {
-            const style = selectorStyles[box.selector];
+            const style = selectorStyles[box.token];
             if (!style) {
                 return;
             }
