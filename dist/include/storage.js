@@ -45,6 +45,7 @@ window["chrome"] = {
         create: () => undefined,
     },
 };
+//
 "use strict";
 var _a;
 const useChromeAPI = () => !this.browser;
