@@ -79,7 +79,7 @@ class MatchTerm {
         const sanitize = this.matchMode.regex
             ? phrase => phrase
             : (phrase, replacement) => sanitizeForRegex(phrase, replacement);
-        this.selector = `${sanitize(this.phrase, "_").replace(/\W/g, "_")}-${Object.values(this.matchMode).map((matchFlag) => Number(matchFlag)).join("")}-${(Date.now() + Math.random()).toString(36).replace(/\W/g, "_")}`; // Selector is most likely unique; a repeated selector results in undefined behaviour
+        this.selector = `${sanitize(this.phrase, "_").replace(/\W/g, "_")}-${Object.values(this.matchMode).map((matchFlag) => Number(matchFlag)).join("")}-${(Date.now() + Math.random()).toString(36).replace(/\W/g, "_")}`; // Selector is most likely unique; a repeated selector results in undefined behaviour.
         const flags = this.matchMode.case ? "gu" : "giu";
         const [patternStringPrefix, patternStringSuffix] = (this.matchMode.stem && !this.matchMode.regex)
             ? getWordPatternStrings(this.phrase)

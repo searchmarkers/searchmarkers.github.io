@@ -135,7 +135,6 @@ body
 .container-tab > .tab
 	{ flex: unset; padding-inline: 10px; }
 		`);
-	//pageInsertWarning(document.querySelector(".container-panel .panel-general") ?? document.body, "I am aware of an issue in version 1.13.6 which can cause pages to freeze. Rest assured that the fix is pending review, and will be published very soon!");
     };
 })();
 (() => {
