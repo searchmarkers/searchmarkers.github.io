@@ -45,4 +45,3 @@ window["chrome"] = {
         create: () => undefined,
     },
 };
-//
