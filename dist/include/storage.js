@@ -47,6 +47,7 @@ window["chrome"] = {
 };
 "use strict";
 var _a;
+const useChromeAPI = () => !this.browser;
 chrome.storage = useChromeAPI() ? chrome.storage : browser.storage;
 (_a = chrome.storage).session ?? (_a.session = chrome.storage.local);
 var StorageSession;
@@ -199,7 +200,7 @@ const storageInitialize = async () => {
         console.warn("Storage 'local' cleanup rectified issues. Results:", localOld, local); // Use standard logging system?
     }
     await storageSet("local", local);
-    if (chrome.storage["session"] !== chrome.storage.local) { // Temporary fix. Without the 'session' API, its values may be stored in 'local'.
+    if (chrome.storage["session"]) { // Temporary fix. Without the 'session' API, its values may be stored in 'local'.
         await chrome.storage.local.remove(toRemove);
     }
     await storageSet("session", {

@@ -22,80 +22,47 @@ const loadStartpage = (() => {
                         {
                             className: "action",
                             label: {
-                                text: "Press Alt+M, then type a keyword and press Enter to see it highlighted.",
-                                getText: async () => {
-                                    const shortcut = (await chrome.commands.getAll())
-                                        .find(command => command.name === "toggle-research-tab")
-                                        ?.shortcut;
-                                    return shortcut
-                                        ? `Press ${shortcut}, then type a keyword and press Enter to see it highlighted.`
-                                        : `Set a keyboard shortcut by visiting ${chrome.runtime.getURL("/").startsWith("chrome-extension://")
-                                            ? "chrome://extensions/shortcuts"
-                                            : "about:addons, pressing the cog and selecting \"Manage Extension Shortcuts\""}, \
-going to "Find in current tab", and assigning something like Alt+M. \
-You can always activate ${getName()} by opening its popup (from the 'extensions' icon) and clicking "Active".`;
-                                },
+                                text: "Search on DuckDuckGo, Google, or anywhere else",
                             },
                         },
                         {
                             className: "action",
                             label: {
-                                text: "Try it here!",
-                            },
-                        },
-                    ]
-                },
-                {
-                    title: {
-                        text: "Automatic Highlighting",
-                    },
-                    interactions: [
-                        {
-                            className: "action",
-                            label: {
-                                text: "Use a search provider like DuckDuckGo or Google.",
+                                text: "See your keywords highlighted in the search results",
                             },
                         },
                         {
                             className: "action",
                             label: {
-                                text: "Search keywords are highlighted - click a link to see it in action.",
-                            },
-                        },
-                        {
-                            className: "option",
-                            label: {
-                                text: "Should online searches be highlighted automatically?",
-                            },
-                            checkbox: {
-                                onLoad: async (setChecked) => {
-                                    const local = await storageGet("local", [StorageLocal.ENABLED]);
-                                    setChecked(local.enabled);
-                                },
-                                onToggle: checked => {
-                                    storageSet("local", {
-                                        enabled: checked,
-                                    });
-                                },
+                                text: "You're done! See highlights on any site you visit",
                             },
                         },
                         {
                             className: "action",
                             submitters: [{
-                                    text: "Type search words, then click here to open search results",
+                                    text: "Try it out",
                                     // Allow the user to try out the extension by searching for the query string, if any, they entered into the input.
                                     // Prefer highlighting within the startpage, fallback to searching with their default search provider.
                                     onClick: (messageText, formFields, onSuccess) => {
-                                        chrome.search["query"]({
-                                            disposition: "NEW_TAB",
-                                            text: messageText,
-                                        }, onSuccess);
+                                        if (chrome.runtime.getURL("/").startsWith("chrome-extension://")) {
+                                            chrome.search["query"]({
+                                                disposition: "NEW_TAB",
+                                                text: messageText,
+                                            }, onSuccess);
+                                        }
+                                        else {
+                                            messageSendBackground({
+                                                toggleHighlightsOn: true,
+                                                makeUnique: true,
+                                                terms: messageText.split(" ").filter(phrase => phrase !== "").map(phrase => new MatchTerm(phrase)),
+                                            });
+                                            onSuccess();
+                                        }
                                     },
                                     message: {
-                                        required: true,
                                         singleline: true,
                                         rows: 1,
-                                        placeholder: "Search keywords",
+                                        placeholder: "Search words",
                                     },
                                 }],
                         },
@@ -104,9 +71,20 @@ You can always activate ${getName()} by opening its popup (from the 'extensions'
                 {
                     title: {
                         text: "Operation",
-                        expands: true,
                     },
                     interactions: [
+                        {
+                            className: "action",
+                            label: {
+                                text: "Activate or deactivate with Alt+M",
+                            },
+                        },
+                        {
+                            className: "action",
+                            label: {
+                                text: "Activate automatically by searching online",
+                            },
+                        },
                         {
                             className: "action",
                             label: {

@@ -392,7 +392,7 @@ textarea
                     if (labelInfo.getText) {
                         labelInfo.getText(containerIndex).then(text => label.textContent = text);
                     }
-                    const checkboxId = `input-${getIdSequential.next().value}`;
+                    const checkboxId = getIdSequential.next().value;
                     label.htmlFor = checkboxId;
                     return [label, checkboxId];
                 }
@@ -505,7 +505,7 @@ textarea
                 const getObjectIndex = () => Array.from(container.children).indexOf(objectElement);
                 const insertColumn = (columnInfo) => {
                     if (columnInfo.rows.length > 1) {
-                        const checkboxId = `input-${getIdSequential.next().value}`;
+                        const checkboxId = getIdSequential.next().value;
                         const toggleCheckbox = document.createElement("input");
                         toggleCheckbox.type = "checkbox";
                         toggleCheckbox.id = checkboxId;
@@ -677,17 +677,17 @@ textarea
                     : () => {
                         const box = document.createElement("textarea");
                         box.rows = messageInfo.rows;
+                        if (messageInfo.required) {
+                            allowInputs = (allowed = true) => {
+                                box.disabled = !allowed;
+                            };
+                            button.disabled = true;
+                            box.addEventListener("input", () => {
+                                button.disabled = box.value === "";
+                            });
+                        }
                         return box;
                     })();
-                if (messageInfo.required) {
-                    allowInputs = (allowed = true) => {
-                        messageBox.disabled = !allowed;
-                    };
-                    button.disabled = true;
-                    messageBox.addEventListener("input", () => {
-                        button.disabled = messageBox.value === "";
-                    });
-                }
                 messageBox.classList.add("message");
                 messageBox.placeholder = submitterInfo.message.placeholder;
                 messageBox.spellcheck = true;
@@ -790,7 +790,7 @@ textarea
                     // TODO make function
                     const titleRow = document.createElement("label");
                     titleRow.classList.add("title-row");
-                    const checkboxId = `input-${getIdSequential.next().value}`;
+                    const checkboxId = getIdSequential.next().value;
                     titleRow.htmlFor = checkboxId;
                     const toggleCheckbox = document.createElement("input");
                     toggleCheckbox.type = "checkbox";
@@ -919,10 +919,6 @@ textarea
         chrome.tabs.query = useChromeAPI()
             ? chrome.tabs.query
             : browser.tabs.query;
-        const viewportMeta = document.createElement("meta");
-        viewportMeta.name = "viewport";
-        viewportMeta.content = "width=device-width, initial-scale=1";
-        document.head.appendChild(viewportMeta);
         fillAndInsertStylesheet(additionalStyleText);
         insertAndManageContent(panelsInfo, shiftModifierIsRequired);
         pageFocusScrollContainer();
