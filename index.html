@@ -1,20 +1,145 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-	</head>
-	<body>
-		<h1>Mark My Search - Highlighter Browser Extension</h1>
-		<div>This site is currently a live playground for internal extension pages, and mainly used for debugging purposes.</div>
-		<br>
-		<div>Users may be redirected here by Mark My Search in cases where an internal page is not supported.</div>
-		<br>
-		<div>
-			<a href="https://github.com/searchmarkers/searchmarkers.github.io/tree/main/pages">Find accessible pages</a>
-		</div>
-		<br>
-		<div>
-			<a href="https://github.com/searchmarkers/mark-my-search">Visit the extension repository</a>
-		</div>
-	</body>
+<head>
+	<meta charset="utf8">
+	<title>About :: Mark My Search</title>
+	<link rel="icon" href="icons/mms.svg" sizes="any">
+	<link rel="icon" href="favicon.ico" sizes="16x16 32x32">
+	<link rel="icon" href="favicon-16.png" sizes="16x16">
+	<link rel="icon" href="favicon-32.png" sizes="32x32">
+	<link rel="stylesheet" href="main.css">
+	<style>
+		.review-list {
+			display: flex;
+			overflow-x: auto;
+			padding-block: 6px; /* Stop shadows inside from being clipped */
+		}
+
+		.review-list li {
+			margin-inline: 14px;
+			width: 300px;
+			border: 2px solid hsl(0 0% 64%);
+			border-radius: 32px;
+			flex-shrink: 0;
+		}
+
+		.review-list li:hover {
+			box-shadow: var(--shadow);
+		}
+
+		.review-list li::marker {
+			color: transparent;
+		}
+
+		.review-list blockquote {
+			margin: 10px;
+		}
+
+		.review-list li:not(:hover) blockquote {
+			color: hsl(0 0% 30%);
+		}
+
+		.review-list blockquote p::before {
+			content: "\201C";
+		}
+
+		.review-list blockquote p::after {
+			content: "\201D";
+		}
+
+		.review-list mark {
+			background: none;
+			text-decoration: 2px dotted hsl(300 100% 50%) underline;
+		}
+
+		.faq-list h3 {
+			font-weight: normal;
+			font-style: italic;
+		}
+	</style>
+</head>
+<body>
+	<header id="header">
+		<img class="logo-icon" src="icons/mms.svg">
+		<h1 class="logo-title">Mark My Search</h1>
+		<nav>
+			<a href="/files/stores/">Stores</a>
+			<a href="/files/projects/">Projects</a>
+		</nav>
+	</header>
+	<article>
+		<h2>Introduction</h2>
+		<p>
+			<i>Mark My Search</i> is a browser extension with powerful features for highlighting webpages. Think of it as <kbd>Ctrl</kbd> + <kbd>F</kbd><span class="info"><button></button><span class="details">Web browsers allow you to search for text in the current page. Try it by pressing <kbd>Ctrl</kbd> and <kbd>F</kbd> together, then typing some text.</span></span> for multiple phrases at once, marked up in colours of your choice.
+		</p>
+		<p>
+			It updates as the page changes, continues highlighting when you visit a different page, and matches words in all their forms - all of which <kbd>Ctrl</kbd> + <kbd>F</kbd> does not do!
+		</p>
+		<p>
+			Oh yes, and it's open source, <strong>free</strong> and ad-less forever, and highlights your keywords when you search online.
+		</p>
+		<h2>My favourite reviews</h2>
+		<ul class="review-list">
+			<li>
+				<blockquote>
+					<p><mark>Simple and Extremely powerful.</mark>
+					Removes much of the frustration of search. <mark>Big time saver.</mark> Tons of keyboard shortcuts to get even faster & fully customizable as well.</p>
+				</blockquote>
+			</li>
+			<li>
+				<blockquote>
+					<p>I am waiting for this add-on for long-time! <mark>Good job and thank you so much!</mark></p>
+				</blockquote>
+			</li>
+			<li>
+				<blockquote>
+					<p>Very happy with it, does exactly what it says and has <mark>easy to understand options</mark> to customize your experience.</p>
+				</blockquote>
+			</li>
+			<li>
+				<blockquote>
+					<p>Thank you developer! <mark>Absolutely love this extension</mark> [...] I tried multiple searches to find an extension to highlight keywords in search results without ever seeing this wonderful new extension!</p>
+				</blockquote>
+			</li>
+		</ul>
+		<h2>Q&A</h2>
+		<ul class="faq-list">
+			<li>
+				<h3>Free and no ads? What do you get from this?</h3>
+				<p>
+					Well, I use the extension every day, and I don't like ads any more than you do. And I suppose I just like to know that my work is helping real people. I love to read your feedback!
+				</p>
+			</li>
+			<li>
+				<h3>Can Mark My Search be trusted?</h3>
+				<p>
+					You'll have to decide for yourself, but if it helps…
+					<ul>
+						<li>
+							Mark My Search is <strong>Featured</strong><span class="info"><button></button><span class="details">Mark My Search has the <i>Featured</i> badge through manual review by the Chrome Web Store team, indicating compliance with their policies. I am also an <i>Established Publisher</i>. Read more about <a href="https://developer.chrome.com/docs/webstore/discovery/#badges" target="_blank">badges in the Chrome Web Store</a>.</span></span> on the Chrome Web Store (where I have a <q cite="https://chromewebstore.google.com/detail/mark-my-search/lijbnhoniejpjjgemoifpjklobhakinb#:~:text=searchmarkers.github.io">good record with no history of violations</q>).
+						</li>
+						<li>
+							I have good standing on the Firefox and Edge add-on stores, and have earned the trust of Mark My Search's users. I do not want to throw that away!
+						</li>
+						<li>
+							You can see the <a href="https://github.com/searchmarkers/mark-my-search" target="_blank">full source code</a> used to build Mark My Search, or browse its <a href="https://github.com/searchmarkers/mark-my-search/commits/main/" target="_blank">history</a>.
+						</li>
+					</ul>
+				</p>
+			</li>
+			<li>
+				<h3>Can I contribute?</h3>
+				<p>
+					<a href="https://github.com/searchmarkers/mark-my-search" target="_blank">The repo is on GitHub</a>, and is open for anyone to raise an issue or PR. Drop me a comment or <a href="mailto:ator-dev@protonmail.com">email</a>, I will be happy to get you started with the code.
+				</p>
+			</li>
+			<!--<li>
+				<h3>Has anyone actually asked these questions?</h3>
+				<p>
+					Nope! But I like to plan ahead ;)
+				</p>
+			</li>-->
+		</ul>
+	</article>
+</body>
 </html>
