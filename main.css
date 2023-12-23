@@ -1,4 +1,4 @@
-body > *, body > #theme-light:checked ~ * {
+body > *, #theme-light:checked ~ * {
 	--shadow: 0 2px 4px hsl(0 0% 64%);
 	--bg: hsl(0 0% 98%);
 	--color: hsl(0 0% 0%);
@@ -50,7 +50,7 @@ body > * {
 	}
 }
 
-body > #theme-dark:checked ~ * {
+#theme-dark:checked ~ * {
 	--bg: var(--bg-dark);
 	--color: var(--color-dark);
 	--color-dim: var(--color-dim-dark);
@@ -62,6 +62,13 @@ body > #theme-dark:checked ~ * {
 	--color-info-details: var(--color-info-details-dark);
 	--color-anchor: var(--color-anchor-dark);
 	--color-anchor-visited: var(--color-anchor-visited-dark);
+}
+
+#theme-light:checked ~ * [for="theme-light"],
+#theme-dark:checked ~ * [for="theme-dark"],
+#theme:checked ~ * [for="theme"] {
+	outline: 2px solid hsl(300 50% 70%);
+	outline-offset: 1px;
 }
 
 #background {
