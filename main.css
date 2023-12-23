@@ -1,5 +1,7 @@
 body > *, #theme-light:checked ~ * {
 	--shadow: 0 2px 4px hsl(0 0% 64%);
+	--bg-selected: hsl(300 50% 70%);
+	--color-selected: hsl(0 0% 0%);
 	--bg: hsl(0 0% 98%);
 	--color: hsl(0 0% 0%);
 	--color-dim: hsl(0 0% 30%);
@@ -67,7 +69,14 @@ body > * {
 #theme-light:checked ~ * [for="theme-light"],
 #theme-dark:checked ~ * [for="theme-dark"],
 #theme:checked ~ * [for="theme"] {
-	outline: 2px solid hsl(300 50% 70%);
+	background: var(--bg-selected);
+	color: var(--color-selected);
+}
+
+#theme-light:focus ~ * [for="theme-light"],
+#theme-dark:focus ~ * [for="theme-dark"],
+#theme:focus ~ * [for="theme"] {
+	outline: 2px solid var(--bg-selected);
 	outline-offset: 1px;
 }
 
