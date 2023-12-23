@@ -100,24 +100,25 @@ h2 {
 	margin-right: 4px;
 }
 
-.info button {
+.info input {
 	padding-inline: 5px;
 	border: none;
 	border-radius: 20px;
 	font-weight: bold;
 	background: none;
 	color: hsl(0 0% 50%);
+	appearance: none; /* Remove checkbox appearance for custom styling - may only work in newest browsers */
 }
 
-.info button:not(:focus-visible) {
+.info input:not(:focus-visible) {
 	outline: 1px solid;
 }
 
-.info button:hover {
+.info input:hover {
 	color: hsl(300 100% 34%);
 }
 
-.info button::after {
+.info input::after {
 	content: "?";
 }
 
@@ -132,7 +133,7 @@ h2 {
 	box-shadow: var(--shadow);
 }
 
-.info:focus-within .details, .info .details:hover {
+.info input:checked + .details {
 	display: block;
 }
 
