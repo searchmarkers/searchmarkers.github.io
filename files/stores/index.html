@@ -16,15 +16,28 @@
 	</style>
 </head>
 <body>
+	<input type="radio" id="theme-light" name="theme" tabindex="-1">
+	<input type="radio" id="theme" name="theme" checked tabindex="-1">
+	<input type="radio" id="theme-dark" name="theme" tabindex="-1">
 	<header id="header">
 		<div class="brand">
 			<img class="logo-icon" src="/icons/mms.svg">
 			<h1 class="logo-title">Mark My Search</h1>
 		</div>
-		<nav>
-			<a href="/files/stores/">Stores</a>
-			<a href="/files/projects/">Projects</a>
-		</nav>
+		<div class="controls">
+			<nav>
+				<a href="#main">Skip navigation</a>
+				<a href="/files/stores/">Stores</a>
+				<a href="/files/projects/">Projects</a>
+				<a href="#theme">Select a site theme</a>
+			</nav>
+			<fieldset class="theme-select">
+				<legend>Select a site theme</legend>
+				<label for="theme-light">Light</label>
+				<label for="theme">Automatic</label>
+				<label for="theme-dark">Dark</label>
+			</fieldset>
+		</div>
 	</header>
 	<article>
 		<h2>Stores</h2>
@@ -40,5 +53,6 @@
 			</li>
 		</ul>
 	</article>
+	<div id="background"></div>
 </body>
 </html>

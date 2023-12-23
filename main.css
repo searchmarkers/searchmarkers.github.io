@@ -134,6 +134,7 @@ header > *, article > * {
 #header nav a[href^="#"] {
 	position: absolute;
 	opacity: 0;
+	pointer-events: none;
 }
 
 #header nav a:not([href^="#"]) ~ a[href^="#"] {
@@ -142,6 +143,7 @@ header > *, article > * {
 
 #header nav a[href^="#"]:focus {
 	opacity: 1;
+	pointer-events: auto;
 }
 
 #header .logo-icon {
