@@ -1,19 +1,99 @@
-:root {
+body > *, body > #theme-light:checked ~ * {
 	--shadow: 0 2px 4px hsl(0 0% 64%);
+	--bg: hsl(0 0% 98%);
+	--color: hsl(0 0% 0%);
+	--color-dim: hsl(0 0% 30%);
+	--color-h2: hsl(0 0% 20%);
+	--bg-header: hsl(300 100% 98%);
+	--border-nav-button: hsl(300 100% 88%);
+	--border-nav-button-hover: hsl(300 100% 80%);
+	--bg-nav-button: hsl(0 0% 100%);
+	--color-nav-button: hsl(0 0% 0%);
+	--color-info: hsl(0 0% 50%);
+	--color-info-hover: hsl(300 100% 34%);
+	--outline-info-details: hsl(0 0% 60%);
+	--color-info-details: hsl(0 0% 0%);
+	--color-anchor: revert;
+	--color-anchor-visited: revert;
+	--border-keyboard: hsl(0 0% 60%);
+	--bg-keyboard: hsl(0 0% 86%);
+	--color-keyboard: hsl(0 0% 0%);
+}
+
+body > * {
+	--bg-dark: hsl(0 0% 15%);
+	--color-dark: hsl(0 0% 85%);
+	--color-dim-dark: hsl(0, 0%, 66%);
+	--color-h2-dark: hsl(0 0% 72%);
+	--bg-header-dark: hsl(300, 30%, 23%);
+	--color-info-dark: hsl(0 0% 50%);
+	--color-info-hover-dark: hsl(300 100% 34%);
+	--outline-info-details-dark: hsl(0 0% 60%);
+	--color-info-details-dark: hsl(0 0% 0%);
+	--color-anchor-dark: revert;
+	--color-anchor-visited-dark: revert;
+}
+
+@media (prefers-color-scheme: dark) {
+	body > * {
+		--bg: var(--bg-dark);
+		--color: var(--color-dark);
+		--color-dim: var(--color-dim-dark);
+		--color-h2: var(--color-h2-dark);
+		--bg-header: var(--bg-header-dark);
+		--color-info: var(--color-info-dark);
+		--color-info-hover: var(--color-info-hover-dark);
+		--outline-info-details: var(--outline-info-details-dark);
+		--color-info-details: var(--color-info-details-dark);
+		--color-anchor: var(--color-anchor-dark);
+		--color-anchor-visited: var(--color-anchor-visited-dark);
+	}
+}
+
+body > #theme-dark:checked ~ * {
+	--bg: var(--bg-dark);
+	--color: var(--color-dark);
+	--color-dim: var(--color-dim-dark);
+	--color-h2: var(--color-h2-dark);
+	--bg-header: var(--bg-header-dark);
+	--color-info: var(--color-info-dark);
+	--color-info-hover: var(--color-info-hover-dark);
+	--outline-info-details: var(--outline-info-details-dark);
+	--color-info-details: var(--color-info-details-dark);
+	--color-anchor: var(--color-anchor-dark);
+	--color-anchor-visited: var(--color-anchor-visited-dark);
+}
+
+#background {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	z-index: -1;
+	background: var(--bg);
 }
 
 body {
 	margin: 0;
 }
 
+body > input {
+	position: fixed;
+}
+
 header, article {
-	padding-inline: 10px;
+	color: var(--color);
+}
+
+header > *, article > * {
+	margin-inline: 10px;
 }
 
 #header {
 	display: flex;
 	overflow-x: auto; /* In case of overflow, overflow the header instead of the page */
-	background: hsl(300 100% 98%);
+	background: var(--bg-header);
 	box-shadow: 0 0 8px hsl(0 0% 0%);
 	position: sticky;
 	top: 0;
@@ -24,23 +104,44 @@ header, article {
 	display: flex;
 }
 
+#header .controls {
+	display: flex;
+	flex-grow: 1;
+	align-items: center;
+}
+
 #header nav {
 	display: flex;
-	align-items: center;
+	position: relative;
+	flex-grow: 1;
 	margin-inline: 40px;
 	gap: 20px;
-	flex-grow: 1;
+	align-items: center;
 }
 
 #header nav a {
 	padding: 14px;
-	border: 4px solid hsl(300 100% 88%);
+	border: 4px solid var(--border-nav-button);
 	border-radius: 100px;
-	background: hsl(0 0% 100%);
+	background: var(--bg-nav-button);
+	color: var(--color-nav-button);
 }
 
 #header nav a:hover {
-	border-color: hsl(300 100% 80%);
+	border-color: var(--border-nav-button-hover);
+}
+
+#header nav a[href^="#"] {
+	position: absolute;
+	opacity: 0;
+}
+
+#header nav a:not([href^="#"]) ~ a[href^="#"] {
+	right: 0;
+}
+
+#header nav a[href^="#"]:focus {
+	opacity: 1;
 }
 
 #header .logo-icon {
@@ -66,7 +167,7 @@ header, article {
 
 	#header nav {
 		margin-inline: 0;
-		margin-block: 4px;
+		padding-block: 4px;
 		gap: 10px;
 		overflow-x: auto;
 	}
@@ -86,11 +187,15 @@ header, article {
 	}
 }
 
+h1 {
+	color: var(--color);
+}
+
 h2 {
 	margin-block: 1.4em;
 	font-weight: normal;
 	text-decoration: 2px solid underline;
-	color: hsl(0 0% 20%);
+	color: var(--color-h2);
 }
 
 .info {
@@ -106,7 +211,7 @@ h2 {
 	border-radius: 20px;
 	font-weight: bold;
 	background: none;
-	color: hsl(0 0% 50%);
+	color: var(--color-info);
 	appearance: none; /* Remove checkbox appearance for custom styling - may only work in newest browsers */
 }
 
@@ -115,7 +220,7 @@ h2 {
 }
 
 .info input:hover {
-	color: hsl(300 100% 34%);
+	color: var(--color-info-hover);
 }
 
 .info input::after {
@@ -129,19 +234,29 @@ h2 {
 	padding: 14px;
 	width: 400px;
 	background: Canvas;
-	outline: 1px solid hsl(0 0% 60%);
+	outline: 1px solid var(--outline-info-details);
 	box-shadow: var(--shadow);
+	color: var(--color-info-details)
 }
 
 .info input:checked + .details {
 	display: block;
 }
 
+a {
+	color: var(--color-anchor);
+}
+
+a:visited {
+	color: var(--color-anchor-visited);
+}
+
 kbd {
 	padding-inline: 3px;
 	padding-block: 1px;
-	border: 1px solid hsl(0 0% 60%);
+	border: 1px solid var(--border-keyboard);
 	border-radius: 6px;
-	background: hsl(0 0% 86%);
+	background: var(--bg-keyboard);
 	box-shadow: 0 2px 0 0 hsl(0 0% 60%);
+	color: var(--color-keyboard);
 }

@@ -14,6 +14,8 @@
 			display: flex;
 			overflow-x: auto;
 			padding-block: 6px; /* Stop shadows inside from being clipped */
+			padding-inline: 6px;
+			margin-inline: 0; /* Display up to the page edges */
 		}
 
 		.review-list li {
@@ -37,7 +39,7 @@
 		}
 
 		.review-list li:not(:hover) blockquote {
-			color: hsl(0 0% 30%);
+			color: var(--color-dim);
 		}
 
 		.review-list blockquote p::before {
@@ -51,6 +53,7 @@
 		.review-list mark {
 			background: none;
 			text-decoration: 2px dotted hsl(300 100% 50%) underline;
+			color: var(--color);
 		}
 
 		.faq-list h3 {
@@ -60,17 +63,30 @@
 	</style>
 </head>
 <body>
+	<input type="radio" id="theme-light" name="theme">
+	<input type="radio" id="theme" name="theme" checked>
+	<input type="radio" id="theme-dark" name="theme">
 	<header id="header">
 		<div class="brand">
 			<img class="logo-icon" src="/icons/mms.svg">
 			<h1 class="logo-title">Mark My Search</h1>
 		</div>
-		<nav>
-			<a href="/files/stores/">Stores</a>
-			<a href="/files/projects/">Projects</a>
-		</nav>
+		<div class="controls">
+			<nav>
+				<a href="#main">Skip navigation</a>
+				<a href="/files/stores/">Stores</a>
+				<a href="/files/projects/">Projects</a>
+				<a href="#theme">Select a site theme</a>
+			</nav>
+			<fieldset class="theme-select">
+				<legend>Select a site theme</legend>
+				<label for="theme-light">Light</label>
+				<label for="theme">Automatic</label>
+				<label for="theme-dark">Dark</label>
+			</fieldset>
+		</div>
 	</header>
-	<article>
+	<article id="main">
 		<h2>Introduction</h2>
 		<p>
 			<i>Mark My Search</i> is a browser extension with powerful features for highlighting webpages. Think of it as <kbd>Ctrl</kbd> + <kbd>F</kbd><span class="info"><input type="checkbox" aria-haspopup="dialog" aria-controls="details-ctrl-f" aria-label="help" aria-description="Details about the find-in-page feature triggered by Control + F"><span id="details-ctrl-f" class="details" role="dialog">Web browsers allow you to search for text in the current page. Try it by pressing <kbd>Ctrl</kbd> and <kbd>F</kbd> together, then typing some text.</span></span> for multiple phrases at once, marked up in colours of your choice.
@@ -144,5 +160,6 @@
 			</li>-->
 		</ul>
 	</article>
+	<div id="background"></div>
 </body>
 </html>
