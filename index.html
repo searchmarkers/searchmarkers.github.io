@@ -9,58 +9,7 @@
 	<link rel="icon" href="/favicon-16.png" sizes="16x16">
 	<link rel="icon" href="/favicon-32.png" sizes="32x32">
 	<link rel="stylesheet" href="/main.css">
-	<style>
-		.review-list {
-			display: flex;
-			overflow-x: auto;
-			padding-block: 6px; /* Stop shadows inside from being clipped */
-			padding-inline: 6px;
-			margin-inline: 0; /* Display up to the page edges */
-		}
-
-		.review-list li {
-			margin-inline: 14px;
-			width: 300px;
-			border: 2px solid hsl(0 0% 64%);
-			border-radius: 32px;
-			flex-shrink: 0;
-		}
-
-		.review-list li:hover {
-			box-shadow: var(--shadow);
-		}
-
-		.review-list li::marker {
-			color: transparent;
-		}
-
-		.review-list blockquote {
-			margin: 10px;
-		}
-
-		.review-list li:not(:hover) blockquote {
-			color: var(--color-dim);
-		}
-
-		.review-list blockquote p::before {
-			content: "\201C";
-		}
-
-		.review-list blockquote p::after {
-			content: "\201D";
-		}
-
-		.review-list mark {
-			background: none;
-			text-decoration: 2px dotted hsl(300 100% 50%) underline;
-			color: var(--color);
-		}
-
-		.faq-list h3 {
-			font-weight: normal;
-			font-style: italic;
-		}
-	</style>
+	<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 	<input type="radio" id="theme-light" name="theme" tabindex="-1">
@@ -152,12 +101,6 @@
 					<a href="https://github.com/searchmarkers/mark-my-search" target="_blank">The repo is on GitHub</a>, and is open for anyone to raise an issue or PR. Drop me a comment or <a href="mailto:ator-dev@protonmail.com">email</a>, I will be happy to get you started with the code.
 				</p>
 			</li>
-			<!--<li>
-				<h3>Has anyone actually asked these questions?</h3>
-				<p>
-					Nope! But I like to plan ahead ;)
-				</p>
-			</li>-->
 		</ul>
 	</article>
 	<div id="background"></div>
