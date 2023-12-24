@@ -10,13 +10,12 @@ body > *, #theme-light:checked ~ * {
 	--border-nav-button: hsl(300 100% 88%);
 	--border-nav-button-hover: hsl(300 100% 80%);
 	--bg-nav-button: hsl(0 0% 100%);
-	--color-nav-button: hsl(0 0% 0%);
 	--color-info: hsl(0 0% 50%);
 	--color-info-hover: hsl(300 100% 34%);
 	--outline-info-details: hsl(0 0% 60%);
 	--color-info-details: hsl(0 0% 0%);
-	--color-anchor: revert;
-	--color-anchor-visited: revert;
+	--color-anchor: LinkText;
+	--color-anchor-visited: VisitedText;
 	--border-keyboard: hsl(0 0% 60%);
 	--bg-keyboard: hsl(0 0% 86%);
 	--color-keyboard: hsl(0 0% 0%);
@@ -140,7 +139,6 @@ header > *, article > * {
 	border: 4px solid var(--border-nav-button);
 	border-radius: 100px;
 	background: var(--bg-nav-button);
-	color: var(--color-nav-button);
 }
 
 #header nav a:hover {
