@@ -14,8 +14,10 @@ body > *, #theme-light:checked ~ * {
 	--color-info-hover: hsl(300 100% 34%);
 	--outline-info-details: hsl(0 0% 60%);
 	--color-info-details: hsl(0 0% 0%);
-	--color-anchor: LinkText;
-	--color-anchor-visited: VisitedText;
+	--color-anchor-light: LinkText;
+	--color-anchor: var(--color-anchor-light);
+	--color-anchor-visited-light: VisitedText;
+	--color-anchor-visited: var(--color-anchor-visited-light);
 	--border-keyboard: hsl(0 0% 60%);
 	--bg-keyboard: hsl(0 0% 86%);
 	--color-keyboard: hsl(0 0% 0%);
@@ -31,8 +33,8 @@ body > * {
 	--color-info-hover-dark: hsl(300 100% 34%);
 	--outline-info-details-dark: hsl(0 0% 60%);
 	--color-info-details-dark: hsl(0 0% 0%);
-	--color-anchor-dark: revert;
-	--color-anchor-visited-dark: revert;
+	--color-anchor-dark: hsl(271, 68%, 70%);
+	--color-anchor-visited-dark: hsl(240, 100%, 70%);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -139,6 +141,11 @@ header > *, article > * {
 	border: 4px solid var(--border-nav-button);
 	border-radius: 100px;
 	background: var(--bg-nav-button);
+	color: LinkText;
+}
+
+#header nav a:visited {
+	color: VisitedText;
 }
 
 #header nav a:hover {
