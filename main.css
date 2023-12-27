@@ -14,10 +14,9 @@ body > *, #theme-light:checked ~ * {
 	--color-info-hover: hsl(300 100% 34%);
 	--outline-info-details: hsl(0 0% 60%);
 	--color-info-details: hsl(0 0% 0%);
-	--color-anchor-light: LinkText;
-	--color-anchor: var(--color-anchor-light);
-	--color-anchor-visited-light: VisitedText;
-	--color-anchor-visited: var(--color-anchor-visited-light);
+	--color-anchor: LinkText;
+	--color-anchor-visited: VisitedText;
+	--color-anchor-active: ActiveText;
 	--border-keyboard: hsl(0 0% 60%);
 	--bg-keyboard: hsl(0 0% 86%);
 	--color-keyboard: hsl(0 0% 0%);
@@ -29,12 +28,16 @@ body > * {
 	--color-dim-dark: hsl(0, 0%, 66%);
 	--color-h2-dark: hsl(0 0% 72%);
 	--bg-header-dark: hsl(300, 30%, 23%);
+	--border-nav-button-dark: hsl(300 100% 88%); /* Nav buttons have no dark theming yet */
+	--border-nav-button-hover-dark: hsl(300 100% 80%);
+	--bg-nav-button-dark: hsl(0 0% 100%);
 	--color-info-dark: hsl(0 0% 50%);
 	--color-info-hover-dark: hsl(300 100% 34%);
 	--outline-info-details-dark: hsl(0 0% 60%);
 	--color-info-details-dark: hsl(0 0% 0%);
 	--color-anchor-dark: hsl(240, 100%, 70%);
 	--color-anchor-visited-dark: hsl(271, 68%, 70%);
+	--color-anchor-active-dark: ActiveText;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -44,12 +47,16 @@ body > * {
 		--color-dim: var(--color-dim-dark);
 		--color-h2: var(--color-h2-dark);
 		--bg-header: var(--bg-header-dark);
+		--border-nav-button: var(--border-nav-button-dark);
+		--border-nav-button-hover: var(--border-nav-button-hover-dark);
+		--bg-nav-button: var(--bg-nav-button-dark);
 		--color-info: var(--color-info-dark);
 		--color-info-hover: var(--color-info-hover-dark);
 		--outline-info-details: var(--outline-info-details-dark);
 		--color-info-details: var(--color-info-details-dark);
 		--color-anchor: var(--color-anchor-dark);
 		--color-anchor-visited: var(--color-anchor-visited-dark);
+		--color-anchor-active: var(--color-anchor-active-dark);
 	}
 }
 
@@ -59,12 +66,16 @@ body > * {
 	--color-dim: var(--color-dim-dark);
 	--color-h2: var(--color-h2-dark);
 	--bg-header: var(--bg-header-dark);
+	--border-nav-button: var(--border-nav-button-dark);
+	--border-nav-button-hover: var(--border-nav-button-hover-dark);
+	--bg-nav-button: var(--bg-nav-button-dark);
 	--color-info: var(--color-info-dark);
 	--color-info-hover: var(--color-info-hover-dark);
 	--outline-info-details: var(--outline-info-details-dark);
 	--color-info-details: var(--color-info-details-dark);
 	--color-anchor: var(--color-anchor-dark);
 	--color-anchor-visited: var(--color-anchor-visited-dark);
+	--color-anchor-active: var(--color-anchor-active-dark);
 }
 
 #theme-light:checked ~ * [for="theme-light"],
@@ -141,11 +152,6 @@ header > *, article > * {
 	border: 4px solid var(--border-nav-button);
 	border-radius: 100px;
 	background: var(--bg-nav-button);
-	color: LinkText;
-}
-
-#header nav a:visited {
-	color: VisitedText;
 }
 
 #header nav a:hover {
@@ -272,6 +278,10 @@ a {
 
 a:visited {
 	color: var(--color-anchor-visited);
+}
+
+a:active {
+	color: var(--color-anchor-active);
 }
 
 kbd {
