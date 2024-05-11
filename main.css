@@ -187,6 +187,11 @@ header > *, article > * {
 	padding: 8px;
 }
 
+#header nav a[href^="#"]:focus {
+	opacity: revert;
+	pointer-events: revert;
+}
+
 #header nav a:not([href^="#"]) ~ a[href^="#"] {
 	position: revert;
 	opacity: revert;
@@ -195,11 +200,6 @@ header > *, article > * {
 
 /*#header nav a:not([href^="#"]) ~ a[href^="#"] {
 	right: 0;
-}*/
-
-/*#header nav a[href^="#"]:focus {
-	opacity: 1;
-	pointer-events: auto;
 }*/
 
 #header .logo-icon {
