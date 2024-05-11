@@ -85,6 +85,27 @@ body > * {
 	color: var(--color-selected);
 }
 
+.theme-select {
+	display: none;
+}
+
+#theme-light:focus ~ * .theme-select,
+#theme-dark:focus ~ * .theme-select,
+#theme:focus ~ * .theme-select {
+	display: block;
+}
+
+#theme-light:active ~ * .theme-select,
+#theme-dark:active ~ * .theme-select,
+#theme:active ~ * .theme-select {
+	display: block;
+}
+
+:is(#theme-light, #theme-dark, #theme):focus ~ * [href="#theme"],
+:is(#theme-light, #theme-dark, #theme):active ~ * [href="#theme"] {
+	display: none;
+}
+
 #theme-light:focus ~ * [for="theme-light"],
 #theme-dark:focus ~ * [for="theme-dark"],
 #theme:focus ~ * [for="theme"] {
