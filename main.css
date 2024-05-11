@@ -180,14 +180,17 @@ header > *, article > * {
 	border-color: var(--border-nav-button-hover);
 }
 
-#header nav a[href^="#"]:first-child, #header nav a:not([href^="#"]) ~ a[href^="#"] {
+#header nav a[href^="#"] {
 	position: absolute;
 	opacity: 0;
 	pointer-events: none;
+	padding: 8px;
 }
 
-#header nav a[href^="#"] {
-	padding: 8px;
+#header nav a:not([href^="#"]) ~ a[href^="#"] {
+	position: revert;
+	opacity: revert;
+	pointer-events: revert;
 }
 
 /*#header nav a:not([href^="#"]) ~ a[href^="#"] {
