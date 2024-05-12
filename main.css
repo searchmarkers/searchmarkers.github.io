@@ -262,7 +262,7 @@ h2 {
 	margin-left: 0.3em;
 }
 
-.info input {
+input.info {
 	padding-inline: 5px;
 	border: none;
 	border-radius: 20px;
@@ -272,31 +272,32 @@ h2 {
 	appearance: none; /* Remove checkbox appearance for custom styling - may only work in newest browsers */
 }
 
-.info input:not(:focus-visible) {
+input.info:not(:focus-visible) {
 	outline: 1px solid;
 }
 
-.info input:hover {
+input.info:hover {
 	color: var(--color-info-hover);
 }
 
-.info input::after {
+input.info::after {
 	content: "?";
 }
 
-.info .details {
+.info.details {
 	display: none;
-	position: absolute;
-	margin-top: 2px;
+	float: right;
+	box-sizing: border-box;
+	width: 100%;
 	padding: 14px;
-	width: 400px;
+	margin-block: 6px;
 	background: Canvas;
 	outline: 1px solid var(--outline-info-details);
 	box-shadow: var(--shadow);
 	color: var(--color-info-details)
 }
 
-.info input:checked + .details {
+input.info:checked + .info.details {
 	display: block;
 }
 
