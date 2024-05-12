@@ -7,7 +7,7 @@ body > *, #theme-light:checked ~ * {
 	--color-dim: hsl(0 0% 30%);
 	--color-h2: hsl(0 0% 20%);
 	--bg-header: hsl(300 100% 98%);
-	--border-nav-button: hsl(300 100% 88%);
+	--border-header: hsl(300 100% 88%);
 	--border-nav-button-hover: hsl(300 100% 80%);
 	--bg-nav-button: hsl(0 0% 100%);
 	--color-info: hsl(0 0% 50%);
@@ -28,7 +28,7 @@ body > * {
 	--color-dim-dark: hsl(0, 0%, 66%);
 	--color-h2-dark: hsl(0 0% 72%);
 	--bg-header-dark: hsl(300, 30%, 23%);
-	--border-nav-button-dark: hsl(300 100% 88%); /* Nav buttons have no dark theming yet */
+	--border-header-dark: hsl(300 100% 88%); /* Nav buttons have no dark theming yet */
 	--border-nav-button-hover-dark: hsl(300 100% 80%);
 	--bg-nav-button-dark: hsl(0 0% 100%);
 	--color-info-dark: hsl(0 0% 50%);
@@ -47,7 +47,7 @@ body > * {
 		--color-dim: var(--color-dim-dark);
 		--color-h2: var(--color-h2-dark);
 		--bg-header: var(--bg-header-dark);
-		--border-nav-button: var(--border-nav-button-dark);
+		--border-header: var(--border-header-dark);
 		--border-nav-button-hover: var(--border-nav-button-hover-dark);
 		--bg-nav-button: var(--bg-nav-button-dark);
 		--color-info: var(--color-info-dark);
@@ -66,7 +66,7 @@ body > * {
 	--color-dim: var(--color-dim-dark);
 	--color-h2: var(--color-h2-dark);
 	--bg-header: var(--bg-header-dark);
-	--border-nav-button: var(--border-nav-button-dark);
+	--border-header: var(--border-header-dark);
 	--border-nav-button-hover: var(--border-nav-button-hover-dark);
 	--bg-nav-button: var(--bg-nav-button-dark);
 	--color-info: var(--color-info-dark);
@@ -138,7 +138,7 @@ header > *, article > * {
 	display: flex;
 	overflow-x: auto; /* In case of overflow, overflow the header instead of the page */
 	background: var(--bg-header);
-	box-shadow: 0 0 8px hsl(0 0% 0%);
+	border-bottom: 2px solid var(--border-header);
 	position: sticky;
 	top: 0;
 	z-index: 1;
@@ -166,13 +166,19 @@ header > *, article > * {
 #header nav a {
 	padding: 14px;
 	white-space: nowrap;
-	border: 4px solid var(--border-nav-button);
-	border-radius: 100px;
 	background: var(--bg-nav-button);
+	border: 2px solid var(--border-header);
+	border-radius: 100px;
+	transition: background-color 100ms, border-color 100ms;
 }
 
 #header nav a:hover {
-	border-color: var(--border-nav-button-hover);
+	background: var(--border-header);
+}
+
+#header nav a:active {
+	background: var(--bg-header);
+	border-color: var(--bg-header);
 }
 
 #header nav a[href^="#"] {
@@ -204,6 +210,7 @@ header > *, article > * {
 }
 
 .logo-title {
+	margin-block: 0.4em;
 	white-space: nowrap;
 	font-weight: normal;
 }
