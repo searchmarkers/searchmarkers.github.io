@@ -1,5 +1,4 @@
 body > *, #theme-light:checked ~ * {
-	--shadow: 0 2px 4px hsl(0 0% 64%);
 	--bg-selected: hsl(300 50% 70%);
 	--color-selected: hsl(0 0% 0%);
 	--bg: hsl(0 0% 98%);
@@ -115,6 +114,10 @@ body > * {
 	width: 100%;
 	z-index: -1;
 	background: var(--bg);
+}
+
+html {
+	font-family: Georgia, serif;
 }
 
 body {
@@ -306,7 +309,6 @@ input.info:checked::after {
 	margin-block: 0.5em;
 	background: Canvas;
 	outline: 1px solid var(--outline-info-details);
-	box-shadow: var(--shadow);
 	color: var(--color-info-details)
 }
 
