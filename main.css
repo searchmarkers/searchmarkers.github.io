@@ -8,8 +8,10 @@ body > *, #theme-light:checked ~ * {
 	--color-h2: hsl(0 0% 20%);
 	--bg-header: hsl(300 100% 98%);
 	--border-header: hsl(300 100% 88%);
-	--border-nav-button-hover: hsl(300 100% 80%);
 	--bg-nav-button: hsl(0 0% 100%);
+	--bg-nav-button-hover: var(--bg-header);
+	--border-nav-button: var(--border-header);
+	--border-nav-button-hover: var(--bg-header);
 	--color-info: hsl(0 0% 50%);
 	--color-info-hover: hsl(300 100% 34%);
 	--outline-info-details: hsl(0 0% 60%);
@@ -28,9 +30,8 @@ body > * {
 	--color-dim-dark: hsl(0, 0%, 66%);
 	--color-h2-dark: hsl(0 0% 72%);
 	--bg-header-dark: hsl(300, 30%, 23%);
-	--border-header-dark: hsl(300 100% 88%); /* Nav buttons have no dark theming yet */
-	--border-nav-button-hover-dark: hsl(300 100% 80%);
-	--bg-nav-button-dark: hsl(0 0% 100%);
+	--border-header-dark: hsl(300 40% 40%);
+	--bg-nav-button-dark: hsl(0 0% 15%);
 	--color-info-dark: hsl(0 0% 50%);
 	--color-info-hover-dark: hsl(300 100% 34%);
 	--outline-info-details-dark: hsl(0 0% 60%);
@@ -48,7 +49,6 @@ body > * {
 		--color-h2: var(--color-h2-dark);
 		--bg-header: var(--bg-header-dark);
 		--border-header: var(--border-header-dark);
-		--border-nav-button-hover: var(--border-nav-button-hover-dark);
 		--bg-nav-button: var(--bg-nav-button-dark);
 		--color-info: var(--color-info-dark);
 		--color-info-hover: var(--color-info-hover-dark);
@@ -67,7 +67,6 @@ body > * {
 	--color-h2: var(--color-h2-dark);
 	--bg-header: var(--bg-header-dark);
 	--border-header: var(--border-header-dark);
-	--border-nav-button-hover: var(--border-nav-button-hover-dark);
 	--bg-nav-button: var(--bg-nav-button-dark);
 	--color-info: var(--color-info-dark);
 	--color-info-hover: var(--color-info-hover-dark);
