@@ -264,9 +264,11 @@ h2 {
 }
 
 input.info {
-	padding-inline: 5px;
+	width: 1.2em;
+	height: 1.2em;
 	border: none;
-	border-radius: 20px;
+	border-radius: 1em;
+	text-align: center;
 	font-weight: bold;
 	background: none;
 	color: var(--color-info);
@@ -288,11 +290,11 @@ input.info::before {
 input.info:checked::after {
 	content: "";
 	position: absolute;
-	border-bottom: 8px solid var(--outline-info-details);
-	border-left: 8px solid transparent;
-	border-right: 8px solid transparent;
-	left: 0;
-	top: 15px;
+	border-bottom: 0.8em solid var(--outline-info-details);
+	border-left: 0.8em solid transparent;
+	border-right: 0.8em solid transparent;
+	left: -0.2em;
+	top: 1.2em;
 }
 
 .info.details {
@@ -300,8 +302,8 @@ input.info:checked::after {
 	float: right;
 	box-sizing: border-box;
 	width: 100%;
-	padding: 14px;
-	margin-block: 6px;
+	padding: 0.8em;
+	margin-block: 0.5em;
 	background: Canvas;
 	outline: 1px solid var(--outline-info-details);
 	box-shadow: var(--shadow);
