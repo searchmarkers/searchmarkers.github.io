@@ -275,8 +275,18 @@ input.info:hover {
 	color: var(--color-info-hover);
 }
 
-input.info::after {
+input.info::before {
 	content: "?";
+}
+
+input.info:checked::after {
+	content: "";
+	position: absolute;
+	border-bottom: 8px solid var(--outline-info-details);
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+	left: 0;
+	top: 15px;
 }
 
 .info.details {
