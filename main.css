@@ -78,6 +78,18 @@ body > * {
 	--color-anchor-active: var(--color-anchor-active-dark);
 }
 
+.theme-select {
+	display: none;
+}
+
+:is(#theme, #theme-light, #theme-dark):is(:focus, :active) ~ * .theme-select {
+	display: block;
+}
+
+:is(#theme, #theme-light, #theme-dark):is(:focus, :active) ~ * [href="#theme"] {
+	display: none;
+}
+
 #theme-light:checked ~ * [for="theme-light"],
 #theme-dark:checked ~ * [for="theme-dark"],
 #theme:checked ~ * [for="theme"] {
@@ -85,32 +97,15 @@ body > * {
 	color: var(--color-selected);
 }
 
-.theme-select {
-	display: none;
-}
-
-#theme-light:focus ~ * .theme-select,
-#theme-dark:focus ~ * .theme-select,
-#theme:focus ~ * .theme-select {
-	display: block;
-}
-
-#theme-light:active ~ * .theme-select,
-#theme-dark:active ~ * .theme-select,
-#theme:active ~ * .theme-select {
-	display: block;
-}
-
-:is(#theme-light, #theme-dark, #theme):focus ~ * [href="#theme"],
-:is(#theme-light, #theme-dark, #theme):active ~ * [href="#theme"] {
-	display: none;
-}
-
+#theme:focus ~ * [for="theme"],
 #theme-light:focus ~ * [for="theme-light"],
-#theme-dark:focus ~ * [for="theme-dark"],
-#theme:focus ~ * [for="theme"] {
+#theme-dark:focus ~ * [for="theme-dark"] {
 	outline: 2px solid var(--bg-selected);
 	outline-offset: 1px;
+}
+
+#theme:not(:target), #theme:not(:target) ~ :is(#theme-light, #theme-dark) {
+	display: none;
 }
 
 #background {
