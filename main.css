@@ -164,7 +164,6 @@ header > *, article > * {
 	background: var(--bg-nav-button);
 	border: 2px solid var(--border-nav-button);
 	border-radius: 12px;
-	transition: background-color 100ms, border-color 100ms;
 }
 
 #header nav a[href^="#"] {
@@ -216,6 +215,7 @@ header > *, article > * {
 #header nav fieldset label {
 	display: block;
 	margin-inline: 1px;
+	padding: 2px;
 }
 
 .theme-select {
