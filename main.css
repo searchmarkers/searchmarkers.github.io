@@ -40,7 +40,7 @@
 	--color-keyboard-L: hsl(0 0% 0%);
 }
 
-body > *, #theme-light:checked ~ * {
+#theme-light:checked ~ #container, #container {
 	--bg-selected: var(--bg-selected-L);
 	--color-selected: var(--color-selected-L);
 	--bg: var(--bg-L);
@@ -65,8 +65,25 @@ body > *, #theme-light:checked ~ * {
 	--color-keyboard: var(--color-keyboard-L);
 }
 
+#theme-dark:checked ~ #container {
+	--bg: var(--bg-D);
+	--color: var(--color-D);
+	--color-dim: var(--color-dim-D);
+	--color-h2: var(--color-h2-D);
+	--bg-header: var(--bg-header-D);
+	--border-header: var(--border-header-D);
+	--bg-nav-button: var(--bg-nav-button-D);
+	--color-info: var(--color-info-D);
+	--color-info-hover: var(--color-info-hover-D);
+	--outline-info-details: var(--outline-info-details-D);
+	--color-info-details: var(--color-info-details-D);
+	--color-anchor: var(--color-anchor-D);
+	--color-anchor-visited: var(--color-anchor-visited-D);
+	--color-anchor-active: var(--color-anchor-active-D);
+}
+
 @media (prefers-color-scheme: dark) {
-	body > * {
+	#container {
 		--bg: var(--bg-D);
 		--color: var(--color-D);
 		--color-dim: var(--color-dim-D);
@@ -82,23 +99,6 @@ body > *, #theme-light:checked ~ * {
 		--color-anchor-visited: var(--color-anchor-visited-D);
 		--color-anchor-active: var(--color-anchor-active-D);
 	}
-}
-
-#theme-dark:checked ~ * {
-	--bg: var(--bg-D);
-	--color: var(--color-D);
-	--color-dim: var(--color-dim-D);
-	--color-h2: var(--color-h2-D);
-	--bg-header: var(--bg-header-D);
-	--border-header: var(--border-header-D);
-	--bg-nav-button: var(--bg-nav-button-D);
-	--color-info: var(--color-info-D);
-	--color-info-hover: var(--color-info-hover-D);
-	--outline-info-details: var(--outline-info-details-D);
-	--color-info-details: var(--color-info-details-D);
-	--color-anchor: var(--color-anchor-D);
-	--color-anchor-visited: var(--color-anchor-visited-D);
-	--color-anchor-active: var(--color-anchor-active-D);
 }
 
 :root {
