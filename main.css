@@ -1,108 +1,107 @@
-body > *, #theme-light:checked ~ * {
-	--bg-selected: hsl(300 50% 70%);
-	--color-selected: hsl(0 0% 0%);
-	--bg: hsl(0 0% 98%);
-	--color: hsl(0 0% 0%);
-	--color-dim: hsl(0 0% 30%);
-	--color-h2: hsl(0 0% 20%);
-	--bg-header: hsl(300 100% 98%);
-	--border-header: hsl(300 100% 88%);
-	--bg-nav-button: hsl(0 0% 100%);
-	--bg-nav-button-hover: var(--bg-header);
-	--border-nav-button: var(--border-header);
-	--border-nav-button-hover: var(--bg-header);
-	--color-info: hsl(0 0% 50%);
-	--color-info-hover: hsl(300 100% 34%);
-	--outline-info-details: hsl(0 0% 60%);
-	--color-info-details: hsl(0 0% 0%);
-	--color-anchor: LinkText;
-	--color-anchor-visited: VisitedText;
-	--color-anchor-active: ActiveText;
-	--border-keyboard: hsl(0 0% 60%);
-	--bg-keyboard: hsl(0 0% 86%);
-	--color-keyboard: hsl(0 0% 0%);
+:root {
+	--bg-selected-L: hsl(300 50% 70%);
+	--color-selected-L: hsl(0 0% 0%);
+	--bg-L: hsl(0 0% 98%);
+	--bg-D: hsl(0 0% 15%);
+	--color-L: hsl(0 0% 0%);
+	--color-D: hsl(0 0% 85%);
+	--color-dim-L: hsl(0 0% 30%);
+	--color-dim-D: hsl(0, 0%, 66%);
+	--color-h2-L: hsl(0 0% 20%);
+	--color-h2-D: hsl(0 0% 72%);
+	--bg-header-L: hsl(300 100% 98%);
+	--bg-header-D: hsl(300, 30%, 23%);
+	--border-header-L: hsl(300 100% 88%);
+	--border-header-D: hsl(300 40% 40%);
+	--bg-nav-button-L: hsl(0 0% 100%);
+	--bg-nav-button-D: hsl(0 0% 15%);
+	--bg-nav-button-hover-L: var(--bg-header-L);
+	--bg-nav-button-hover-D: var(--bg-header-D);
+	--border-nav-button-L: var(--border-header-L);
+	--border-nav-button-D: var(--border-header-D);
+	--border-nav-button-hover-L: var(--bg-header-L);
+	--border-nav-button-hover-D: var(--bg-header-D);
+	--color-info-L: hsl(0 0% 50%);
+	--color-info-D: hsl(0 0% 50%);
+	--color-info-hover-L: hsl(300 100% 34%);
+	--color-info-hover-D: hsl(300 100% 34%);
+	--outline-info-details-L: hsl(0 0% 60%);
+	--outline-info-details-D: hsl(0 0% 60%);
+	--color-info-details-L: hsl(0 0% 0%);
+	--color-info-details-D: hsl(0 0% 0%);
+	--color-anchor-L: LinkText;
+	--color-anchor-D: hsl(240, 100%, 70%);
+	--color-anchor-visited-L: VisitedText;
+	--color-anchor-visited-D: hsl(271, 68%, 70%);
+	--color-anchor-active-L: ActiveText;
+	--color-anchor-active-D: ActiveText;
+	--border-keyboard-L: hsl(0 0% 60%);
+	--bg-keyboard-L: hsl(0 0% 86%);
+	--color-keyboard-L: hsl(0 0% 0%);
 }
 
-body > * {
-	--bg-dark: hsl(0 0% 15%);
-	--color-dark: hsl(0 0% 85%);
-	--color-dim-dark: hsl(0, 0%, 66%);
-	--color-h2-dark: hsl(0 0% 72%);
-	--bg-header-dark: hsl(300, 30%, 23%);
-	--border-header-dark: hsl(300 40% 40%);
-	--bg-nav-button-dark: hsl(0 0% 15%);
-	--color-info-dark: hsl(0 0% 50%);
-	--color-info-hover-dark: hsl(300 100% 34%);
-	--outline-info-details-dark: hsl(0 0% 60%);
-	--color-info-details-dark: hsl(0 0% 0%);
-	--color-anchor-dark: hsl(240, 100%, 70%);
-	--color-anchor-visited-dark: hsl(271, 68%, 70%);
-	--color-anchor-active-dark: ActiveText;
+body > *, #theme-light:checked ~ * {
+	--bg-selected: var(--bg-selected-L);
+	--color-selected: var(--color-selected-L);
+	--bg: var(--bg-L);
+	--color: var(--color-L);
+	--color-dim: var(--color-dim-L);
+	--color-h2: var(--color-h2-L);
+	--bg-header: var(--bg-header-L);
+	--border-header: var(--border-header-L);
+	--bg-nav-button: var(--bg-nav-button-L);
+	--bg-nav-button-hover: var(--bg-nav-button-hover-L);
+	--border-nav-button: var(--border-nav-button-L);
+	--border-nav-button-hover: var(--bg-nav-button-hover-L);
+	--color-info: var(--color-info-L);
+	--color-info-hover: var(--color-info-hover-L);
+	--outline-info-details: var(--outline-info-details-L);
+	--color-info-details: var(--color-info-details-L);
+	--color-anchor: var(--color-anchor-L);
+	--color-anchor-visited: var(--color-anchor-visited-L);
+	--color-anchor-active: var(--color-anchor-active-L);
+	--border-keyboard: var(--border-keyboard-L);
+	--bg-keyboard: var(--bg-keyboard-L);
+	--color-keyboard: var(--color-keyboard-L);
 }
 
 @media (prefers-color-scheme: dark) {
 	body > * {
-		--bg: var(--bg-dark);
-		--color: var(--color-dark);
-		--color-dim: var(--color-dim-dark);
-		--color-h2: var(--color-h2-dark);
-		--bg-header: var(--bg-header-dark);
-		--border-header: var(--border-header-dark);
-		--bg-nav-button: var(--bg-nav-button-dark);
-		--color-info: var(--color-info-dark);
-		--color-info-hover: var(--color-info-hover-dark);
-		--outline-info-details: var(--outline-info-details-dark);
-		--color-info-details: var(--color-info-details-dark);
-		--color-anchor: var(--color-anchor-dark);
-		--color-anchor-visited: var(--color-anchor-visited-dark);
-		--color-anchor-active: var(--color-anchor-active-dark);
+		--bg: var(--bg-D);
+		--color: var(--color-D);
+		--color-dim: var(--color-dim-D);
+		--color-h2: var(--color-h2-D);
+		--bg-header: var(--bg-header-D);
+		--border-header: var(--border-header-D);
+		--bg-nav-button: var(--bg-nav-button-D);
+		--color-info: var(--color-info-D);
+		--color-info-hover: var(--color-info-hover-D);
+		--outline-info-details: var(--outline-info-details-D);
+		--color-info-details: var(--color-info-details-D);
+		--color-anchor: var(--color-anchor-D);
+		--color-anchor-visited: var(--color-anchor-visited-D);
+		--color-anchor-active: var(--color-anchor-active-D);
 	}
 }
 
 #theme-dark:checked ~ * {
-	--bg: var(--bg-dark);
-	--color: var(--color-dark);
-	--color-dim: var(--color-dim-dark);
-	--color-h2: var(--color-h2-dark);
-	--bg-header: var(--bg-header-dark);
-	--border-header: var(--border-header-dark);
-	--bg-nav-button: var(--bg-nav-button-dark);
-	--color-info: var(--color-info-dark);
-	--color-info-hover: var(--color-info-hover-dark);
-	--outline-info-details: var(--outline-info-details-dark);
-	--color-info-details: var(--color-info-details-dark);
-	--color-anchor: var(--color-anchor-dark);
-	--color-anchor-visited: var(--color-anchor-visited-dark);
-	--color-anchor-active: var(--color-anchor-active-dark);
+	--bg: var(--bg-D);
+	--color: var(--color-D);
+	--color-dim: var(--color-dim-D);
+	--color-h2: var(--color-h2-D);
+	--bg-header: var(--bg-header-D);
+	--border-header: var(--border-header-D);
+	--bg-nav-button: var(--bg-nav-button-D);
+	--color-info: var(--color-info-D);
+	--color-info-hover: var(--color-info-hover-D);
+	--outline-info-details: var(--outline-info-details-D);
+	--color-info-details: var(--color-info-details-D);
+	--color-anchor: var(--color-anchor-D);
+	--color-anchor-visited: var(--color-anchor-visited-D);
+	--color-anchor-active: var(--color-anchor-active-D);
 }
 
-.theme-select {
-	display: none;
-}
-
-input[name="theme"]:is(:focus, :active) ~ * .theme-select {
-	display: flex;
-}
-
-#theme-light:checked ~ * [for="theme-light"],
-#theme-dark:checked ~ * [for="theme-dark"],
-#theme:checked ~ * [for="theme"] {
-	background: var(--bg-selected);
-	color: var(--color-selected);
-}
-
-#theme:focus ~ * [for="theme"],
-#theme-light:focus ~ * [for="theme-light"],
-#theme-dark:focus ~ * [for="theme-dark"] {
-	outline: 2px solid var(--bg-selected);
-	outline-offset: 1px;
-}
-
-#theme:not(:target), #theme:not(:target) ~ :is(#theme-light, #theme-dark) {
-	display: none;
-}
-
-html {
+:root {
 	font-family: Georgia, serif;
 }
 
@@ -210,6 +209,32 @@ header > *, article > * {
 #header nav fieldset label {
 	display: block;
 	margin-inline: 1px;
+}
+
+.theme-select {
+	display: none;
+}
+
+input[name="theme"]:is(:focus, :active) ~ * .theme-select {
+	display: flex;
+}
+
+#theme-light:checked ~ * [for="theme-light"],
+#theme-dark:checked ~ * [for="theme-dark"],
+#theme:checked ~ * [for="theme"] {
+	background: var(--bg-selected);
+	color: var(--color-selected);
+}
+
+#theme:focus ~ * [for="theme"],
+#theme-light:focus ~ * [for="theme-light"],
+#theme-dark:focus ~ * [for="theme-dark"] {
+	outline: 2px solid var(--bg-selected);
+	outline-offset: 1px;
+}
+
+#theme:not(:target), #theme:not(:target) ~ :is(#theme-light, #theme-dark) {
+	display: none;
 }
 
 #header .logo-icon {
