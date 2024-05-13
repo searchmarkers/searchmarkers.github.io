@@ -266,13 +266,10 @@ h2 {
 	color: var(--color-h2);
 }
 
-.info {
-	position: relative;
-	display: inline-block;
-	margin-left: 0.3em;
-}
-
 input.info {
+	display: inline-block;
+	position: relative;
+	margin-inline: 0.3em;
 	width: 1.2em;
 	height: 1.2em;
 	border: none;
