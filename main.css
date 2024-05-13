@@ -170,6 +170,10 @@ header > *, article > * {
 	transition: background-color 100ms, border-color 100ms;
 }
 
+#header nav a[href^="#"] {
+	padding: 8px;
+}
+
 #header nav a:hover {
 	background: var(--border-header);
 }
@@ -181,7 +185,6 @@ header > *, article > * {
 
 #header nav a.hidden {
 	position: absolute;
-	padding: 8px;
 }
 
 #header nav a.hidden:not(:focus) {
@@ -189,11 +192,19 @@ header > *, article > * {
 	pointer-events: none;
 }
 
+#header nav div {
+	position: relative;
+}
+
 #header nav fieldset {
 	position: absolute;
 	width: 100%;
 	box-sizing: border-box;
-	background: #fff;
+	background: var(--bg);
+}
+
+#header nav fieldset legend {
+	display: none;
 }
 
 #header nav fieldset label {
