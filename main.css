@@ -199,7 +199,7 @@ header > *, article > * {
 	gap: 4px;
 	position: absolute;
 	width: 100%;
-	top: calc(100% + 8px);
+	top: calc(100% - 2px);
 	left: 0;
 	box-sizing: border-box;
 	margin: 0;
