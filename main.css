@@ -81,7 +81,7 @@ body > * {
 }
 
 input[name="theme"]:is(:focus, :active) ~ * .theme-select {
-	display: block;
+	display: flex;
 }
 
 #theme-light:checked ~ * [for="theme-light"],
@@ -198,9 +198,11 @@ header > *, article > * {
 }
 
 #header nav fieldset {
+	flex-direction: column;
+	gap: 4px;
 	position: absolute;
 	width: 100%;
-	top: 140%;
+	top: calc(100% + 8px);
 	left: 0;
 	box-sizing: border-box;
 	margin: 0;
@@ -216,7 +218,6 @@ header > *, article > * {
 
 #header nav fieldset label {
 	display: block;
-	margin-block: 2px;
 	margin-inline: 1px;
 }
 
