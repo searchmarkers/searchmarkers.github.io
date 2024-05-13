@@ -153,7 +153,7 @@ header > *, article > * {
 	display: flex;
 	position: relative;
 	flex-grow: 1;
-	margin-inline: 40px;
+	margin-inline: 20px;
 	gap: 20px;
 	align-items: center;
 }
@@ -261,7 +261,7 @@ input[name="theme"]:is(:focus, :active) ~ * .theme-select {
 }
 
 /* Alternate stacked header layout for narrow screens */
-@media (max-width: 820px) {
+@media (max-width: 740px) {
 	#header {
 		flex-direction: column;
 	}
