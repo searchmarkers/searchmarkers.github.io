@@ -80,12 +80,8 @@ body > * {
 	display: none;
 }
 
-:is(#theme, #theme-light, #theme-dark):is(:focus, :active) ~ * .theme-select {
+input[name="theme"]:is(:focus, :active) ~ * .theme-select {
 	display: block;
-}
-
-:is(#theme, #theme-light, #theme-dark):is(:focus, :active) ~ * [href="#theme"] {
-	display: none;
 }
 
 #theme-light:checked ~ * [for="theme-light"],
@@ -138,7 +134,7 @@ header > *, article > * {
 
 #header {
 	display: flex;
-	overflow-x: auto; /* In case of overflow, overflow the header instead of the page */
+	overflow-y: visible; /* Ensure that dropdowns can drop below the header. */
 	background: var(--bg-header);
 	border-bottom: 2px solid var(--border-header);
 	position: sticky;
@@ -183,27 +179,26 @@ header > *, article > * {
 	border-color: var(--bg-header);
 }
 
-#header nav a[href^="#"] {
+#header nav a.hidden {
 	position: absolute;
-	opacity: 0;
-	pointer-events: none;
 	padding: 8px;
 }
 
-#header nav a[href^="#"]:focus {
-	opacity: revert;
-	pointer-events: revert;
+#header nav a.hidden:not(:focus) {
+	opacity: 0;
+	pointer-events: none;
 }
 
-#header nav a:not([href^="#"]) ~ a[href^="#"] {
-	position: revert;
-	opacity: revert;
-	pointer-events: revert;
+#header nav fieldset {
+	position: absolute;
+	width: 100%;
+	box-sizing: border-box;
+	background: #fff;
 }
 
-/*#header nav a:not([href^="#"]) ~ a[href^="#"] {
-	right: 0;
-}*/
+#header nav fieldset label {
+	display: block;
+}
 
 #header .logo-icon {
 	width: 38px;
@@ -224,14 +219,14 @@ header > *, article > * {
 	}
 
 	#header > * {
-		overflow-x: auto; /* Now the header is a stack of items, each child should absorb its own overflow */
+		/*overflow-x: auto; Now the header is a stack of items, each child should absorb its own overflow*/
 	}
 
 	#header nav {
 		margin-inline: 0;
 		padding-block: 4px;
 		gap: 10px;
-		overflow-x: auto;
+		/*overflow-x: auto;*/
 	}
 
 	#header nav a {
