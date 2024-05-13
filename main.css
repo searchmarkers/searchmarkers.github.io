@@ -73,6 +73,9 @@
 	--bg-header: var(--bg-header-D);
 	--border-header: var(--border-header-D);
 	--bg-nav-button: var(--bg-nav-button-D);
+	--bg-nav-button-hover: var(--bg-nav-button-hover-D);
+	--border-nav-button: var(--border-nav-button-D);
+	--border-nav-button-hover: var(--bg-nav-button-hover-D);
 	--color-info: var(--color-info-D);
 	--color-info-hover: var(--color-info-hover-D);
 	--outline-info-details: var(--outline-info-details-D);
@@ -91,6 +94,9 @@
 		--bg-header: var(--bg-header-D);
 		--border-header: var(--border-header-D);
 		--bg-nav-button: var(--bg-nav-button-D);
+		--bg-nav-button-hover: var(--bg-nav-button-hover-D);
+		--border-nav-button: var(--border-nav-button-D);
+		--border-nav-button-hover: var(--bg-nav-button-hover-D);
 		--color-info: var(--color-info-D);
 		--color-info-hover: var(--color-info-hover-D);
 		--outline-info-details: var(--outline-info-details-D);
@@ -155,7 +161,7 @@ header > *, article > * {
 	padding: 14px;
 	white-space: nowrap;
 	background: var(--bg-nav-button);
-	border: 2px solid var(--border-header);
+	border: 2px solid var(--border-nav-button);
 	border-radius: 12px;
 	transition: background-color 100ms, border-color 100ms;
 }
@@ -166,7 +172,7 @@ header > *, article > * {
 }
 
 #header nav a:hover {
-	background: var(--border-header);
+	background: var(--border-nav-button);
 }
 
 #header nav a:active {
