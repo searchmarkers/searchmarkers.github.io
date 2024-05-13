@@ -102,16 +102,6 @@ input[name="theme"]:is(:focus, :active) ~ * .theme-select {
 	display: none;
 }
 
-#background {
-	position: fixed;
-	top: 0;
-	left: 0;
-	height: 100%;
-	width: 100%;
-	z-index: -1;
-	background: var(--bg);
-}
-
 html {
 	font-family: Georgia, serif;
 }
@@ -124,12 +114,13 @@ body > input {
 	position: fixed;
 }
 
-header, article {
-	color: var(--color);
-}
-
 header > *, article > * {
 	margin-inline: 10px;
+}
+
+#container {
+	background: var(--bg);
+	color: var(--color);
 }
 
 #header {
@@ -225,6 +216,10 @@ header > *, article > * {
 	width: 38px;
 	margin-right: 10px;
 	padding-bottom: 10px;
+}
+
+#main {
+	overflow: auto; /* Prevent margin collapse over the top and bottom. */
 }
 
 .logo-title {
