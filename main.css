@@ -124,6 +124,7 @@ header > *, article > * {
 }
 
 #container {
+	min-height: 100vh;
 	background: var(--bg);
 	color: var(--color);
 }
