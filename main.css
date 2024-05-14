@@ -134,7 +134,7 @@ body > input {
 }
 
 header > *, article > * {
-	margin-inline: 10px;
+	padding-inline: 10px;
 }
 
 #container {
@@ -167,7 +167,6 @@ header > *, article > * {
 	display: flex;
 	position: relative;
 	flex-grow: 1;
-	margin-inline: 20px;
 	gap: 20px;
 	align-items: center;
 }
@@ -275,7 +274,7 @@ input[name="theme"]:is(:focus, :active) ~ * .theme-select {
 }
 
 /* Alternate stacked header layout for narrow screens */
-@media (max-width: 740px) {
+@media (max-width: 700px) {
 	#header {
 		flex-direction: column;
 	}
