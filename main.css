@@ -295,7 +295,8 @@ input[name="theme"]:is(:focus, :active) ~ * .theme-select {
 	font-weight: normal;
 }
 
-.logo-title a {
+/* High specificity with :root to match pseudo-class selectors. */
+:root .logo-title a {
 	color: var(--color);
 	text-decoration: none;
 }
