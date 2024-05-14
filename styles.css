@@ -1,16 +1,12 @@
 .review-list {
 	display: flex;
+	gap: 30px;
+	padding: 0;
 	overflow-x: auto;
-	padding-block: 6px; /* Stop shadows inside from being clipped */
-	padding-inline: 6px;
-	margin-inline: 0; /* Display up to the page edges */
 }
 
 .review-list li {
-	margin-inline: 14px;
 	width: 300px;
-	border: 2px solid hsl(0 0% 64%);
-	border-radius: 32px;
 	flex-shrink: 0;
 }
 
@@ -22,8 +18,34 @@
 	color: transparent;
 }
 
+.review-list figure {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	margin: 0;
+}
+
+.review-list figcaption {
+	margin-block: 10px;
+}
+
 .review-list blockquote {
-	margin: 10px;
+	position: relative;
+	flex-grow: 1;
+	margin: 0;
+	padding-inline: 10px;
+	border: 2px solid hsl(0 0% 64%);
+	border-radius: 32px;
+}
+
+.review-list blockquote::after {
+	content: "";
+	position: absolute;
+	border-top: 10px solid hsl(0 0% 64%);
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	top: 100%;
+	left: 20px;
 }
 
 .review-list li:not(:hover) blockquote {
@@ -42,6 +64,11 @@
 	background: none;
 	text-decoration: 2px dotted hsl(300 100% 50%) underline;
 	color: var(--color);
+}
+
+.review-list time {
+	display: block;
+	color: hsl(0 0% 50%);
 }
 
 .faq-list h3 {

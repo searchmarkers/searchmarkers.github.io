@@ -331,8 +331,8 @@ input.info:checked::after {
 	border-bottom: 0.8em solid var(--outline-info-details);
 	border-left: 0.8em solid transparent;
 	border-right: 0.8em solid transparent;
-	left: -0.2em;
 	top: 1.2em;
+	left: -0.2em;
 }
 
 .info.details {
