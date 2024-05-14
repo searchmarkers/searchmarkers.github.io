@@ -178,7 +178,6 @@ article > .full-width {
 
 #header nav a {
 	display: block;
-	position: relative;
 	padding: 14px;
 	background: var(--bg-nav-button);
 	border: 2px solid var(--border-nav-button);
@@ -190,27 +189,11 @@ article > .full-width {
 	border-radius: 0;
 }
 
-#header nav a.current::after {
-	content: "";
-	position: absolute;
-	top: calc(100% - 12px);
-	left: -2px;
-	height: 23px;
-	width: 100%;
-	border-left: 2px solid var(--border-nav-button);
-	border-right: 2px solid var(--border-nav-button);
-	background: var(--bg-nav-button);
-}
-
 #header nav a:hover {
 	background: var(--border-nav-button);
 }
 
-#header nav a:hover, #header nav a:hover::after {
-	background: var(--border-nav-button);
-}
-
-#header nav a:active, #header nav a:active::after {
+#header nav a:active {
 	background: var(--bg-header);
 	border-color: var(--bg-header);
 }
@@ -315,10 +298,6 @@ input[name="theme"]:is(:focus, :active) ~ * .theme-select {
 
 	#header nav a {
 		padding: 8px;
-	}
-
-	#header nav a.current::after {
-		height: 20px;
 	}
 
 	#header .logo-icon {
