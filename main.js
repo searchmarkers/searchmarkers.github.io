@@ -1,4 +1,4 @@
-addEventListener("load", () => {
+document.addEventListener("DOMContentLoaded", () => {
 	const theme = localStorage.getItem("theme");
 	if (theme !== null) {
 		const checkbox = document.getElementById("theme-" + theme);
