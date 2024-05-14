@@ -9,6 +9,18 @@
 	--color-dim-D: hsl(0, 0%, 66%);
 	--color-h2-L: hsl(0 0% 20%);
 	--color-h2-D: hsl(0 0% 72%);
+	--color-anchor-L: LinkText;
+	--color-anchor-D: hsl(240, 100%, 70%);
+	--color-anchor-visited-L: VisitedText;
+	--color-anchor-visited-D: hsl(271, 68%, 70%);
+	--color-anchor-active-L: ActiveText;
+	--color-anchor-active-D: ActiveText;
+	--bg-keyboard-L: hsl(0 0% 86%);
+	--bg-keyboard-D: hsl(0 0% 86%);
+	--color-keyboard-L: hsl(0 0% 0%);
+	--color-keyboard-D: hsl(0 0% 0%);
+	--border-keyboard-L: hsl(0 0% 60%);
+	--border-keyboard-D: hsl(0 0% 60%);
 	--bg-header-L: hsl(300 100% 98%);
 	--bg-header-D: hsl(300, 30%, 23%);
 	--border-header-L: hsl(300 100% 88%);
@@ -29,15 +41,8 @@
 	--outline-info-details-D: hsl(0 0% 60%);
 	--color-info-details-L: hsl(0 0% 0%);
 	--color-info-details-D: hsl(0 0% 0%);
-	--color-anchor-L: LinkText;
-	--color-anchor-D: hsl(240, 100%, 70%);
-	--color-anchor-visited-L: VisitedText;
-	--color-anchor-visited-D: hsl(271, 68%, 70%);
-	--color-anchor-active-L: ActiveText;
-	--color-anchor-active-D: ActiveText;
-	--border-keyboard-L: hsl(0 0% 60%);
-	--bg-keyboard-L: hsl(0 0% 86%);
-	--color-keyboard-L: hsl(0 0% 0%);
+	--border-bubble-L: hsl(0 0% 64%);
+	--border-bubble-D: hsl(0 0% 64%);
 }
 
 #theme-light:checked ~ #container, #container {
@@ -47,6 +52,12 @@
 	--color: var(--color-L);
 	--color-dim: var(--color-dim-L);
 	--color-h2: var(--color-h2-L);
+	--color-anchor: var(--color-anchor-L);
+	--color-anchor-visited: var(--color-anchor-visited-L);
+	--color-anchor-active: var(--color-anchor-active-L);
+	--bg-keyboard: var(--bg-keyboard-L);
+	--color-keyboard: var(--color-keyboard-L);
+	--border-keyboard: var(--border-keyboard-L);
 	--bg-header: var(--bg-header-L);
 	--border-header: var(--border-header-L);
 	--bg-nav-button: var(--bg-nav-button-L);
@@ -57,12 +68,7 @@
 	--color-info-hover: var(--color-info-hover-L);
 	--outline-info-details: var(--outline-info-details-L);
 	--color-info-details: var(--color-info-details-L);
-	--color-anchor: var(--color-anchor-L);
-	--color-anchor-visited: var(--color-anchor-visited-L);
-	--color-anchor-active: var(--color-anchor-active-L);
-	--border-keyboard: var(--border-keyboard-L);
-	--bg-keyboard: var(--bg-keyboard-L);
-	--color-keyboard: var(--color-keyboard-L);
+	--border-bubble: var(--border-bubble-L);
 }
 
 #theme-dark:checked ~ #container {
@@ -70,6 +76,12 @@
 	--color: var(--color-D);
 	--color-dim: var(--color-dim-D);
 	--color-h2: var(--color-h2-D);
+	--color-anchor: var(--color-anchor-D);
+	--color-anchor-visited: var(--color-anchor-visited-D);
+	--color-anchor-active: var(--color-anchor-active-D);
+	--bg-keyboard: var(--bg-keyboard-D);
+	--color-keyboard: var(--color-keyboard-D);
+	--border-keyboard: var(--border-keyboard-D);
 	--bg-header: var(--bg-header-D);
 	--border-header: var(--border-header-D);
 	--bg-nav-button: var(--bg-nav-button-D);
@@ -80,9 +92,7 @@
 	--color-info-hover: var(--color-info-hover-D);
 	--outline-info-details: var(--outline-info-details-D);
 	--color-info-details: var(--color-info-details-D);
-	--color-anchor: var(--color-anchor-D);
-	--color-anchor-visited: var(--color-anchor-visited-D);
-	--color-anchor-active: var(--color-anchor-active-D);
+	--border-bubble: var(--border-bubble-D);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -91,6 +101,12 @@
 		--color: var(--color-D);
 		--color-dim: var(--color-dim-D);
 		--color-h2: var(--color-h2-D);
+		--color-anchor: var(--color-anchor-D);
+		--color-anchor-visited: var(--color-anchor-visited-D);
+		--color-anchor-active: var(--color-anchor-active-D);
+		--bg-keyboard: var(--bg-keyboard-D);
+		--color-keyboard: var(--color-keyboard-D);
+		--border-keyboard: var(--border-keyboard-D);
 		--bg-header: var(--bg-header-D);
 		--border-header: var(--border-header-D);
 		--bg-nav-button: var(--bg-nav-button-D);
@@ -101,9 +117,7 @@
 		--color-info-hover: var(--color-info-hover-D);
 		--outline-info-details: var(--outline-info-details-D);
 		--color-info-details: var(--color-info-details-D);
-		--color-anchor: var(--color-anchor-D);
-		--color-anchor-visited: var(--color-anchor-visited-D);
-		--color-anchor-active: var(--color-anchor-active-D);
+		--border-bubble: var(--border-bubble-D);
 	}
 }
 
@@ -369,6 +383,6 @@ kbd {
 	border: 1px solid var(--border-keyboard);
 	border-radius: 6px;
 	background: var(--bg-keyboard);
-	box-shadow: 0 2px 0 0 hsl(0 0% 60%);
+	box-shadow: 0 2px 0 0 var(--border-keyboard);
 	color: var(--color-keyboard);
 }

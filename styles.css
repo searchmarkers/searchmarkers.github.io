@@ -10,10 +10,6 @@
 	flex-shrink: 0;
 }
 
-.review-list li:hover {
-	box-shadow: var(--shadow);
-}
-
 .review-list li::marker {
 	color: transparent;
 }
@@ -34,14 +30,14 @@
 	flex-grow: 1;
 	margin: 0;
 	padding-inline: 10px;
-	border: 2px solid hsl(0 0% 64%);
+	border: 2px solid var(--border-bubble);
 	border-radius: 32px;
 }
 
 .review-list blockquote::after {
 	content: "";
 	position: absolute;
-	border-top: 10px solid hsl(0 0% 64%);
+	border-top: 10px solid var(--border-bubble);
 	border-left: 10px solid transparent;
 	border-right: 10px solid transparent;
 	top: 100%;
@@ -68,7 +64,7 @@
 
 .review-list time {
 	display: block;
-	color: hsl(0 0% 50%);
+	color: var(--color-dim);
 }
 
 .faq-list h3 {
