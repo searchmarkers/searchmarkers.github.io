@@ -273,6 +273,11 @@ input[name="theme"]:is(:focus, :active) ~ * .theme-select {
 	font-weight: normal;
 }
 
+.logo-title a {
+	color: var(--color);
+	text-decoration: none;
+}
+
 /* Alternate stacked header layout for narrow screens */
 @media (max-width: 700px) {
 	#header {
