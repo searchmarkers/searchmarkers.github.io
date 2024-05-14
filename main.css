@@ -317,6 +317,10 @@ input[name="theme"]:is(:focus, :active) ~ * .theme-select {
 		padding: 8px;
 	}
 
+	#header nav a.current::after {
+		height: 20px;
+	}
+
 	#header .logo-icon {
 		padding-bottom: 0;
 	}
