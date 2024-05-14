@@ -134,6 +134,11 @@ body > input {
 }
 
 header > *, article > * {
+	margin-inline: 10px;
+}
+
+article > .full-width {
+	margin-inline: 0;
 	padding-inline: 10px;
 }
 
