@@ -213,7 +213,7 @@ article > .full-width {
 
 #header nav fieldset {
 	flex-direction: column;
-	gap: 4px;
+	gap: 2px;
 	position: absolute;
 	width: 100%;
 	top: calc(100% - 2px);
@@ -232,7 +232,7 @@ article > .full-width {
 
 #header nav fieldset label {
 	display: block;
-	margin-inline: 1px;
+	margin: 1px;
 	padding: 2px;
 }
 
