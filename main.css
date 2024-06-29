@@ -207,7 +207,12 @@ main > .full-width {
 	position: relative;
 }
 
-#header nav fieldset {
+#header .menu:focus-within fieldset, #header .menu fieldset:has(:target) {
+	display: flex;
+}
+
+#header .menu fieldset {
+	display: none;
 	flex-direction: column;
 	gap: 2px;
 	position: absolute;
@@ -222,36 +227,29 @@ main > .full-width {
 	background: var(--bg);
 }
 
-#header nav fieldset legend {
+#header .menu fieldset legend {
 	display: none;
 }
 
-#header nav fieldset input {
-	visibility: hidden;
+#header .menu fieldset input {
+	position: absolute;
+	opacity: 0;
 }
 
-#header nav fieldset label {
+#header .menu fieldset label {
 	display: block;
 	margin: 1px;
 	padding: 2px;
 }
 
-#header nav fieldset input:checked + label {
+#header .menu fieldset input:checked + label {
 	background: var(--bg-selected);
 	color: var(--color-selected);
 }
 
-#header nav fieldset input:focus + label {
+#header .menu fieldset input:focus + label {
 	outline: 2px solid var(--bg-selected);
 	outline-offset: 1px;
-}
-
-.theme-select {
-	display: none;
-}
-
-.theme-select:has(:target) {
-	display: flex;
 }
 
 #header .logo-icon {
