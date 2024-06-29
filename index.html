@@ -13,113 +13,111 @@
 	<script src="/main.js"></script>
 </head>
 <body>
-	<input type="radio" id="theme" name="theme" checked tabindex="-1">
-	<input type="radio" id="theme-dark" name="theme" tabindex="-1">
-	<input type="radio" id="theme-light" name="theme" tabindex="-1">
-	<div id="container">
-		<header id="header">
-			<div class="brand">
-				<img class="logo-icon" src="/icons/mms.svg">
-				<h1 class="logo-title"><a href="/">Mark My Search</a></h1>
-			</div>
-			<div class="controls">
-				<nav>
-					<a href="#main" class="hidden">Skip navigation</a>
-					<a href="/files/stores/">Add-on Stores</a>
-					<a href="/files/projects/">Projects</a>
-					<div>
-						<a href="#theme">Set theme</a>
-						<fieldset class="theme-select">
-							<legend>Select a site theme</legend>
-							<label for="theme-light">Light</label>
-							<label for="theme">Automatic</label>
-							<label for="theme-dark">Dark</label>
-						</fieldset>
-					</div>
-				</nav>
-			</div>
-		</header>
-		<article id="main">
-			<h2>Introduction</h2>
-			<p>
-				<i>Mark My Search</i> is a browser extension that finds and highlights phrases. It's a bit like <kbd>Ctrl</kbd> + <kbd>F</kbd><input type="checkbox" class="info" aria-haspopup="dialog" aria-controls="details-ctrl-f" aria-label="info" aria-description="Details about the find-in-page feature triggered by Control + F"><span id="details-ctrl-f" class="info details" role="dialog">Web browsers allow you to search for text in the current page. Try it by pressing <kbd>Ctrl</kbd> and <kbd>F</kbd> together, then typing some text.</span> for multiple searches at once, each in a different colour.
-			</p>
-			<p>
-				It updates as the page changes, continues highlighting when you visit a different page, and recognises different forms of the same word (such as plurals). It can also highlight your search keywords on various search engines.
-			</p>
-			<p>
-				It's open source, free, and ad-less forever!
-			</p>
-			<h2>My favourite reviews</h2>
-			<ul class="review-list full-width">
-				<li><figure>
-					<blockquote>
-						<p><mark>Simple and Extremely powerful.</mark>
-						Removes much of the frustration of search. <mark>Big time saver.</mark> Tons of keyboard shortcuts to get even faster &amp; fully customizable as well.</p>
-					</blockquote>
-					<figcaption>
-						<cite><a href="https://addons.mozilla.org/en-GB/firefox/addon/mark-my-search/reviews/1938583/" target="_blank">Review</a></cite> on Firefox Browser Add-ons
-						<time datetime="2023-03-04">4 Mar 2023</time>
-					</figcaption>
-				</figure></li>
-				<li><figure>
-					<blockquote>
-						<p>I am waiting for this add-on for long-time! <mark>Good job and thank you so much!</mark></p>
-					</blockquote>
-					<figcaption>
-						<cite><a target="_blank" href="https://addons.mozilla.org/en-GB/firefox/addon/mark-my-search/reviews/1939347/">Review</a></cite> on Firefox Browser Add-ons
-						<time datetime="2023-03-07">7 Mar 2023</time>
-					</figcaption>
-				</figure></li>
-				<li><figure>
-					<blockquote>
-						<p>Very happy with it, does exactly what it says and has <mark>easy to understand options</mark> to customize your experience.</p>
-					</blockquote>
-					<figcaption>
-						<cite><a target="_blank" href="https://addons.mozilla.org/en-GB/firefox/addon/mark-my-search/reviews/1993073/">Review</a></cite> on Firefox Browser Add-ons
-						<time datetime="2023-08-28">28 Aug 2023</time>
-					</figcaption>
-				</figure></li>
-				<li><figure>
-					<blockquote>
-						<p>Thank you developer! <mark>Absolutely love this extension</mark> [...] I tried multiple searches to find an extension to highlight keywords in search results without ever seeing this wonderful new extension!</p>
-					</blockquote>
-					<figcaption>
-						<cite>Review <a target="_blank" href="https://chromewebstore.google.com/detail/mark-my-search/lijbnhoniejpjjgemoifpjklobhakinb/reviews">(Reviews)</a></cite> on Chrome Web Store
-						<time datetime="2022-11-05">5 Nov 2022</time>
-					</figcaption>
-				</figure></li>
-			</ul>
-			<h2 aria-description="Questions and Answers">Q&A</h2>
-			<ul class="faq-list">
-				<li>
-					<h3>Free and no ads? What do you get from this?</h3>
-					<p>
-						Well, I use the extension every day, and I don't like ads any more than you do. And I suppose I just like to know that my work is helping real people. I love to read your feedback!
-					</p>
-				</li>
-				<li>
-					<h3>How can I trust Mark My Search?</h3>
-					<ul>
-						<li>
-							<p>Mark My Search is <strong>Featured</strong><input type="checkbox" class="info" aria-haspopup="dialog" aria-controls="details-featured" aria-label="info" aria-description="Details about badges in the Chrome Web Store"><span id="details-featured" class="info details" role="dialog">The <i>Featured</i> badge is awarded through manual review by the Chrome Web Store team, indicating compliance with their policies. Read more about <a href="https://developer.chrome.com/docs/webstore/discovery/#badges" target="_blank">badges in the Chrome Web Store.</a></span> on the Chrome Web Store. I am an <strong>Established Publisher</strong>: I have a <q cite="https://chromewebstore.google.com/detail/mark-my-search/lijbnhoniejpjjgemoifpjklobhakinb#:~:text=searchmarkers.github.io">good record with no history of violations.</q></p>
-						</li>
-						<li>
-							<p>I have good standing on the Firefox and Edge add-on stores, and have earned the trust of Mark My Search's users. I do not want to throw that away!</p>
-						</li>
-						<li>
-							<p>You can see the <a href="https://github.com/searchmarkers/mark-my-search" target="_blank">full source code</a> used to build Mark My Search, or browse its <a href="https://github.com/searchmarkers/mark-my-search/commits/main/" target="_blank">history.</a></p>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<h3>Can I contribute?</h3>
-					<p>
-						<a href="https://github.com/searchmarkers/mark-my-search" target="_blank">The repo is on GitHub</a>, and is open for anyone to raise an issue or PR. Drop me a comment or <a href="mailto:ator-dev@protonmail.com">email</a>, I will be happy to get you started with the code.
-					</p>
-				</li>
-			</ul>
-		</article>
-	</div>
+	<header id="header">
+		<div class="brand">
+			<img class="logo-icon" src="/icons/mms.svg">
+			<h1 class="logo-title"><a href="/">Mark My Search</a></h1>
+		</div>
+		<div class="controls">
+			<nav>
+				<a href="#main" class="hidden">Skip navigation</a>
+				<a href="/files/stores/">Add-on Stores</a>
+				<a href="/files/projects/">Projects</a>
+				<div>
+					<a href="#theme">Set theme</a>
+					<fieldset class="theme-select">
+						<legend>Select a site theme</legend>
+						<input type="radio" id="theme-light" name="theme" tabindex="-1">
+						<label for="theme-light">Light</label>
+						<input type="radio" id="theme" name="theme" checked tabindex="-1">
+						<label for="theme">Automatic</label>
+						<input type="radio" id="theme-dark" name="theme" tabindex="-1">
+						<label for="theme-dark">Dark</label>
+					</fieldset>
+				</div>
+			</nav>
+		</div>
+	</header>
+	<main id="main">
+		<h2>Introduction</h2>
+		<p>
+			<i>Mark My Search</i> is a browser extension that finds and highlights phrases. It's a bit like <kbd>Ctrl</kbd> + <kbd>F</kbd><input type="checkbox" class="info" aria-haspopup="dialog" aria-controls="details-ctrl-f" aria-label="info" aria-description="Details about the find-in-page feature triggered by Control + F"><span id="details-ctrl-f" class="info details" role="dialog">Web browsers allow you to search for text in the current page. Try it by pressing <kbd>Ctrl</kbd> and <kbd>F</kbd> together, then typing some text.</span> for multiple searches at once, each in a different colour.
+		</p>
+		<p>
+			It updates as the page changes, continues highlighting when you visit a different page, and recognises different forms of the same word (such as plurals). It can also highlight your search keywords on various search engines.
+		</p>
+		<p>
+			It's open source, free, and ad-less forever!
+		</p>
+		<h2>My favourite reviews</h2>
+		<ul class="review-list full-width">
+			<li><figure>
+				<blockquote>
+					<p><mark>Simple and Extremely powerful.</mark>
+					Removes much of the frustration of search. <mark>Big time saver.</mark> Tons of keyboard shortcuts to get even faster &amp; fully customizable as well.</p>
+				</blockquote>
+				<figcaption>
+					<cite><a href="https://addons.mozilla.org/en-GB/firefox/addon/mark-my-search/reviews/1938583/" target="_blank">Review</a></cite> on Firefox Browser Add-ons
+					<time datetime="2023-03-04">4 Mar 2023</time>
+				</figcaption>
+			</figure></li>
+			<li><figure>
+				<blockquote>
+					<p>I am waiting for this add-on for long-time! <mark>Good job and thank you so much!</mark></p>
+				</blockquote>
+				<figcaption>
+					<cite><a target="_blank" href="https://addons.mozilla.org/en-GB/firefox/addon/mark-my-search/reviews/1939347/">Review</a></cite> on Firefox Browser Add-ons
+					<time datetime="2023-03-07">7 Mar 2023</time>
+				</figcaption>
+			</figure></li>
+			<li><figure>
+				<blockquote>
+					<p>Very happy with it, does exactly what it says and has <mark>easy to understand options</mark> to customize your experience.</p>
+				</blockquote>
+				<figcaption>
+					<cite><a target="_blank" href="https://addons.mozilla.org/en-GB/firefox/addon/mark-my-search/reviews/1993073/">Review</a></cite> on Firefox Browser Add-ons
+					<time datetime="2023-08-28">28 Aug 2023</time>
+				</figcaption>
+			</figure></li>
+			<li><figure>
+				<blockquote>
+					<p>Thank you developer! <mark>Absolutely love this extension</mark> [...] I tried multiple searches to find an extension to highlight keywords in search results without ever seeing this wonderful new extension!</p>
+				</blockquote>
+				<figcaption>
+					<cite>Review <a target="_blank" href="https://chromewebstore.google.com/detail/mark-my-search/lijbnhoniejpjjgemoifpjklobhakinb/reviews">(Reviews)</a></cite> on Chrome Web Store
+					<time datetime="2022-11-05">5 Nov 2022</time>
+				</figcaption>
+			</figure></li>
+		</ul>
+		<h2 aria-description="Questions and Answers">Q&A</h2>
+		<ul class="faq-list">
+			<li>
+				<h3>Free and no ads? What do you get from this?</h3>
+				<p>
+					Well, I use the extension every day, and I don't like ads any more than you do. And I suppose I just like to know that my work is helping real people. I love to read your feedback!
+				</p>
+			</li>
+			<li>
+				<h3>How can I trust Mark My Search?</h3>
+				<ul>
+					<li>
+						<p>Mark My Search is <strong>Featured</strong><input type="checkbox" class="info" aria-haspopup="dialog" aria-controls="details-featured" aria-label="info" aria-description="Details about badges in the Chrome Web Store"><span id="details-featured" class="info details" role="dialog">The <i>Featured</i> badge is awarded through manual review by the Chrome Web Store team, indicating compliance with their policies. Read more about <a href="https://developer.chrome.com/docs/webstore/discovery/#badges" target="_blank">badges in the Chrome Web Store.</a></span> on the Chrome Web Store. I am an <strong>Established Publisher</strong>: I have a <q cite="https://chromewebstore.google.com/detail/mark-my-search/lijbnhoniejpjjgemoifpjklobhakinb#:~:text=searchmarkers.github.io">good record with no history of violations.</q></p>
+					</li>
+					<li>
+						<p>I have good standing on the Firefox and Edge add-on stores, and have earned the trust of Mark My Search's users. I do not want to throw that away!</p>
+					</li>
+					<li>
+						<p>You can see the <a href="https://github.com/searchmarkers/mark-my-search" target="_blank">full source code</a> used to build Mark My Search, or browse its <a href="https://github.com/searchmarkers/mark-my-search/commits/main/" target="_blank">history.</a></p>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<h3>Can I contribute?</h3>
+				<p>
+					<a href="https://github.com/searchmarkers/mark-my-search" target="_blank">The repo is on GitHub</a>, and is open for anyone to raise an issue or PR. Drop me a comment or <a href="mailto:ator-dev@protonmail.com">email</a>, I will be happy to get you started with the code.
+				</p>
+			</li>
+		</ul>
+	</main>
 </body>
 </html>

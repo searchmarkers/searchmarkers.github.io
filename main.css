@@ -45,7 +45,7 @@
 	--border-bubble-D: hsl(0 0% 64%);
 }
 
-#theme-light:checked ~ #container, #container {
+:root, :root:has(#theme-light:checked) {
 	--bg-selected: var(--bg-selected-L);
 	--color-selected: var(--color-selected-L);
 	--bg: var(--bg-L);
@@ -71,7 +71,7 @@
 	--border-bubble: var(--border-bubble-L);
 }
 
-#theme-dark:checked ~ #container {
+:root:has(#theme-dark:checked) {
 	--bg: var(--bg-D);
 	--color: var(--color-D);
 	--color-dim: var(--color-dim-D);
@@ -96,7 +96,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-	#container {
+	:root {
 		--bg: var(--bg-D);
 		--color: var(--color-D);
 		--color-dim: var(--color-dim-D);
@@ -123,6 +123,8 @@
 
 :root {
 	font-family: Georgia, serif;
+	background: var(--bg);
+	color: var(--color);
 }
 
 body {
@@ -133,19 +135,13 @@ body > input {
 	position: fixed;
 }
 
-header > *, article > * {
+header > *, main > * {
 	margin-inline: 10px;
 }
 
-article > .full-width {
+main > .full-width {
 	margin-inline: 0;
 	padding-inline: 10px;
-}
-
-#container {
-	min-height: 100vh;
-	background: var(--bg);
-	color: var(--color);
 }
 
 #header {
@@ -230,36 +226,32 @@ article > .full-width {
 	display: none;
 }
 
+#header nav fieldset input {
+	visibility: hidden;
+}
+
 #header nav fieldset label {
 	display: block;
 	margin: 1px;
 	padding: 2px;
 }
 
-.theme-select {
-	display: none;
-}
-
-input[name="theme"]:is(:focus, :active) ~ * .theme-select {
-	display: flex;
-}
-
-#theme-light:checked ~ * [for="theme-light"],
-#theme-dark:checked ~ * [for="theme-dark"],
-#theme:checked ~ * [for="theme"] {
+#header nav fieldset input:checked + label {
 	background: var(--bg-selected);
 	color: var(--color-selected);
 }
 
-#theme:focus ~ * [for="theme"],
-#theme-light:focus ~ * [for="theme-light"],
-#theme-dark:focus ~ * [for="theme-dark"] {
+#header nav fieldset input:focus + label {
 	outline: 2px solid var(--bg-selected);
 	outline-offset: 1px;
 }
 
-#theme:not(:target), #theme:not(:target) ~ :is(#theme-light, #theme-dark) {
+.theme-select {
 	display: none;
+}
+
+.theme-select:has(:target) {
+	display: flex;
 }
 
 #header .logo-icon {
