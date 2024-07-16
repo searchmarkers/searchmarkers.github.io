@@ -207,7 +207,7 @@ main > .full-width {
 	position: relative;
 }
 
-#header .menu:focus-within fieldset, #header .menu fieldset:has(:target) {
+#header .menu:focus-within fieldset, #header .menu fieldset:active, #header .menu fieldset:hover {
 	display: flex;
 }
 
