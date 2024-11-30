@@ -1,5 +1,6 @@
 #header .controls,
 .image-placeholder,
+.sidebar-filled .tab-list li a[href="#section--summoning"],
 .sidebar-filled .tab-list li a[href="#section--website-exclusions"],
 .sidebar-filled .tab-list li a[href="#section--keyword-lists"] {
 	display: none;
