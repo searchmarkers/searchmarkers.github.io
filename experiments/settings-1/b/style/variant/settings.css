@@ -1,0 +1,11 @@
+.section:not(:has(:target)) {
+	display: none;
+}
+
+h3 {
+	font-weight: normal;
+}
+
+hgroup p {
+	display: none;
+}

@@ -1,0 +1,79 @@
+body {
+	padding-inline: 6px;
+	padding-block: 2px;
+	margin: 0;
+	background: #bbb;
+	user-select: none;
+}
+
+.erroneous {
+	color: #e11;
+}
+
+.modified {
+	font-weight: bold;
+}
+
+.tab-button {
+	border-radius: 0;
+	display: none;
+}
+
+.container-tab {
+	display: flex;
+	flex-flow: column;
+}
+
+.option-section {
+	padding: 6px;
+	margin-block: 4px;
+	border-radius: 6px;
+	background-color: #eee;
+	box-shadow: 2px 2px 4px hsla(0, 0%, 0%, 0.4);
+}
+
+.option-label {
+	color: hsl(0 0% 6%);
+	margin-bottom: 4px;
+}
+
+.table-preferences {
+	display: flex;
+	flex-flow: column;
+	width: 100%;
+}
+
+.table-preferences .preference-cell {
+	flex: 1;
+	display: flex;
+	align-items: center;
+}
+
+.table-preferences .preference-cell > ::after {
+	content: ":"
+}
+
+.table-preferences .preference-cell > * {
+	flex: 1;
+}
+
+.table-preferences input[type=text] {
+	width: 110px;
+}
+
+.preference-row {
+	display: flex;
+	color: hsl(0 0% 21%);
+}
+
+.preference-row:nth-child(odd) {
+	background-color: hsl(0 0% 87%);
+}
+
+label {
+	color: hsl(0 0% 28%);
+}
+
+label[for]:hover {
+	color: hsl(0 0% 18%);
+}

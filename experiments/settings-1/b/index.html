@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+	<meta http-equiv="content-security-policy" content="default-src https:">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Settings (Mark My Search)</title>
+	<link rel="icon" href="/icons/mms.svg" sizes="any">
+	<link rel="stylesheet" href="style/main.css">
+	<link rel="stylesheet" href="style/variant/settings.css">
+	<link rel="stylesheet" href="style/experiment-specific.css">
+</head>
+<body>
+	<header id="header">
+		<div class="brand">
+			<img class="logo-icon" src="/icons/mms.svg">
+			<a class="logo-title" href="https://markmysearch.ator.systems">Mark My Search</a>
+		</div>
+		<nav class="controls">
+			<a href="#main" class="hidden">Skip navigation</a>
+			<a href="/pages/startpage.html">Start</a>
+			<a href="">Settings</a>
+			<div class="menu">
+				<a href="#theme">Set theme</a>
+				<fieldset>
+					<legend>Select a site theme</legend>
+					<input type="radio" id="theme-light" name="theme">
+					<label for="theme-light">Light</label>
+					<input type="radio" id="theme" name="theme" checked="">
+					<label for="theme">Automatic</label>
+					<input type="radio" id="theme-dark" name="theme">
+					<label for="theme-dark">Dark</label>
+				</fieldset>
+			</div>
+		</nav>
+	</header>
+	<div id="main-container">
+		<div class="sidebar sidebar-filled">
+			<nav class="sidebar-content">
+				<h1>
+					Settings
+				</h1>
+				<ul class="tab-list">
+					<li>
+						<a href="#section--summoning">Summoning</a>
+					</li>
+					<li>
+						<a href="#section--toolbar">Toolbar</a>
+					</li>
+					<li>
+						<a href="#section--highlighting">Highlighting</a>
+					</li>
+					<li>
+						<a href="#section--website-exclusions">Website exclusions</a>
+					</li>
+					<li>
+						<a href="#section--search-highlighting">Search highlighting</a>
+					</li>
+					<li>
+						<a href="#section--keyword-lists">Automation</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+		<main id="main">
+			<section class="section">
+				<h2 id="section--summoning">
+					Summoning
+				</h2>
+				<div class="setting-list">
+					<span><input id="setting--summoning-restore-keywords" type="checkbox" checked=""></span>
+					<span><label for="setting--summoning-restore-keywords">
+						Restore the tab's last keywords when summoned
+					</label></span>
+				</div>
+				<p class="image-placeholder">Web search demo</p>
+			</section>
+			<section class="section">
+				<h2 id="section--toolbar">
+					Toolbar
+				</h2>
+				<section class="group">
+					<hgroup>
+						<h3 id="group--toolbar-controls">
+							Controls
+						</h3>
+						<p>
+							What controls should appear in the toolbar?
+						</p>
+					</hgroup>
+					<div class="setting-list">
+						<span><input id="setting--toolbar-control--dismiss" type="checkbox" checked=""></span>
+						<span><label for="setting--toolbar-control--dismiss">
+							<span class="toolbar-button"><img src="/icons/close.svg" alt="Dismiss From Tab"></span>
+							Dismiss from the current tab
+						</label></span>
+						<span><input id="setting--toolbar-control--search-keywords" type="checkbox"></span>
+						<span><label for="setting--toolbar-control--search-keywords">
+							<span class="toolbar-button"><img src="/icons/search.svg" alt="Look Up Keywords"></span>
+							Perform a search using the current keywords
+						</label></span>
+						<span><input id="setting--toolbar-control--toggle-highlight-display" type="checkbox" checked=""></span>
+						<span><label for="setting--toolbar-control--toggle-highlight-display">
+							<span class="toolbar-button"><img src="/icons/show.svg" alt="Show/Hide Highlighting"></span>
+							Toggle display of highlighting
+						</label></span>
+						<span><input id="setting--toolbar-control--add-keyword" type="checkbox" checked=""></span>
+						<span><label for="setting--toolbar-control--add-keyword">
+							<span class="toolbar-button"><img src="/icons/create.svg" alt="Add Keyword"></span>
+							Add a new keyword to the toolbar
+						</label></span>
+						<span><input id="setting--toolbar-control--apply-auto-keywords" type="checkbox" checked=""></span>
+						<span><label for="setting--toolbar-control--apply-auto-keywords">
+							<span class="toolbar-button"><img src="/icons/refresh.svg" alt="Apply Automatic Keywords"></span>
+							Replace keywords with detected search keywords
+						</label></span>
+					</div>
+					<p class="image-placeholder">Toolbar w/ current controls</p>
+				</section>
+				<section class="group">
+					<hgroup>
+						<h3 id="group--toolbar-keyword-controls">
+							Keyword controls
+						</h3>
+						<p>
+							What controls should appear next to a keyword in the toolbar?
+						</p>
+					</hgroup>
+					<div class="setting-list">
+						<span><input id="setting--toolbar-keyword-control--edit" type="checkbox" checked=""></span>
+						<span><label for="setting--toolbar-keyword-control--edit">
+							<span class="toolbar-button"><img src="/icons/edit.svg" alt="Edit Keyword"></span>
+							Edit keyword
+						</label></span>
+						<span><input id="setting--toolbar-keyword-control--menu" type="checkbox" checked=""></span>
+						<span><label for="setting--toolbar-keyword-control--menu">
+							<span class="toolbar-button"><img src="/icons/reveal.svg" alt="Toggle Keyword Menu"></span>
+							Open matching options
+						</label></span>
+					</div>
+					<p class="image-placeholder">Keyword w/ current controls</p>
+				</section>
+				<section class="group">
+					<hgroup>
+						<h3 id="group--toolbar-style">
+							Style
+						</h3>
+						<p>
+							How should the toolbar look?
+						</p>
+					</hgroup>
+					<div class="setting-list">
+						<span data-unit="px"><input id="setting--toolbar-font-size" type="number" min="0" value="15"></span>
+						<span><label for="setting--toolbar-font-size">
+							Font size
+						</label></span>
+						<span><input id="setting--toolbar-keyword-opacity" type="number" min="0" max="1" step="0.1" value="0.86"></span>
+						<span><label for="setting--toolbar-keyword-opacity">
+							Opacity of keyword buttons
+						</label></span>
+						<span><input id="setting--toolbar-control-opacity" type="number" min="0" max="1" step="0.1" value="0.8"></span>
+						<span><label for="setting--toolbar-control-opacity">
+							Opacity of other buttons
+						</label></span>
+						<span data-unit="px"><input id="setting--toolbar-corner-radius" type="number" min="0" value="4"></span>
+						<span><label for="setting--toolbar-corner-radius">
+							Radius of rounded corners
+						</label></span>
+					</div>
+					<p class="image-placeholder">Toolbar w/ current controls</p>
+				</section>
+			</section>
+			<section class="section">
+				<h2 id="section--highlighting">
+					Highlighting
+				</h2>
+				<section class="group">
+					<hgroup>
+						<h3 id="group--highlighting-style">
+							Style
+						</h3>
+						<p>
+							How should the highlighting look?
+						</p>
+					</hgroup>
+					<div class="setting-list">
+						<span><input id="setting--highlighting-hues" type="text" value="300,60,110,220,30,190,0"></span>
+						<span><label for="setting--highlighting-hues">
+							Highlight colour hue values
+						</label></span>
+					</div>
+					<p class="image-placeholder">Toolbar w/ keywords w/ highlight colours</p>
+				</section>
+				<section class="group">
+					<hgroup>
+						<h3 id="group--highlighting-algorithm">
+							Algorithm (advanced)
+						</h3>
+						<p>
+							How should highlighting be computed?
+						</p>
+					</hgroup>
+					<div class="setting-list">
+						<span><select id="setting--highlighting-engine">
+							<option value="ELEMENT" selected="">Element</option>
+							<option value="PAINT">Paint</option>
+						</select></span>
+						<span><label for="setting--highlighting-engine">
+							Highlighting engine
+						</label></span>
+					</div>
+				</section>
+			</section>
+		</main>
+		<div class="sidebar"></div>
+	</div>
+	<script src="script.js"></script>
+	<script src="experiment.js"></script>
+</body>
+</html>

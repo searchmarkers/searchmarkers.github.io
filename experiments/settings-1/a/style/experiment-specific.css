@@ -1,0 +1,19 @@
+:root {
+	font-family: sans-serif;
+}
+
+body {
+	display: flex;
+}
+
+.flex-space {
+	flex: 1;
+}
+
+body > form {
+	width: 40em;
+}
+
+#save, .preference-row :disabled {
+	display: none;
+}
