@@ -32,7 +32,7 @@
 	--color-logo-title: hsl(0 0% 20%);
 	--color-h1: hsl(0 0% 20%);
 	--color-h2: hsl(0 0% 20%);
-	--color-h3: hsl(0, 0%, 32%);
+	--color-h3: hsl(0, 0%, 26%);
 	--bg-header: hsl(300 100% 98%);
 	--border-header: hsl(300 100% 88%);
 	--color-info: hsl(0 0% 50%);
@@ -321,6 +321,8 @@ h2 {
 }
 
 h3 {
+	margin-top: 1.6em;
+	margin-bottom: 0.9em;
 	color: var(--color-h3);
 }
 
@@ -422,16 +424,25 @@ mark {
 
 .setting-list {
 	& {
+		margin-block: 1em;
+		padding-inline-start: 40px;
+	}
+	
+	&:not(.wrapped) {
 		display: grid;
 		grid-template-columns: min-content auto;
-		margin-block: 1em;
 		row-gap: 0.5em;
-		padding-inline-start: 40px;
 		column-gap: 14px;
 	}
 
-	&.rows {
+	&:not(.wrapped).rows {
 		grid-template-columns: auto;
+	}
+
+	&.wrapped {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 14px;
 	}
 
 	.setting-label-row {
@@ -460,9 +471,9 @@ mark {
 	}
 
 	select {
-		padding-block: 0;
+		padding-block: 1px;
 		font-size: 0.9em;
-		margin-block: -1px /* Subtract space taken by user agent border */;
+		margin-block: -1px /* Subtract space taken by padding */;
 	}
 
 	& input[type="number"] {
@@ -476,6 +487,7 @@ mark {
 	& [data-unit]::after {
 		content: attr(data-unit);
 		font-size: 0.9em;
+		margin-left: 1px;
 		color: var(--color-dim);
 	}
 }
