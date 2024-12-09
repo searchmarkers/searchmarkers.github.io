@@ -77,3 +77,15 @@ label {
 label[for]:hover {
 	color: hsl(0 0% 18%);
 }
+
+.highlight-colors {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.highlight-colors > * {
+	background: hsl(var(--hue) 100% 50%);
+	height: 16px;
+	aspect-ratio: 1;
+	border: 1px solid hsl(0 0% 0% / 0.5);
+}

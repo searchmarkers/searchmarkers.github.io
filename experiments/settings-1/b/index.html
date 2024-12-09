@@ -54,7 +54,7 @@
 						<a href="#section--website-exclusions">Website exclusions</a>
 					</li>
 					<li>
-						<a href="#section--search-highlighting">Highlight-on-search</a>
+						<a href="#section--search-highlighting">Web search auto-highlight</a>
 					</li>
 					<li>
 						<a href="#section--keyword-lists">Automation</a>
@@ -213,49 +213,70 @@
 			</section>
 			<section class="section">
 				<h2 id="section--search-highlighting">
-					Highlight-on-search
+					Web search auto-highlight
 				</h2>
-				<!--<section class="group">
+				<section class="group">
 					<hgroup>
-						<h3 id="group--highlighting-style">
-							Style
+						<h3 id="group--search-highlighting-activation">
+							Activation
 						</h3>
 						<p>
-							How should the highlighting look?
+							When should web searches be auto-highlighted?
 						</p>
 					</hgroup>
 					<div class="setting-list">
-						<span><input id="setting--highlighting-hues" type="text" value="300,60,110,220,30,190,0"></span>
-						<span><label for="setting--highlighting-hues">
-							Highlight colour hue values
+						<span><input id="setting--search-highlighting" type="checkbox" checked=""></span>
+						<span><label for="setting--search-highlighting">
+							Activate when you use a search engine
 						</label></span>
+						<span><input id="setting--search-highlighting-url-parameters" type="text" value="search_terms,search_term,searchTerms,searchTerm,search_query,searchQuery,search,query,phrase,keywords,keyword,terms,term,text,s,q,p,k,_nkw,wd"></span>
+						<span>
+							<label for="setting--search-highlighting-url-parameters">
+								URL parameters for detecting search keywords
+							</label>
+							<div class="note">
+								For example, in <i>google.com/search?<strong>q=keyword</strong></i>, <strong><i>q</i></strong> is the URL parameter. Mark My Search will auto-highlight <q>keyword</q>.
+							</div>
+						</span>
 					</div>
-					<p class="image-placeholder">Toolbar w/ keywords w/ highlight colours</p>
 				</section>
 				<section class="group">
 					<hgroup>
-						<h3 id="group--highlighting-algorithm">
-							Algorithm (advanced)
+						<h3 id="group--search-highlighting-exceptions">
+							Keyword exceptions
 						</h3>
-						<p>
-							How should highlighting be computed?
-						</p>
 					</hgroup>
 					<div class="setting-list">
-						<span><select id="setting--highlighting-engine">
-							<option value="ELEMENT" selected="">Element</option>
-							<option value="PAINT">Paint</option>
-						</select></span>
-						<span><label for="setting--highlighting-engine">
-							Highlighting engine
+						<span><input id="setting--search-highlighting-excluded-keywords" type="text" value="i,a,an,and,or,not,the,that,there,where,which,to,do,of,in,on,at,too,if,for,while,is,as,isn't,are,aren't,can,can't,how,vs,them,their,theirs,her,hers,him,his,it,its,me,my,one,one's,you,your,yours"></span>
+						<span><label for="setting--search-highlighting-excluded-keywords">
+							Keywords to exclude from auto-highlight
 						</label></span>
 					</div>
-				</section>-->
+				</section>
+				<section class="group">
+					<hgroup>
+						<h3 id="group--search-highlighting-visibility">
+							Visibility
+						</h3>
+					</hgroup>
+					<div class="setting-list rows">
+						<div>
+							<div class="setting-label-row"><label for="setting--search-highlighting-excluded-keywords">
+								Automatic highlighting visibility:
+							</label></div>
+							<div><select id="setting--highlighting-engine">
+								<option value="" selected="">Highlights are visible and can be hidden</option>
+								<option value="">Highlights are invisible and can be shown</option>
+								<option value="">Highlights are invisible except on a search results page</option>
+							</select></div>
+						</div>
+					</div>
+				</section>
 			</section>
 		</main>
 		<div class="sidebar"></div>
 	</div>
-	<script src="script.js"></script>
-	<script src="experiment.js"></script>
+	<script src="script/main.js"></script>
+	<script src="script/experiment.js"></script>
 </body>
 </html>
