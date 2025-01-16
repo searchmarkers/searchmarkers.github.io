@@ -1,16 +1,14 @@
 .review-list {
 	display: flex;
+	padding-inline: 0;
 	gap: 30px;
 	overflow-x: auto;
+	list-style: none;
 }
 
 .review-list li {
-	width: 300px;
+	width: 18.4em;
 	flex-shrink: 0;
-}
-
-.review-list li::marker {
-	color: transparent;
 }
 
 .review-list figure {
