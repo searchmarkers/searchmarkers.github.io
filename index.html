@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-	<meta http-equiv="content-security-policy" content="default-src https:">
+	<meta http-equiv="content-security-policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'">
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>About :: Mark My Search</title>
@@ -12,7 +12,6 @@
 	<link rel="stylesheet" href="/main.css">
 	<link rel="stylesheet" href="/width-adaptive.css">
 	<link rel="stylesheet" href="styles.css">
-	<script src="/main.js"></script>
 </head>
 <body>
 	<header id="header">
@@ -121,7 +120,8 @@
 				</li>
 			</ul>
 		</main>
-	<div class="sidebar"></div>
+		<div class="sidebar"></div>
 	</div>
+	<script src="/main.js"></script>
 </body>
 </html>
