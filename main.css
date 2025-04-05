@@ -541,6 +541,19 @@ ol, ul {
 	}
 }
 
+dd {
+	margin-inline-start: 0;
+	margin-block-start: 0.6em;
+}
+
+dd dfn {
+	font-weight: bold;
+}
+
+dt {
+	margin-inline-start: 8px;
+}
+
 button {
 	padding-block: 4px;
 	padding-inline: 6px;

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+	<meta http-equiv="content-security-policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Stores :: Mark My Search</title>
+	<link rel="icon" href="/icons/mms.svg" sizes="any">
+	<link rel="icon" href="/favicon.ico" sizes="16x16 32x32">
+	<link rel="icon" href="/favicon-16.png" sizes="16x16">
+	<link rel="icon" href="/favicon-32.png" sizes="32x32">
+	<link rel="stylesheet" href="/main.css">
+	<link rel="stylesheet" href="/width-adaptive.css">
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<header id="header">
+		<div class="brand">
+			<img class="logo-icon" src="/icons/mms.svg">
+			<a class="logo-title" href="/">Mark My Search</a>
+		</div>
+		<nav class="controls">
+			<a href="#main" class="hidden">Skip navigation</a>
+			<a href="/stores/">Add-on Stores</a>
+			<a href="/projects/">Projects</a>
+			<div class="menu">
+				<a href="#theme">Set theme</a>
+				<fieldset>
+					<legend>Select a site theme</legend>
+					<input type="radio" id="theme-light" name="theme">
+					<label for="theme-light">Light</label>
+					<input type="radio" id="theme" name="theme" checked="">
+					<label for="theme">Automatic</label>
+					<input type="radio" id="theme-dark" name="theme">
+					<label for="theme-dark">Dark</label>
+				</fieldset>
+			</div>
+		</nav>
+	</header>
+	<main id="main">
+		<h1>Privacy Policy</h1>
+		<h2>Terms used in this privacy notice</h2>
+		<dl>
+			<dd><dfn>Extension</dfn></dd>
+			<dt>
+				The browser extension product, <i>Mark My Search</i>.
+			</dt>
+			<dd><dfn>Browser</dfn></dd>
+			<dt>
+				A web browser application on which the Extension is installed.
+			</dt>
+			<dd><dfn>User</dfn></dd>
+			<dt>
+				A user of the Extension.
+			</dt>
+		</dl>
+		<h2>Data policy</h2>
+		<p>
+			The Extension <strong>does not collect or store any personal information.</strong>
+		</p>
+		<p>
+			Some <strong>non-personal data</strong> is stored in the Browser and deleted when the Browser is restarted:
+			<ul>
+				<li>
+					Words to be highlighted, gathered spontaneously from search queries and from manual entry by the User.
+				</li>
+				<li>
+					Dynamic bookmarks stored by the User (bookmarks with a replaceable URL field).
+				</li>
+			</ul>
+		</p>
+		<p>
+			Some <strong>non-personal data</strong> is stored in the Browser,
+			and may be subject to the Browser's <i>sync</i> feature:
+			<ul>
+				<li>
+					Explicit extension configuration by the User.
+				</li>
+			</ul>
+		</p>
+	</main>
+	<script src="/main.js"></script>
+</body>
+</html>
