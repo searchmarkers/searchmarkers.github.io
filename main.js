@@ -1,18 +1,16 @@
 const loadTheme = theme => {
 	const input = document.getElementById("theme-" + theme);
-	if (input) {
-		input.checked = true;
-	} else {
-		return false;
-	}
+	if (!input) return false;
+	input.checked = true;
+	return true;
 };
 
 const storedTheme = localStorage.getItem("theme");
 
 if (storedTheme !== null && !loadTheme(storedTheme)) {
 	document.addEventListener("DOMContentLoaded", () => {
-		if (!loadTheme(theme)) {
-			console.warn("Theme '" + theme + "' is not available on this page. Using automatic theme.");
+		if (!loadTheme(storedTheme)) {
+			console.warn("Theme '" + storedTheme + "' is not available on this page. Using automatic theme.");
 		}
 	}, { passive: true });
 }
